@@ -4,3 +4,4 @@ dist
 tmp
 public/
 resources/_gen/
+*.lock
