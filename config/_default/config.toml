@@ -1,7 +1,7 @@
 baseURL = "https://throw.nullreference.io"
 title = "Throwin' Exceptions"
 theme = "hugo-theme-bootstrap"
-copyright = "Copyright © 2021-{year} Elan Hasson. All Rights Reserved."
+copyright = "Copyright © 2020-{year} Elan Hasson. All Rights Reserved."
 
 # Multilingual mode
 defaultContentLanguage = "en"
