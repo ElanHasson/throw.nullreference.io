@@ -11,7 +11,7 @@ In the post, he talks about how if you post your content on other platforms, it'
 
 He quotes [Tim Bray](https://twitter.com/timbray), who I'll also quote here:
 
-> Own your space on the Web, and _pay for it_. Extra effort, but otherwise you’re a sharecropper. - [Tim Bray](http://www.tbray.org/ongoing/When/201x/2012/08/18/Blogodammerung)
+> Own your space on the Web, and _pay for it_. Extra effort, but otherwise you’re a sharecropper. -— [Tim Bray](http://www.tbray.org/ongoing/When/201x/2012/08/18/Blogodammerung)
 
 Well, here we go: home data center, [Ghost](https://ghost.org/), [Kubernetes](https://kubernetes.io/), and more.
 
