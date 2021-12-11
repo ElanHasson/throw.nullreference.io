@@ -5,7 +5,8 @@ draft: false
 ---
 # Hello World
 
-{{< figure src="images/heloworld-2.png" height="300" title="Hello World!" alt="The words &quote;Hello World&quote; in neon green on a black background." >}}
+![Resize](images/heloworld-2.png?width=300px)
+" height="300" title="Hello World!" alt="The words \"Hello World\" in neon green on a black background." >
 
 [Scott Hanselmen](https://twitter.com/shanselman) wrote a post titled _[Your words are wasted](https://www.hanselman.com/blog/your-words-are-wasted)._ It's a great point being made there, worth the read.
 
