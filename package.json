@@ -1,7 +1,11 @@
 {
   "name": "examplesite",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "postinstall": "hugo-installer --version otherDependencies.hugo --extended"
+  },
+  "devDependencies": {
+    "hugo-installer": "^3.1.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -9,5 +13,8 @@
     "terser-webpack-plugin": "^5.2.5",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1"
+  },
+  "otherDependencies": {
+    "hugo": "0.90.1"
   }
 }
