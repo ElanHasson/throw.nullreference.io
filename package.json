@@ -1,5 +1,5 @@
 {
-  "name": "examplesite",
+  "name": "throw-nullreference-io",
   "scripts": {
     "build": "webpack",
     "postinstall": "hugo-installer --version otherDependencies.hugo --extended"
