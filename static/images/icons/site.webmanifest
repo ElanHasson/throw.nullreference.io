@@ -16,5 +16,6 @@
     "theme_color": "#d33c39",
     "background_color": "#d33c39",
     "start_url": "https://throw.nullreference.io",
+    "id:": "/",
     "display": "standalone"
 }
