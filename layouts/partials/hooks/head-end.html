@@ -5,5 +5,14 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-766Y1QEBHH');
+{{ if .Params.googleAnalytics  }}
+  
+gtag('config', 'G-766Y1QEBHH');
+
+{{ else }}
+
+gtag('config', 'G-766Y1QEBHH',{ 'debug_mode':true });
+
+
+{{ end }}
 </script>
