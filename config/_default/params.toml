@@ -34,7 +34,7 @@ googleAdsense = ""
 # socialShare = false # disable social network sharing
 # searchBar = false # disable search-bar
 
-poweredBy = false # Whether to show powered by.
+poweredBy = true # Whether to show powered by.
 
 readingTime = true # Whether to display the reading time.
 # postDate = false # Whether to display the post date in the post meta section.
