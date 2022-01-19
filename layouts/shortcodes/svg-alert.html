@@ -1,0 +1,13 @@
+{{ $icon := .Get "icon" }}
+{{ $type := .Get "type" }}
+{{ $variant := printf "%x" .Params.type }}
+
+{{ partialCached "svg" $icon . $variant }}
+
+
+<div class="alert alert-{{ $type }} d-flex align-items-center" role="alert">
+  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="{{ $type }}"><use xlink:href="#{{ $icon }}"/></svg>
+  <div>
+    {{  .Inner | $.Page.RenderString }}
+  </div>
+</div>
