@@ -70,7 +70,7 @@ viewer = true # Image Viewer
 [post]
   # excerpt = "description"
   # excerptMaxLength = 120
-
+  copyright = false
 [archive]
   paginate = 8 # Archive pagination. Default to 100.
   # dateFormat = "01-02" # Archive date format. Default to "Jan 2".
