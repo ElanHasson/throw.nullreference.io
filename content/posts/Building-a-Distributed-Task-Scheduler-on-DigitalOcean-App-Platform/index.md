@@ -29,7 +29,7 @@ I figured I'd kill two birds with one stone and build a complex distributed syst
 
 This [series](/series/building-a-distributed-task-scheduler-on-digitalocean-app-platform) is going to document my journey of building a highly-available Task Scheduling system hosted on App Platform.
 
-I've selected a very fancy name for the project: *Web Scheduler*. It's 100% open source, and can be found in the [repository](https://github.com/ElanHasson/web-scheduler) at GitHub.
+I've selected a very fancy name for the project: *Web Scheduler*. It's 100% open source, and can be found in the [repository](https://github.com/web-scheduler/web-scheduler) at GitHub.
 
 
 
