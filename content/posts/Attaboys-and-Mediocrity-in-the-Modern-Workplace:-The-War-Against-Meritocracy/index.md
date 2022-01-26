@@ -29,7 +29,7 @@ src = 'YouTried.png'
 
 I recently attended a week of training courses instructed by [Cardinal Path](http://cardinalpath.com/) to deepen my knowledge of [Google AdWords](http://adwords.google.com/) and [Google Analytics](https://www.google.com/analytics/). At the end of the course I received the Certification of Completion. All I had to do to get this certification is pay a bunch of money and show up. While showing up is half the battle, it certainly doesn't mean that I learned anything or that I achieved anything noteworthy.
 
-So why do training organizations give out *attaboys*? I don't think they'll help you get a raise or even a job. I think it's because you (or your boss) shelled out *mucho dinero* for the courses and they want *something *tangible to show for it.
+So why do training organizations give out *attaboys*? I don't think they'll help you get a raise or even a job. I think it's because you (or your boss) shelled out *mucho dinero* for the courses and they want *something* tangible to show for it.
 
 All this got me thinking about how *pats on the back* can actually breed (and encourage) mediocrity in an organization.
 
