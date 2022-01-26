@@ -19,11 +19,14 @@ tags = [
 series = [
   ""
 ]
-images = ["LowOnMemory.png"]
+
+[[resources]]
+name = 'thumbnail-LowOnMemory.png'
+src = 'LowOnMemory.png'
 +++
 A few minutes ago I was presented with this dialog box:
 
-![Close programs to prevent information loss - low on memory](LowOnMemory.png#center "Scary dialog box that popped up.")
+![Close programs to prevent information loss - low on memory](thumbnail-LowOnMemory.png#center "Scary dialog box that popped up.")
 
 
 At first I thought it may have been one of those [adware](http://en.wikipedia.org/wiki/Adware) apps that makes some claim about the health of your computer in a thinly veiled attempt to extract some cash out of me. After a a moment of looking to see what spawned that dialog box and a bit of Googling, I determined [it was real](http://windows.microsoft.com/en-us/windows/preventing-low-memory-problems).

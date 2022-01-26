@@ -2,8 +2,12 @@
 title: "Hello World"
 date: 2021-12-10T21:35:43-05:00
 draft: false
+
+resources:
+- name: 'thumbnail'
+  src: 'images/helloworld-2.png'
 ---
-{{< figure src="images/heloworld-2.png?width=300px" height="300" alt="The words \"Hello World\" in neon green on a black background." >}}
+{{< figure src="images/helloworld-2.png?width=300px" height="300" alt="The words \"Hello World\" in neon green on a black background." >}}
 
 [Scott Hanselmen](https://twitter.com/shanselman) wrote a post titled _[Your words are wasted](https://www.hanselman.com/blog/your-words-are-wasted)._ It's a great point being made there, worth the read.
 

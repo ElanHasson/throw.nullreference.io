@@ -16,9 +16,11 @@ tags = []
 series = [
   "Building a Distributed Task Scheduler on DigitalOcean App Platform"
 ]
-images = [
-  "scheduled-25134.svg"
-]
+
+[[resources]]
+name = 'thumbnail'
+src = 'scheduled-25134.png'
+
 +++
 
 ## New Beginnings

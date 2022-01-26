@@ -19,7 +19,11 @@ aliases=["/2014/06/attaboys-and-mediocrity-in-modern.html"]
 series = [
   ""
 ]
-images = ["YouTried.png"]
+
+[[resources]]
+name = 'thumbnail-YouTried.png'
+src = 'YouTried.png'
+
 +++
 ![My Cardinal Path Training Certification of Completion AdWords 101-201 - Analytics 101-301](Certificate.jpg?width=340&height=247px#floatright "My Cardinal Path Training Certification of Completion AdWords 101-201 - Analytics 101-301")
 
@@ -94,7 +98,7 @@ All this got me thinking about how *pats on the back* can actually breed (and en
 ### The Human Condition?
 
 Perhaps as a society we've come to expect to be told that we're doing a great job at what we are *supposed* to be doing. Could this be a side effect of [overly](http://web.archive.org/web/20160831152230/http://www.coachdeck.com:80/articles/is-it-all-right-to-win.asp) [progressive](http://web.archive.org/web/20110102145559/http://www.kxii.com/blogs/sports/17648684.html) [parenting](http://boards.straightdope.com/sdmb/showthread.php?t=582053)?
-![You Tried, here's a ribbon.](YouTried.png?width=125&height=200#floatright "You Tried")
+![You Tried, here's a ribbon.](thumbnail-YouTried.png?width=125&height=200#floatright "You Tried")
 In a prior life, an employee survey was sent to all employees asking how they would like to be recognized for their work achievements. The results of the survey were as follows (in order of preference by respondents):
 
 1.  Receiving a "Shout Out" during the weekly all-hands department meeting and having your name and photo placed on a PowerPoint slide which displayed for the month on many TV screens throughout the building

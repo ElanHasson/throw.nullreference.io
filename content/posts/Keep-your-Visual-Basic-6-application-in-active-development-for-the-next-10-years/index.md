@@ -20,14 +20,17 @@ aliases =["/2014/05/keep-your-visual-basic-6-application-in.html"]
 series = [
   ""
 ]
-images = ["Form_vide_VB.JPG"]
+
+[[resources]]
+name = 'thumbnail-Form_vide_VB.JPG'
+src = 'Form_vide_VB.JPG'
 +++
 
 VB6 Form
 A blast from the past.
 If you still have a Visual Basic 6 application in active development, you can keep servicing it for the next ten years.
 
-[Microsoft's official stance on Visual Basic 6.0](http://msdn.microsoft.com/en-us/vstudio/ms788708) is:![A Blast from the past: VB6 Form](Form_vide_VB.JPG#floatright)
+[Microsoft's official stance on Visual Basic 6.0](http://msdn.microsoft.com/en-us/vstudio/ms788708) is:![A Blast from the past: VB6 Form](thumbnail-Form_vide_VB.JPG#floatright)
 The Visual Basic team is committed to “It Just Works” compatibility for Visual Basic 6.0 applications on Windows Vista, Windows Server 2008 including R2, Windows 7, and Windows 8.
 The Visual Basic team’s goal is that Visual Basic 6.0 applications that run on Windows XP will also run on Windows Vista, Windows Server 2008, Windows 7, and Windows 8. As detailed in this document, the core Visual Basic 6.0 runtime will be supported for the full lifetime of Windows Vista, Windows Server 2008, Windows 7, and Windows 8, which is five years of mainstream support followed [by five years of extended support](http://support.microsoft.com/gp/lifepolicy).
 
