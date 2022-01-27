@@ -1,5 +1,5 @@
 +++
-title = "Part 1: Building a Distributed Task Scheduler on DigitalOcean's App Platform"
+title = "Building a Distributed Task Scheduler on DigitalOcean's App Platform"
 description = "A multi-part series on building a complex application on DigitalOcean's App Platform"
 date = 2022-01-19T02:07:52Z
 featured = true
