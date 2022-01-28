@@ -35,4 +35,9 @@ resources:
 
 As I learn [Go](https://go.dev/), I'm always looking for new information and resources. To keep track of them, I'll be posting them by category.
 
-No "Learning Go" page would be complete without a link to [A Tour of Go](https://go.dev/tour/).
+## Start Here:
+- [Official Go Website](https://go.dev/)
+- [A Tour of Go](https://go.dev/tour/)
+
+## Online Courses
+- [Learn How To Code: Google's Go (golang) Programming Language](https://www.udemy.com/course/learn-how-to-code/) by [Todd McLeod](https://twitter.com/Todd_McLeod)
