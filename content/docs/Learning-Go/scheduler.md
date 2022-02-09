@@ -23,7 +23,7 @@ images = []
 
 +++
 
-Go scheduler’s job is to distribute runnable goroutines over multiple worker OS threads that runs on one or more processors.
+Go scheduler’s job is to distribute runnable `goroutines` over multiple worker OS threads that runs on one or more processors.
 
 # Links
 * [Scheduling In Go](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part1.html) by [William Kennedy](https://twitter.com/goinggodotnet), a Three-part Series covering the OS and Go schedulers, and Concurrency.
