@@ -1,6 +1,5 @@
-@startuml "Deployment Diagram"
+@startuml "DeploymentDiagram"
 !theme cerulean-outline
-!include plantuml/sprites/common.puml
 !include plantuml/sprites/orleans.puml
 title "WebScheduler Deployment"
 
