@@ -1,0 +1,56 @@
+
+@startuml "PhysicalDeploymentDiagram"
+!theme cerulean-outline
+!include plantuml/sprites/orleans.puml
+!include plantuml/sprites/blazor.puml
+!include plantuml/sprites/do_app.puml
+!include <tupadr3/common>
+!include <tupadr3/font-awesome-5/docker>
+!include <tupadr3/devicons/mysql>
+
+!include <tupadr3/devicons/redis>
+
+
+
+skinparam svgLinkTarget _blank
+
+
+title "DigitalOcean App Platform Physical Deployment"
+
+<style>
+component {
+    HorizontalAlignment center
+}
+frame {
+
+    VerticalAlignment center
+}
+</style>
+
+
+
+
+frame "<$t_do_app,scale=0.70,color=#0c489f> web-scheduler" as WebSchedulerApp #White {
+    component "<$docker,scale=1,color=#2496ed>\nweb-scheduler-server" as WebSchedulerServerComponent  #White
+    component "<$docker,scale=1,color=#2496ed>\nweb-scheduler-api"  as WebSchedulerApiComponent#White
+    component "<$docker,scale=1,color=#2496ed>\nweb-scheduler-frontend" as WebSchedulerFrontEndComponent #White
+    component "<$redis,scale=1,color=#dc382c>\nweb-scheduler-redis" as WebSchedulerRedisComponent #White
+    component "<$mysql,scale=1,color=#00758f>\nweb-scheduler-mysql" as WebSchedulerMySqlComponent #White
+
+}
+WebSchedulerApiComponent -> WebSchedulerServerComponent
+WebSchedulerApiComponent -down-> WebSchedulerMySqlComponent
+WebSchedulerApiComponent -down-> WebSchedulerRedisComponent
+WebSchedulerServerComponent -down-> WebSchedulerMySqlComponent
+
+WebSchedulerFrontEndComponent -> WebSchedulerApiComponent
+
+url of WebSchedulerApp is [[https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml{Goto full App Spec}]]
+url of WebSchedulerFrontEndComponent is [[https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml#L120-L130{Goto App Spec for web-scheduler-api}]]
+
+
+url of WebSchedulerServerComponent is [[https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L23-L69{Goto App Spec for web-scheduler-api}]]
+
+url of WebSchedulerApiComponent is [[https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L70-L119{Goto App Spec for web-scheduler-api}]]
+
+@enduml
