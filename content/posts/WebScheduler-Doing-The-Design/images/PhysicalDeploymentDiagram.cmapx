@@ -1,7 +1,0 @@
-<map id="plantuml_map" name="plantuml_map">
-<area shape="rect" id="id1" href="https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L70-L119" title="Goto App Spec for web-scheduler-api" alt="" coords="289,143,475,251"/>
-<area shape="rect" id="id2" href="https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L23-L69" title="Goto App Spec for web-scheduler-api" alt="" coords="511,143,721,251"/>
-<area shape="rect" id="id3" href="https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml#L120-L130" title="Goto App Spec for web-scheduler-api" alt="" coords="26,143,252,251"/>
-<area shape="rect" id="id4" href="https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml" title="Goto full App Spec" alt="" coords="17,86,730,430"/>
-</map>
-

@@ -13,16 +13,19 @@ categories = [
   "DigitalOcean App Platform",
   ".NET",
   "Systems Design",
-  "Microsoft Orleans"
+  "Microsoft Orleans",
+  "Blazor",
+  "WebScheduler",
+  "ASP.NET Core"
 ]
-tags = ["Microsoft Orleans"]
+tags = []
 series = [
   "Building a Distributed Task Scheduler on DigitalOcean App Platform"
 ]
 
 [[resources]]
-name = 'thumbnail-logical-deployment-diagram.svg'
-src = 'images/LogicalDeploymentDiagram.svg'
+name = 'thumbnail'
+src = 'images/PhysicalDeploymentDiagram.svg'
 
 +++
 This post covers the system design of the Web Scheduler and some of the decisions made during the design process.
@@ -35,7 +38,13 @@ I plan to deploy to [DigitalOcean App Platform](https://www.digitalocean.com/pro
 
 ## Deployment Overview
 
+### Physical Deployment
 
+{{< svg "/images/PhysicalDeploymentDiagram.svg" >}}
+
+
+### Logical Deployment
+  
 {{< svg "/images/LogicalDeploymentDiagram.svg" >}}
 
 ## Our Stack
