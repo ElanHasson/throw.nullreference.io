@@ -18,7 +18,7 @@ component {
 
 
     frame "WebScheduler.Server" as WebSchedulerServerPackage {
-    component "<$t_orleans,scale=0.75,color=#783988>\nOrleans Silo" as OrleansSilo #White  
+    component "<$t_orleans,scale=0.85,color=purple>\nOrleans Silo" as OrleansSilo #White  
 
   component "Orleans Dashboard" as OrleansDashboard 
     component "Health Checks" as OrleansHealthChecks 
@@ -27,7 +27,7 @@ component {
 }
     
     frame "WebScheduler.FrontEnd.BlazorApp" as BlazorAppFrame {
-            component "<$t_blazor,scale=0.75,color=#702af7>\nBlazor WebAssembly" as BlazorApp #White  
+            component "<$t_blazor,scale=1,color=#702af7>\nBlazor WebAssembly" as BlazorApp #White  
 
     }
 
