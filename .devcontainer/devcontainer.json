@@ -16,9 +16,11 @@
 			"editor.quickSuggestions": true
 		  },
 		"plantuml.exportFormat": "svg",
-		"plantuml.exportMapFile": true,
+		"plantuml.exportMapFile": false,
 		"plantuml.exportSubFolder": false,
-		"plantuml.exportOutDir": "./"
+		"plantuml.exportOutDir": "./",
+		"markdown.extension.preview.autoShowPreviewToSide": true
+
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
@@ -31,7 +33,8 @@
 		"akmittal.hugofy",
 		"streetsidesoftware.code-spell-checker",
 		"GitHub.copilot",
-		"jebbs.plantuml"
+		"jebbs.plantuml",
+		"yzhang.markdown-all-in-one"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
