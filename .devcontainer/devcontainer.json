@@ -19,7 +19,7 @@
 		"plantuml.exportMapFile": false,
 		"plantuml.exportSubFolder": false,
 		"plantuml.exportOutDir": "./",
-		"markdown.extension.preview.autoShowPreviewToSide": true
+		"markdown.extension.preview.autoShowPreviewToSide": false
 
 	},
 
