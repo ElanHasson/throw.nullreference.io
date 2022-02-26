@@ -28,11 +28,15 @@ name = 'thumbnail'
 src = 'images/PhysicalDeploymentDiagram.svg'
 
 +++
+This is the second post in the series, if you haven't read the first, you should stop here and [read the first part]({{< ref  "Building-a-Distributed-Task-Scheduler-on-DigitalOcean-App-Platform" >}}) before continuing. 
+
 This post covers the system design of the Web Scheduler and some of the decisions made during the design process.
 
-## Planning
+I plan to deploy to [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste) and leveraging their managed PaaS offerings.
 
-I plan to deploy to [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste), first let's figure out the structure we need.
+### Microsoft Orleans
+
+[Microsoft Orleans](https://github.com/dotnet/orleans)
 
 
 
@@ -40,16 +44,15 @@ I plan to deploy to [DigitalOcean App Platform](https://www.digitalocean.com/pro
 
 ### Physical Deployment
 
-{{< svg "/images/PhysicalDeploymentDiagram.svg" >}}
-
+{{< svg "/images/PhysicalDeploymentDiagram.svg" "PhysicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
 ### Logical Deployment
   
-{{< svg "/images/LogicalDeploymentDiagram.svg" >}}
+{{< svg "/images/LogicalDeploymentDiagram.svg" "LogicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
 ## Our Stack
 
-* DigitalOcean App Platform
+* DigitalOcean App Platform 
 * Microsoft Orleans
 * .NET ASP.Net Core
 * MySQL
