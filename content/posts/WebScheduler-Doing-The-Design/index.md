@@ -4,7 +4,7 @@ description = "In this installment of building a distributed task scheduler, we'
 date = 2022-02-23T02:07:52Z
 featured = true
 viewer = false
-draft = false
+draft = true
 comment = true
 toc = true
 reward = true
@@ -97,8 +97,8 @@ The primary reason for selecting Orleans is because of the durable reminders tha
 Orleans has a mechanism called [Reminders](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders) which enable you to specify periodic tasks that are executed by a grain. Reminders are durable and the Orleans runtime guarantees reminders will *always* be fired. This is a great way to implement a cron-like scheduling system, except they don't exactly allow for [cron-like scheduling...yet](https://github.com/dotnet/orleans/issues/7573)!
 
 Reminders do have some limitations:
-* Reminders can only scheduled to  \\(\leq\\)49 days (`0xfffffffe` milliseconds) in the future
-* Reminders can only tick at an interval \\(\leq\\)49 days
+* Reminders can only scheduled \\(\leq\\)49 days (`0xfffffffe` milliseconds) in the future
+* Reminders can only tick at an interval of \\(\leq\\)49 days (`0xfffffffe` milliseconds)
 * They don't speak [*crontab*](https://codebeautify.org/crontab-format)
 * There is no way to have a task run only once. It'll keep *ticking* at the specified interval until you [unregister the reminder](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders#reminder-usage).
 
