@@ -28,7 +28,12 @@ frame {
 </style>
 
 
+frame "<$t_do_app,scale=0.70,color=#0c489f> identity-server" as IdentityServerApp #White {
+    component "<$mysql,scale=1,color=#00758f>\nidentity-server-mysql" as IdentityServerMySqlComponent #White
 
+    component "<$docker,scale=1,color=#2496ed>\nIdentityServer.Host"  as IdentityServerWebComponent#White
+
+}
 
 frame "<$t_do_app,scale=0.70,color=#0c489f> web-scheduler" as WebSchedulerApp #White {
     component "<$docker,scale=1,color=#2496ed>\nweb-scheduler-server" as WebSchedulerServerComponent  #White
@@ -38,13 +43,17 @@ frame "<$t_do_app,scale=0.70,color=#0c489f> web-scheduler" as WebSchedulerApp #W
     component "<$mysql,scale=1,color=#00758f>\nweb-scheduler-mysql" as WebSchedulerMySqlComponent #White
 
 }
+url of IdentityServerApp is [[https://github.com/NullReferenceCorp/accounts.nullreference.io/blob/main/.do/account-nullreference-io.yaml{Goto to full App Spec for identity-server}]]
+url of IdentityServerWebComponent is [[https://github.com/NullReferenceCorp/accounts.nullreference.io/blob/main/.do/account-nullreference-io.yaml#L16-L60{Goto App Spec for identity-server}]]
+IdentityServerWebComponent -down-> IdentityServerMySqlComponent
+WebSchedulerFrontEndComponent -left-> IdentityServerWebComponent
+
 WebSchedulerApiComponent -> WebSchedulerServerComponent
 WebSchedulerApiComponent -down-> WebSchedulerMySqlComponent
 WebSchedulerApiComponent -down-> WebSchedulerRedisComponent
 WebSchedulerServerComponent -down-> WebSchedulerMySqlComponent
 
 WebSchedulerFrontEndComponent -> WebSchedulerApiComponent
-
 url of WebSchedulerApp is [[https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml{Goto full App Spec}]]
 url of WebSchedulerFrontEndComponent is [[https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml#L120-L130{Goto App Spec for web-scheduler-api}]]
 

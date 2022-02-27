@@ -30,9 +30,33 @@ src = 'images/PhysicalDeploymentDiagram.svg'
 +++
 This is the second post in the series, if you haven't read the first, you should stop here and [read the first part]({{< ref  "Building-a-Distributed-Task-Scheduler-on-DigitalOcean-App-Platform" >}}) before continuing. 
 
-This post covers the system design of the Web Scheduler and some of the decisions made during the design process.
 
-I plan to deploy to [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste) and leveraging their managed PaaS offerings.
+This post covers the system design of the Web Scheduler and the decisions made during the design process.
+
+## The Tech Stack
+
+- Hosting Platform: [DigitalOcean's App Platform](#digitaloceans-app-platform)
+- Web Frontend Application: [ASP.NET Core Blazor](#aspnet-core-blazor)
+- Frontend API: [ASP.NET Core Web API](#aspnet-core-web-api)
+- Backend: [Microsoft Orleans](#microsoft-orleans)
+- Durable Data Persistence: [MySQL](#mysql)
+- Caching: [Redis](#redis)
+- Claims-based Identity: [Duende IdentityServer with ASP.NET Core Identity](#duende-identityserver-with-aspnet-core-identity)
+- Build, Test, Package, and Containerize: [GitHub Actions](#github-actions)
+- Observability: [OpenTelemetry and Jaegar](#opentelemetry-and-jaeger)
+
+### DigitalOcean's App Platform
+
+The WebScheduler will be deployed to [DigitalOcean's App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste) and leveraging their managed PaaS offerings for support services.
+
+App Platform is a fully-managed solution that allows you to build, deploy, and scale your apps so you can focus on what you do best: building great software!
+
+The WebScheduler will be deployed as an App Platform App using different *component types*: [Database](https://docs.digitalocean.com/products/app-platform/concepts/database/), [Service](https://docs.digitalocean.com/products/app-platform/concepts/service/), and [Static Site](https://docs.digitalocean.com/products/app-platform/concepts/static-site/).
+
+Our WebScheduler App will be deployed as depicted below. You can click each component to jump to the relevant portion of the [App Spec](https://docs.digitalocean.com/products/app-platform/references/app-specification-reference/).
+{{< svg "/images/PhysicalDeploymentDiagram.svg" "PhysicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
+
+Below are the details about each one of the components that make up the WebScheduler App.
 
 ### Microsoft Orleans
 
@@ -48,13 +72,43 @@ I don't think there is a better explanation of what Orleans is than what has alr
 >
 > It was created by [Microsoft Research](https://research.microsoft.com/projects/orleans/) and introduced the [Virtual Actor Model](https://research.microsoft.com/apps/pubs/default.aspx?id=210931) as a novel approach to building a new generation of distributed systems for the Cloud era. The core contribution of Orleans is its programming model which tames the complexity inherent to highly-parallel distributed systems without restricting capabilities or imposing onerous constraints on the developer.
 
+Check out [An Introduction to Orleans](https://docs.microsoft.com/en-us/shows/reactor/an-introduction-to-orleans) from Microsoft Reactor for a great primer.
+
 #### Orleans History 
 *Note: this section was pieced together from various Orleans blog posts and other sources. If there is more to it, or any inaccuracies, let me know and I'll amend this section.*
 
-Orleans started out in Microsoft Research in 2008 and was quickly moved into the Xbox organization where it lived most of it's life. It is being used for games such as 343's Halo and Gears of War. Orleans is also being used by a number of internal teams at Microsoft, such as Azure, using Orleans for various components of their systems.
+Orleans started out in Microsoft Research in 2008 and was quickly moved into the Xbox organization where it lived most of it's life. It is being used for games such as [343 Industries](https://www.343industries.com/)'s [Halo](https://en.wikipedia.org/wiki/Halo_(franchise)) and Epic Games' [Gears of War](https://gearsofwar.com/) series. Orleans is also being used by a number of internal teams at Microsoft to build [Azure ML](https://azure.microsoft.com/en-us/services/machine-learning/), [Azure IoT Digital Twins](https://azure.microsoft.com/en-us/services/digital-twins/), [Microsoft Mesh](https://www.microsoft.com/en-us/mesh), [Azure Quantum](https://azure.microsoft.com/en-us/services/quantum/), [Microsoft Dynamics 365 Fraud Protection](https://dynamics.microsoft.com/en-us/ai/fraud-protection/), [Azure PlayFab](https://azure.microsoft.com/en-us/services/playfab/) (part of Xbox), just to name a few. For more details, check out the [Orleans at Microsoft](https://www.youtube.com/watch?v=KhgYlvGLv9c) video, where [Reuben Bond](https://twitter.com/reubenbond) talks about how Orleans is used at Microsoft.
 
 More recently, Orleans [has moved into the Microsoft Development Division](https://devblogs.microsoft.com/dotnet/asp-net-core-updates-in-net-7-preview-1/#:~:text=Orleans%3A%20The%20ASP,version%2Dtolerant%20serializer.) (DevDiv). DevDiv is the division in Microsoft which is responsible for developer tooling, languages, frameworks, and some cloud services. This [is an exciting time for Orleans](https://github.com/dotnet/aspnetcore/issues/39504#:~:text=1583%20(gRPC/HTTP)-,Orleans,-Implement%20POCO%20Grains) and I'm super excited to see what this move means for the growing Orleans ecosystem, especially since it'll be closer aligned with other .NET open-source technologies.
 
+### Implementation Details
+
+Orleans manages our concurrency and [load balancing](https://docs.microsoft.com/en-us/dotnet/orleans/implementation/load-balancing) across [Grains](https://docs.microsoft.com/en-us/dotnet/orleans/overview#grains) for us. These are attractive features for us as we want to eliminate the need to manage these seemingly simple, but very complex and nuanced concerns ourselves.
+
+
+We'll be modeling our Scheduled Tasks as virtual actors running on the Orleans cluster. Each Scheduled Task will have a unique ID and will be responsible for executing a task at a specific time.
+
+**TODO CLASS DIAGRAM OF ScheduledTaskGrain**
+
+#### Reminders
+
+The primary reason for selecting Orleans is because of the durable reminders that scale near-linearly when adding new Silos to the cluster.
+
+Orleans has a mechanism called [Reminders](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders) which enable you to specify periodic tasks that are executed by a grain. Reminders are durable and the Orleans runtime guarantees reminders will *always* be fired. This is a great way to implement a cron-like scheduling system, except they don't exactly allow for [cron-like scheduling...yet](https://github.com/dotnet/orleans/issues/7573)!
+
+Reminders do have some limitations:
+* Reminders can only scheduled to  \\(\leq\\)49 days (`0xfffffffe` milliseconds) in the future
+* Reminders can only tick at an interval \\(\leq\\)49 days
+* They don't speak [*crontab*](https://codebeautify.org/crontab-format)
+* There is no way to have a task run only once. It'll keep *ticking* at the specified interval until you [unregister the reminder](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders#reminder-usage).
+
+We'll have to work around these reminder issues.
+
+#### Observability
+
+We'll be using [OrleansDashboard](https://github.com/OrleansContrib/OrleansDashboard) to monitor our silos.
+
+![OrleansDashboard](images/OrleansDashboard.png?height=460px#floatright "The OrleansDashboard")
 
 ### ASP.NET Core Blazor
 ![Blazor Logo](images/Blazor.png?height=100px#floatright "ASP.NET Core Blazor Logo")
@@ -66,21 +120,15 @@ Blazor Server is a client and server-side framework where UI updates are process
 
 For this project, I wanted to keep the UI relatively simple without a backend-host so I could leverage App Platform's [Static Site component](https://docs.digitalocean.com/products/app-platform/concepts/static-site/). To meet this objective, I chose Blazor WebAssembly.
 
-## Deployment Overview
+### MySQL
 
-### Physical Deployment
+### Redis
 
-{{< svg "/images/PhysicalDeploymentDiagram.svg" "PhysicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
+### Duende IdentityServer with ASP.NET Core Identity
+### GitHub Actions
 
-### Logical Deployment
+### OpenTelemetry and Jaeger
+
+## Tieing it All Together
   
 {{< svg "/images/LogicalDeploymentDiagram.svg" "LogicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
-
-## Our Stack
-
-* DigitalOcean App Platform 
-* Microsoft Orleans
-* .NET ASP.Net Core
-* MySQL
-* Redis
-
