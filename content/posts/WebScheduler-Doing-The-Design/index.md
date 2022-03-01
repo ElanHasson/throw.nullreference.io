@@ -86,9 +86,10 @@ More recently, Orleans [has moved into the Microsoft Development Division](https
 Orleans manages our concurrency and [load balancing](https://docs.microsoft.com/en-us/dotnet/orleans/implementation/load-balancing) across [Grains](https://docs.microsoft.com/en-us/dotnet/orleans/overview#grains) for us. These are attractive features for us as we want to eliminate the need to manage these seemingly simple, but very complex and nuanced concerns ourselves.
 
 
-We'll be modeling our Scheduled Tasks as virtual actors running on the Orleans cluster. Each Scheduled Task will have a unique ID and will be responsible for executing a task at a specific time.
+We'll be modeling our Scheduled Tasks as Grains running on the Orleans cluster. Each Scheduled Task will have a unique ID and will be responsible for executing the task at a specified time.
 
-**TODO CLASS DIAGRAM OF ScheduledTaskGrain**
+
+{{< svg "/images/ScheduledTaskClassDiagram.svg" "ScheduledTaskClassDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
 #### Reminders
 
