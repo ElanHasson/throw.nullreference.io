@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="602.0833px" preserveAspectRatio="none" style="width:668px;height:602px;background:#00000000;" version="1.1" viewBox="0 0 668 602" width="668.75px" zoomAndPan="magnify"><defs/><g><rect height="47.168" rx="4.1667" ry="4.1667" style="stroke:#BABDBF;stroke-width:1.0416666666666667;fill:none;" width="378.125" x="140.625" y="20.8333"/><text fill="#2FA4E7" font-family="&quot;Verdana&quot;" font-size="20.8333" font-weight="bold" lengthAdjust="spacing" textLength="355.2083" x="152.0833" y="51.6296">ScheduledTask Class Diagram</text><!--MD5=[423f61e9d5274eee049a36b2eba8914d]
+class ScheduledTaskGrain--><a href="https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs" target="_blank" title="Goto Source" xlink:actuate="onRequest" xlink:href="https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs" xlink:show="new" xlink:title="Goto Source" xlink:type="simple"><rect codeLine="7" height="137.5244" id="ScheduledTaskGrain" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0416666666666667;fill:none;" width="638.5417" x="17.7083" y="86.7513"/><ellipse cx="266.6667" cy="103.8371" fill="#EDF0F2" rx="10.4167" ry="10.4167" style="stroke:#BABDBF;stroke-width:1.0416666666666667;"/><path d="M268.571,108.2642 Q268.1478,108.4757 267.6758,108.5897 Q267.2038,108.7036 266.6992,108.7036 Q264.8438,108.7036 263.8672,107.4992 Q262.9069,106.2785 262.9069,103.9836 Q262.9069,101.6724 263.8672,100.4679 Q264.8438,99.2472 266.6992,99.2472 Q267.2038,99.2472 267.6758,99.3612 Q268.1641,99.4588 268.571,99.6867 L268.571,101.6886 Q268.1152,101.2655 267.6758,101.0701 Q267.2363,100.8586 266.7806,100.8586 Q265.7878,100.8586 265.2832,101.6561 Q264.7786,102.4373 264.7786,103.9836 Q264.7786,105.5135 265.2832,106.2948 Q265.7878,107.076 266.7806,107.076 Q267.2363,107.076 267.6758,106.8807 Q268.1152,106.6854 268.571,106.2622 L268.571,108.2642 Z " fill="#000000"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="121.875" x="291.6667" y="107.8039">ScheduledTaskGrain</text><line style="stroke:#2FA4E7;stroke-width:1.0416666666666667;" x1="18.75" x2="655.2083" y1="120.9229" y2="120.9229"/><ellipse cx="29.1667" cy="132.3812" fill="#84BE84" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="600" x="42.7083" y="140.9337">ValueTask&lt;ScheduledTaskMetadata&gt; CreateAsync(ScheduledTaskMetadata scheduledTaskMetadata)</text><ellipse cx="29.1667" cy="156.1361" fill="#84BE84" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="602.0833" x="42.7083" y="164.6886">ValueTask&lt;ScheduledTaskMetadata&gt; UpdateAsync(ScheduledTaskMetadata scheduledTaskMetadata)</text><ellipse cx="29.1667" cy="179.891" fill="#84BE84" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="290.625" x="42.7083" y="188.4435">ValueTask&lt;ScheduledTaskMetadata&gt; GetAsync()</text><ellipse cx="29.1667" cy="203.6458" fill="#84BE84" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="307.2917" x="42.7083" y="212.1984">ValueTask&lt;ScheduledTaskMetadata&gt; DeleteAsync()</text></a><!--MD5=[68b772ec61f0846dab26e2c3b448cd36]
+class ScheduledTaskMetadata--><a href="https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs" target="_blank" title="Goto Souce" xlink:actuate="onRequest" xlink:href="https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs" xlink:show="new" xlink:title="Goto Souce" xlink:type="simple"><rect codeLine="14" height="303.8086" id="ScheduledTaskMetadata" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0416666666666667;fill:none;" width="496.875" x="88.5417" y="286.7513"/><ellipse cx="255.7292" cy="303.8371" fill="#EDF0F2" rx="10.4167" ry="10.4167" style="stroke:#BABDBF;stroke-width:1.0416666666666667;"/><path d="M257.6335,308.2642 Q257.2103,308.4757 256.7383,308.5897 Q256.2663,308.7036 255.7617,308.7036 Q253.9063,308.7036 252.9297,307.4992 Q251.9694,306.2785 251.9694,303.9836 Q251.9694,301.6724 252.9297,300.4679 Q253.9063,299.2472 255.7617,299.2472 Q256.2663,299.2472 256.7383,299.3612 Q257.2266,299.4588 257.6335,299.6867 L257.6335,301.6886 Q257.1777,301.2655 256.7383,301.0701 Q256.2988,300.8586 255.8431,300.8586 Q254.8503,300.8586 254.3457,301.6561 Q253.8411,302.4373 253.8411,303.9836 Q253.8411,305.5135 254.3457,306.2948 Q254.8503,307.076 255.8431,307.076 Q256.2988,307.076 256.7383,306.8807 Q257.1777,306.6854 257.6335,306.2622 L257.6335,308.2642 Z " fill="#000000"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="143.75" x="280.7292" y="307.8039">ScheduledTaskMetadata</text><line style="stroke:#2FA4E7;stroke-width:1.0416666666666667;" x1="89.5833" x2="584.375" y1="320.9229" y2="320.9229"/><ellipse cx="100" cy="332.3812" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="118.75" x="113.5417" y="340.9337">DateTime CreatedAt</text><ellipse cx="100" cy="356.1361" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="120.8333" x="113.5417" y="364.6886">DateTime ModifiedAt</text><ellipse cx="100" cy="379.891" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="72.9167" x="113.5417" y="388.4435">string Name</text><ellipse cx="100" cy="403.6458" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="105.2083" x="113.5417" y="412.1984">string Description</text><ellipse cx="100" cy="427.4007" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="126.0417" x="113.5417" y="435.9533">DateTime? NextRunAt</text><ellipse cx="100" cy="451.1556" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="125" x="113.5417" y="459.7082">DateTime? LastRunAt</text><ellipse cx="100" cy="474.9105" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="86.4583" x="113.5417" y="483.463">bool IsEnabled</text><ellipse cx="100" cy="498.6654" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="84.375" x="113.5417" y="507.2179">bool IsDeleted</text><ellipse cx="100" cy="522.4202" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="122.9167" x="113.5417" y="530.9728">DateTime? DeletedAt</text><ellipse cx="100" cy="546.1751" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="132.2917" x="113.5417" y="554.7277">string CronExpression</text><ellipse cx="100" cy="569.93" rx="3.125" ry="3.125" style="stroke:#038048;stroke-width:1.0416666666666667;fill:none;"/><text fill="#343A40" font-family="&quot;Verdana&quot;" font-size="11.4583" lengthAdjust="spacing" textLength="460.4167" x="113.5417" y="578.4826">TaskTriggerType TriggerType    +HttpTriggerProperties HttpTriggerProperties</text></a><!--MD5=[c4335cb5f06664ef850f524ccb210c83]
+link ScheduledTaskGrain to ScheduledTaskMetadata--><path codeLine="29" d="M336.9792,224.4502 C336.9792,241.8184 336.9792,261.1873 336.9792,280.9835 " fill="none" id="ScheduledTaskGrain-to-ScheduledTaskMetadata" style="stroke:#2FA4E7;stroke-width:3.125;stroke-dasharray:7.0,7.0;"/><polygon fill="#2FA4E7" points="336.9792,286.577,341.1458,277.202,336.9792,281.3687,332.8125,277.202,336.9792,286.577" style="stroke:#2FA4E7;stroke-width:3.125;"/><!--MD5=[576610b922078600a9ab2d59b16b6370]
+@startuml "ScheduledTaskClassDiagram"
+!theme cerulean-outline
+
+skinparam svgLinkTarget _blank
+title "ScheduledTask Class Diagram"
+ 
+
+class ScheduledTaskGrain [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs{Goto Source}]] {
+     +ValueTask<ScheduledTaskMetadata> CreateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
+     +ValueTask<ScheduledTaskMetadata> UpdateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
+     +ValueTask<ScheduledTaskMetadata> GetAsync()
+     +ValueTask<ScheduledTaskMetadata> DeleteAsync()
+ }
+
+class ScheduledTaskMetadata [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs{Goto Souce}]]{
+    
+    +DateTime CreatedAt
+    +DateTime ModifiedAt
+    +string Name
+    +string Description
+    +DateTime? NextRunAt
+    +DateTime? LastRunAt
+    +bool IsEnabled
+    +bool IsDeleted
+    +DateTime? DeletedAt
+    +string CronExpression
+    +TaskTriggerType TriggerType    +HttpTriggerProperties HttpTriggerProperties
+}
+hide empty member
+ScheduledTaskGrain ..> ScheduledTaskMetadata
+@enduml
+
+@startuml "ScheduledTaskClassDiagram"
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor transparent
+    FontColor #2FA4E7
+    HyperLinkColor #FD7E14
+    LineColor #2683B9
+    LineThickness 1
+    Margin 10
+    Padding 6
+    Shadowing 0.0
+  }
+  node {
+   Padding 15
+   roundcorner 20
+   BackgroundColor transparent
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor #E9ECEF
+    FontColor #033C73
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  referenceHeader {
+    BackgroundColor transparent
+    FontColor #343A40
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor #343A40
+    FontColor transparent
+    FontStyle bold
+  }
+  title {
+	FontSize 20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor  transparent
+	FontColor #2FA4E7
+	BorderColor #E9ECEF
+  }
+  nwdiagDiagram {
+	network {
+			FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent    
+		LineColor #2FA4E7
+		LineThickness 1.0
+		FontColor #2683B9
+	}
+	server {
+			FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	}
+	arrow {
+		FontColor #2683B9
+		LineColor #2683B9
+	}
+	group {
+		BackGroundColor #F8F9FA
+		LineColor $LIGHT_DARK
+		LineThickness 2.0
+		Margin 5
+		Padding 5
+	}
+  }
+  ganttDiagram {
+	task {
+			FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+		LineColor #2FA4E7
+		Margin 10
+		Padding 6
+	}
+	note {
+		FontColor #033C73
+		LineColor $INFO_DARK
+		BackGroundColor transparent
+	}
+	separator {
+		LineColor #BABDBF
+		BackGroundColor transparent
+		FontColor #BABDBF
+	}
+	milestone {
+		FontColor #033C73
+		FontSize 16
+		FontStyle italic
+		BackGroundColor #E9ECEF
+		LineColor #BABDBF
+	}
+	timeline {
+		BackgroundColor #E9ECEF
+		FontColor #BABDBF
+	}
+	closed {
+		BackgroundColor $WARNING_DARK
+		FontColor #DD5600
+	}
+  }
+</style>
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #868E96
+skinparam stereotype {
+    CBackgroundColor #EDF0F2
+    CBorderColor #BABDBF
+    ABackgroundColor #8FB961
+    ABorderColor $SUCCESS_DARK
+    IBackgroundColor #D2494E
+    IBorderColor $DANGER_DARK
+    EBackgroundColor #E47833
+    EBorderColor $WARNING_DARK
+    NBackgroundColor #35638F
+    NBorderColor $INFO_DARK
+}
+skinparam title {
+	FontColor	                 #2FA4E7
+	BorderColor	                 #BABDBF
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              transparent
+}
+
+skinparam legend {
+	BackgroundColor transparent
+	BorderColor #BABDBF
+	FontColor #343A40
+}
+
+skinparam swimlane {
+	BorderColor #033C73
+	BorderThickness 2
+	TitleBackgroundColor  #EDF0F2-#E9ECEF
+	TitleFontColor #2FA4E7
+}
+
+
+skinparam activity {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	BarColor #73A839
+	StartColor #033C73
+	EndColor #033C73
+	DiamondBackgroundColor transparent
+  	DiamondBorderColor #BABDBF
+	DiamondFontColor #BABDBF
+}
+
+
+skinparam participant {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #2FA4E7
+	FontColor #343A40
+}
+
+
+skinparam sequence {
+	BorderColor #2FA4E7
+	TitleFontColor #2FA4E7
+	BackgroundColor transparent
+	StartColor #2FA4E7
+	EndColor #2FA4E7
+	BoxBackgroundColor transparent
+	BoxBorderColor #868E96
+	BoxFontColor #343A40
+	DelayFontColor #343A40
+	LifeLineBorderColor #BABDBF
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor transparent
+	GroupBorderColor #868E96
+	GroupFontColor #343A40
+	GroupHeaderFontColor #033C73
+	DividerBackgroundColor transparent
+    DividerBorderColor #868E96
+    DividerBorderThickness 2
+    DividerFontColor #343A40
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #868E96
+	ReferenceFontColor #343A40
+	ReferenceHeaderFontColor #033C73
+	StereotypeFontColor #2FA4E7
+}
+
+
+skinparam partition {
+	BorderColor #2FA4E7
+	FontColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam control {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam entity {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam boundary {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam agent {
+	BackgroundColor transparent
+	BorderColor #999999
+	FontColor #333333
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor transparent
+	BorderColor #033C73
+	FontColor #033C73
+}
+
+
+skinparam artifact {
+	BackgroundColor transparent
+	BorderColor #868E96
+	FontColor #868E96
+}
+
+
+skinparam component {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam interface {
+	BackgroundColor  transparent
+	BorderColor  #C71C22
+	FontColor #343A40
+}
+
+
+skinparam storage {
+	BackgroundColor transparent
+  	BorderColor #DD5600
+	FontColor #DD5600
+}
+
+
+skinparam node {
+	BackgroundColor transparent
+	BorderColor #343A40
+	FontColor #343A40
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #343A40
+}
+
+
+skinparam database {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam class {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	FontColor #F8F9FA
+	HeaderBackgroundColor #2FA4E7-#2683B9
+	StereotypeFontColor #343A40
+	BorderThickness 1
+	AttributeFontColor #343A40
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	StereotypeFontColor #343A40
+	BorderThickness 1
+	AttributeFontColor #BABDBF
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	BorderThickness 2
+	StereotypeFontColor #2FA4E7
+}
+
+
+skinparam rectangle {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	BorderThickness 2
+	StereotypeFontColor #2FA4E7
+}
+
+
+skinparam package {
+	BackgroundColor transparent
+  	BorderColor #2FA4E7
+	FontColor #2FA4E7
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor transparent
+  	BorderColor #DD5600
+	FontColor #DD5600
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor transparent
+  	BorderColor #033C73
+	FontColor #033C73
+	BorderThickness 2
+}
+
+
+skinparam state {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+	StartColor #033C73
+	EndColor #033C73
+	AttributeFontColor #BABDBF
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+skinparam card {
+	BackgroundColor transparent
+	BorderColor #033C73
+	FontColor #033C73
+}
+
+
+skinparam file {
+	BackgroundColor transparent
+	BorderColor #868E96
+	FontColor #868E96
+}
+
+
+skinparam stack {
+		FontColor #2FA4E7
+	BorderColor #2FA4E7
+	BackgroundColor transparent
+}
+
+
+
+
+skinparam svgLinkTarget _blank
+title "ScheduledTask Class Diagram"
+ 
+
+class ScheduledTaskGrain [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs{Goto Source}]] {
+     +ValueTask<ScheduledTaskMetadata> CreateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
+     +ValueTask<ScheduledTaskMetadata> UpdateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
+     +ValueTask<ScheduledTaskMetadata> GetAsync()
+     +ValueTask<ScheduledTaskMetadata> DeleteAsync()
+ }
+
+class ScheduledTaskMetadata [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs{Goto Souce}]]{
+    
+    +DateTime CreatedAt
+    +DateTime ModifiedAt
+    +string Name
+    +string Description
+    +DateTime? NextRunAt
+    +DateTime? LastRunAt
+    +bool IsEnabled
+    +bool IsDeleted
+    +DateTime? DeletedAt
+    +string CronExpression
+    +TaskTriggerType TriggerType    +HttpTriggerProperties HttpTriggerProperties
+}
+hide empty member
+ScheduledTaskGrain ..> ScheduledTaskMetadata
+@enduml
+
+PlantUML version 1.2022.0(Tue Jan 11 16:16:42 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: ANSI_X3.4-1968
+Language: en
+Country: US
+--></g></svg>

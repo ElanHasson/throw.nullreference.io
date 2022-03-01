@@ -1,0 +1,5 @@
+<map id="plantuml_map" name="plantuml_map">
+<area shape="rect" id="id1" href="https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs" title="Goto Source" alt="" coords="17,86,656,224"/>
+<area shape="rect" id="id2" href="https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs" title="Goto Souce" alt="" coords="88,286,585,590"/>
+</map>
+
