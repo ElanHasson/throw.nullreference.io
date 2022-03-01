@@ -86,7 +86,7 @@ More recently, Orleans [has moved into the Microsoft Development Division](https
 Orleans manages our concurrency and [load balancing](https://docs.microsoft.com/en-us/dotnet/orleans/implementation/load-balancing) across [Grains](https://docs.microsoft.com/en-us/dotnet/orleans/overview#grains) for us. These are attractive features for us as we want to eliminate the need to manage these seemingly simple, but very complex and nuanced concerns ourselves.
 
 
-We'll be modeling our Scheduled Tasks as Grains running on the Orleans cluster. Each Scheduled Task will have a unique ID and will be responsible for executing the task at a specified time.
+We'll be modeling our Scheduled Tasks as a Grain running on the Orleans cluster. Each Scheduled Task will have a unique ID and will be responsible for executing the task at a specified time. The [grain state](https://docs.microsoft.com/en-us/dotnet/orleans/grains/grain-persistence) is stored is modeled in `ScheduledTaskMetadata`, which is a [POCO](https://stackoverflow.com/a/250006/103302).
 
 
 {{< svg "/images/ScheduledTaskClassDiagram.svg" "ScheduledTaskClassDiagram" "0 0 10 20" "xMidYMid meet" >}}
