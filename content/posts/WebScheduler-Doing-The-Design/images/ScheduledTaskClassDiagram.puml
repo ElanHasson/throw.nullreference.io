@@ -25,8 +25,24 @@ class ScheduledTaskMetadata [[https://github.com/web-scheduler/web-scheduler/blo
     +bool IsDeleted
     +DateTime? DeletedAt
     +string CronExpression
-    +TaskTriggerType TriggerType    +HttpTriggerProperties HttpTriggerProperties
+    +TaskTriggerType TriggerType  
+    +HttpTriggerProperties HttpTriggerProperties
 }
 hide empty member
 ScheduledTaskGrain ..> ScheduledTaskMetadata
+
+enum TaskTriggerType [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/TaskTriggerType.cs{Goto Source}]]
+{   
+    HttpTrigger
+}
+class HttpTriggerProperties [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/HttpTriggerProperties.cs{Goto Source}]]
+{
+    +string EndPointUrl
+    +string HttpMethod
+}
+
+ScheduledTaskMetadata .right.> TaskTriggerType
+ScheduledTaskMetadata .left.> HttpTriggerProperties
+
+
 @enduml
