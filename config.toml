@@ -9,3 +9,6 @@ enableGitInfo = true
   expiryDate = ['expiryDate']
   lastmod = [':fileModTime', ':git', 'lastmod', 'date', 'publishDate']
   publishDate = ['publishDate', 'date']
+
+[build]
+  writeStats = true

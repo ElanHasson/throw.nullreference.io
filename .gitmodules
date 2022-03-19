@@ -1,4 +1,4 @@
 [submodule "themes/hugo-theme-bootstrap"]
 	path = themes/hugo-theme-bootstrap
 	url = https://github.com/razonyang/hugo-theme-bootstrap
-	branch = v0.65.1
+	branch = v0.69.0
