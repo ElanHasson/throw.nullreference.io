@@ -1,7 +1,7 @@
 +++
 title = "WebScheduler Part II: Designing the Web Scheduler"
 description = "In this installment of building a distributed task scheduler, we'll go over the system design and implementation details."
-date = 2022-02-23T02:07:52Z
+date = 2022-03-19T02:07:52Z
 featured = true
 viewer = false
 draft = true
@@ -33,11 +33,13 @@ This is the second post in the series, if you haven't read the first, you should
 
 This post covers the system design of the Web Scheduler and the decisions made during the design process.
 
+The code for the project can be found here [in these repositories](https://github.com/web-scheduler).
+
 ## The Tech Stack
 
 - Hosting Platform: [DigitalOcean's App Platform](#digitaloceans-app-platform)
 - Web Frontend Application: [ASP.NET Core Blazor](#aspnet-core-blazor)
-- Frontend API: [ASP.NET Core Web API](#aspnet-core-web-api)
+- Frontend API: ASP.NET Core Web API
 - Backend: [Microsoft Orleans](#microsoft-orleans)
 - Durable Data Persistence: [MySQL](#mysql)
 - Caching: [Redis](#redis)
@@ -45,7 +47,7 @@ This post covers the system design of the Web Scheduler and the decisions made d
 - Build, Test, Package, and Containerize: [GitHub Actions](#github-actions)
 - Observability: [OpenTelemetry and Jaegar](#opentelemetry-and-jaeger)
 
-### DigitalOcean's App Platform
+## DigitalOcean's App Platform
 
 The WebScheduler will be deployed to [DigitalOcean's App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste) and leveraging their managed PaaS offerings for support services.
 
@@ -58,7 +60,7 @@ Our WebScheduler App will be deployed as depicted below. You can click each comp
 
 Below are the details about each one of the components that make up the WebScheduler App.
 
-### Microsoft Orleans
+## Microsoft Orleans
 
 ![Microsoft Orleans Logo](images/orleans.png?height=100px#floatleft "Microsoft Orleans Logo")[Microsoft Orleans](https://github.com/dotnet/orleans) is an open-source, cross-platform framework for building robust, scalable distributed applications in .NET. When I discovered Orleans sometime around 2015 I fell in love with it. It is the type of technology that one can get really excited about, the kind that changes mental model of problems and solutions. I've built a few solutions over the years with Orleans but have recently begun making real contributions (*non-docs* :sweat_smile:) to the project.
 
@@ -74,14 +76,14 @@ I don't think there is a better explanation of what Orleans is than what has alr
 
 Check out [An Introduction to Orleans](https://docs.microsoft.com/en-us/shows/reactor/an-introduction-to-orleans) from Microsoft Reactor for a great primer.
 
-#### Orleans History 
+### Orleans History 
 *Note: this section was pieced together from various Orleans blog posts and other sources. If there is more to it, or any inaccuracies, let me know and I'll amend this section.*
 
 Orleans started out in Microsoft Research in 2008 and was quickly moved into the Xbox organization where it lived most of it's life. It is being used for games such as [343 Industries](https://www.343industries.com/)'s [Halo](https://en.wikipedia.org/wiki/Halo_(franchise)) and Epic Games' [Gears of War](https://gearsofwar.com/) series. Orleans is also being used by a number of internal teams at Microsoft to build [Azure ML](https://azure.microsoft.com/en-us/services/machine-learning/), [Azure IoT Digital Twins](https://azure.microsoft.com/en-us/services/digital-twins/), [Microsoft Mesh](https://www.microsoft.com/en-us/mesh), [Azure Quantum](https://azure.microsoft.com/en-us/services/quantum/), [Microsoft Dynamics 365 Fraud Protection](https://dynamics.microsoft.com/en-us/ai/fraud-protection/), [Azure PlayFab](https://azure.microsoft.com/en-us/services/playfab/) (part of Xbox), just to name a few. For more details, check out the [Orleans at Microsoft](https://www.youtube.com/watch?v=KhgYlvGLv9c) video, where [Reuben Bond](https://twitter.com/reubenbond) talks about how Orleans is used at Microsoft.
 
 More recently, Orleans [has moved into the Microsoft Development Division](https://devblogs.microsoft.com/dotnet/asp-net-core-updates-in-net-7-preview-1/#:~:text=Orleans%3A%20The%20ASP,version%2Dtolerant%20serializer.) (DevDiv). DevDiv is the division in Microsoft which is responsible for developer tooling, languages, frameworks, and some cloud services. This [is an exciting time for Orleans](https://github.com/dotnet/aspnetcore/issues/39504#:~:text=1583%20(gRPC/HTTP)-,Orleans,-Implement%20POCO%20Grains) and I'm super excited to see what this move means for the growing Orleans ecosystem, especially since it'll be closer aligned with other .NET open-source technologies.
 
-### Implementation Details
+## Implementation Details
 
 Orleans manages our concurrency and [load balancing](https://docs.microsoft.com/en-us/dotnet/orleans/implementation/load-balancing) across [Grains](https://docs.microsoft.com/en-us/dotnet/orleans/overview#grains) for us. These are attractive features for us as we want to eliminate the need to manage these seemingly simple, but very complex and nuanced concerns ourselves.
 
@@ -91,7 +93,7 @@ We'll be modeling our Scheduled Tasks as a Grain running on the Orleans cluster.
 
 {{< svg "/images/ScheduledTaskClassDiagram.svg" "ScheduledTaskClassDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
-#### Reminders
+### Reminders
 
 The primary reason for selecting Orleans is because of the durable reminders that scale near-linearly when adding new Silos to the cluster.
 
@@ -105,13 +107,18 @@ Reminders do have some limitations:
 
 We'll have to work around these reminder issues.
 
-#### Observability
+## Observability
 
-We'll be using [OrleansDashboard](https://github.com/OrleansContrib/OrleansDashboard) to monitor our silos.
+For the Orleans Silo Cluster, we'll be using [OrleansDashboard](https://github.com/OrleansContrib/OrleansDashboard) to monitor our silos.
 
-![OrleansDashboard](images/OrleansDashboard.png?height=460px#floatright "The OrleansDashboard")
+![OrleansDashboard](images/OrleansDashboard.png?height=440px#floatright "The OrleansDashboard")
 
-### ASP.NET Core Blazor
+### OpenTelemetry and Jaeger
+
+We'll be using [OpenTelemetry](https://opentelemetry.io/docs/instrumentation/net/) and [Jaeger](https://www.jaegertracing.io/) to implement distributed tracing, so we can see what's happening in our services.
+
+
+## ASP.NET Core Blazor
 ![Blazor Logo](images/Blazor.png?height=100px#floatright "ASP.NET Core Blazor Logo")
 ASP.NET Core Blazor is a framework for building interactive client-side web UI using .NET instead of JavaScript. Blazor has two flavors ([soon three with Blazor Hybrid](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-hybrid)), [Blazor WebAssembly](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-webassembly) and [Blazor Server](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-server). 
 
@@ -121,15 +128,37 @@ Blazor Server is a client and server-side framework where UI updates are process
 
 For this project, I wanted to keep the UI relatively simple without a backend-host so I could leverage App Platform's [Static Site component](https://docs.digitalocean.com/products/app-platform/concepts/static-site/). To meet this objective, I chose Blazor WebAssembly.
 
-### MySQL
+For a UI Component library, We'll be using [Blazorise](https://blazorise.com/) with the [Bootstrap5 theme](https://bootstrap5demo.blazorise.com/).
 
-### Redis
+## MySQL
 
-### Duende IdentityServer with ASP.NET Core Identity
-### GitHub Actions
+For grain storage and other orleans data persistence, We'll be using [MySQL](https://www.mysql.com/), see [ADO.NET grain persistence](https://docs.microsoft.com/en-us/dotnet/orleans/grains/grain-persistence/relational-storage).
 
-### OpenTelemetry and Jaeger
+## Redis
 
-## Tieing it All Together
-  
+[Redis](https://redis.com) will be used for request distributed caching for API requests.
+
+## Duende IdentityServer with ASP.NET Core Identity
+
+We'll be supporting both Social logins and local logins. To do so, be implementing [Duende IdentityServer](https://duendesoftware.com/products/identityserver) to handle our authentication with JWT with claims-based authorization to secure our ASP.NET Web APIs and Frontend Blazor App.
+
+## GitHub Actions
+
+We'll be using GitHub Actions to build, test, package, and deploy our services as container images to DigitalOcean's App Platform.
+
+## Tying it All Together
+
+The components of the WebScheduler system.
+
 {{< svg "/images/LogicalDeploymentDiagram.svg" "LogicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
+
+
+{{<alert type="info" icon="bi bi-code-square">}}
+The code for the project can be found here [in these repositories](https://github.com/web-scheduler).
+{{</alert>}}
+
+
+{{<svg-alert icon="check-circle-fill" type="success">}}
+Head over to DigitalOcean and [sign-up and give App Platform a try](https://m.do.co/c/0759a4937a7a) and get a $100 credit to use over 60 days.
+{{</svg-alert>}}
+

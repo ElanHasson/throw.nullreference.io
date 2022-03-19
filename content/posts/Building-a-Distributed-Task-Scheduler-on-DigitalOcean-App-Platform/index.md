@@ -70,8 +70,11 @@ As for timeliness of the delivery, there are many factors involved, such as:
 
 Sub-second delivery guarantees would be great :smile:
 
-Check out [Part II: Designing the Web Scheduler]({{< ref  "WebScheduler-Doing-The-Design" >}}) for implementation details.
+{{<alert type="info" icon="info-circle" >}}
+Check out [Part II: Designing the Web Scheduler](/posts/webscheduler-part-2-doing-the-design/) for implementation details.
+{{</alert>}}
 
-{{<svg-alert icon="check-circle-fill" type="success">}}
-In the meantime, head over to DigitalOcean and [sign-up and give App Platform a try](https://m.do.co/c/0759a4937a7a) and get a $100 credit to use over 60 days.
+{{<svg-alert type="success" icon="check-circle-fill" >}}
+Head over to DigitalOcean and [sign-up and give App Platform a try](https://m.do.co/c/0759a4937a7a) and get a $100 credit to use over 60 days.
 {{</svg-alert>}}
+

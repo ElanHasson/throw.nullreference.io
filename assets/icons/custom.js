@@ -1,4 +1,4 @@
-import { faGlobe, faClock, faBook } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faClock, faBook,faCode, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-const icons = [faGlobe, faClock, faBook];
+const icons = [faGlobe, faClock, faBook, faCode, faCheckCircle];
 export default icons;
