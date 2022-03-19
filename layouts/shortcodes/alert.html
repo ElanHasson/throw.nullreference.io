@@ -1,0 +1,6 @@
+{{ $icon := .Get "icon" }}
+{{ $type := .Get "type" }}
+
+<div class="alert alert-{{ $type }}" role="alert">
+  <i class="{{ $icon }}"></i>&nbsp;{{ .Inner | $.Page.RenderString  }}
+</div>
