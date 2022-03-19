@@ -33,7 +33,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	 "postCreateCommand": "npm install npm && npm install && sudo ln -s /workspaces/throw.nullreference.io/bin/hugo/hugo /usr/local/bin/hugo && npm run build",
+	 "postCreateCommand": "git submodule update --init --recursive && npm install npm && npm install && npm run build && sudo ln -s /workspaces/throw.nullreference.io/bin/hugo/hugo /usr/local/bin/hugo && hugo mod npm pack &&  npm run build",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node",

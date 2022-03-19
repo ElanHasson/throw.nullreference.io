@@ -1,6 +1,6 @@
 +++
 title = "Keep Your Visual Basic 6 Application in Active Development, for the Next 10 Years"
-date = 2014-05-02T59:00:00Z
+date = 2014-05-02T23:00:00Z
 # description = "" # Used by description meta tag, summary will be used instead if not set or empty.
 featured = false
 draft = false
