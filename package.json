@@ -3,7 +3,7 @@
     "npm": "^8.7.0",
     "node": "^14.19.1"
   },
-  "comments": {
+    "comments": {
     "dependencies": {
       "@babel/cli": "hugo-theme-bootstrap",
       "@babel/core": "hugo-theme-bootstrap",
@@ -20,10 +20,12 @@
       "fuse.js": "hugo-theme-bootstrap",
       "katex": "hugo-theme-bootstrap",
       "mark.js": "hugo-theme-bootstrap",
+      "masonry-layout": "hugo-theme-bootstrap",
       "mermaid": "hugo-theme-bootstrap",
       "mustache": "hugo-theme-bootstrap",
       "npm": "project",
       "postcss-cli": "hugo-theme-bootstrap",
+      "rtlcss": "hugo-theme-bootstrap",
       "terser-webpack-plugin": "project",
       "viewerjs": "hugo-theme-bootstrap",
       "webpack": "project",
@@ -56,10 +58,12 @@
     "fuse.js": "^6.5.3",
     "katex": "^0.15.2",
     "mark.js": "^8.11.1",
+    "masonry-layout": "^4.2.2",
     "mermaid": "^8.14.0",
     "mustache": "^4.2.0",
     "npm": "^8.5.5",
     "postcss-cli": "^9.1.0",
+    "rtlcss": "^3.5.0",
     "terser-webpack-plugin": "^5.2.5",
     "viewerjs": "^1.10.4",
     "webpack": "^5.65.0",
