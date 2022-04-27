@@ -73,7 +73,7 @@
   },
   "name": "throw-nullreference-io",
   "otherDependencies": {
-    "hugo": "0.95.0"
+    "hugo": "0.97.3"
   },
   "scripts": {
     "build": "webpack",
