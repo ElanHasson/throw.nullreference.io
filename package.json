@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "npm": "^8.7.0",
+    "node": "^14.19.1"
+  },
   "comments": {
     "dependencies": {
       "@babel/cli": "hugo-theme-bootstrap",
