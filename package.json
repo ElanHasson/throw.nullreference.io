@@ -1,9 +1,5 @@
 {
-  "engines": {
-    "npm": "^8.7.0",
-    "node": "^14.19.1"
-  },
-    "comments": {
+  "comments": {
     "dependencies": {
       "@babel/cli": "hugo-theme-bootstrap",
       "@babel/core": "hugo-theme-bootstrap",
@@ -78,6 +74,10 @@
     "copy-webpack-plugin": "^10.2.4",
     "hugo-installer": "^3.1.0",
     "webpack-cli": "^4.9.1"
+  },
+  "engines": {
+    "node": "^14.19.1",
+    "npm": "^8.7.0"
   },
   "name": "throw-nullreference-io",
   "otherDependencies": {
