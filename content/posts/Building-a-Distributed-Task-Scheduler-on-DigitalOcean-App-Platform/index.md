@@ -71,7 +71,7 @@ As for timeliness of the delivery, there are many factors involved, such as:
 Sub-second delivery guarantees would be great :smile:
 
 {{<alert type="info" icon="info-circle" >}}
-Check out [Part II: Designing the Web Scheduler](/posts/webscheduler-part-2-doing-the-design/) for implementation details.
+Check out [Part II: Designing the Web Scheduler]({{< ref "WebScheduler-Part-2-Doing-The-Design" >}}) for implementation details.
 {{</alert>}}
 
 {{<svg-alert type="success" icon="check-circle-fill" >}}
