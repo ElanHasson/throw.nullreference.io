@@ -153,9 +153,9 @@ The components of the WebScheduler system.
 {{< svg "/images/LogicalDeploymentDiagram.svg" "LogicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
 
-{{<alert type="info" icon="bi bi-code-square">}}
+{{<svg-alert type="info" icon="code-square">}}
 The code for the project can be found here [in these repositories](https://github.com/web-scheduler).
-{{</alert>}}
+{{</svg-alert>}}
 
 
 {{<svg-alert icon="check-circle-fill" type="success">}}
