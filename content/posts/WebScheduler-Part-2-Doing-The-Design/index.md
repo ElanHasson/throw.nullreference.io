@@ -88,16 +88,22 @@ More recently, Orleans [has moved into the Microsoft Development Division](https
 Orleans manages our concurrency and [load balancing](https://docs.microsoft.com/en-us/dotnet/orleans/implementation/load-balancing) across [Grains](https://docs.microsoft.com/en-us/dotnet/orleans/overview#grains) for us. These are attractive features for us as we want to eliminate the need to manage these seemingly simple, but very complex and nuanced concerns ourselves.
 
 
-We'll be modeling our Scheduled Tasks as a Grain running on the Orleans cluster. Each `ScheduledTaskGrain` will have a unique ID and will be responsible for executing the task at a specified time. The [grain state](https://docs.microsoft.com/en-us/dotnet/orleans/grains/grain-persistence) is modeled in `ScheduledTaskMetadata`, which is a [POCO](https://stackoverflow.com/a/250006/103302).
+We'll be modeling our Scheduled Tasks as a Grain running on the Orleans cluster. Each `ScheduledTaskGrain` will have a unique ID and will be responsible for executing the task at a specified time. The [grain state](https://docs.microsoft.com/en-us/dotnet/orleans/grains/grain-persistence) is modeled in `ScheduledTaskMetadata`, which is a [POCO](https://stackoverflow.com/a/250006/103302). Scheduled tasks will leverage the [Orleans Reminders](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders) feature to schedule their execution.
 
 
 {{< svg "/images/ScheduledTaskClassDiagram.svg" "ScheduledTaskClassDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
-### Reminders
+### The ScheduledTaskGrain
 
-The primary reason for selecting Orleans is because of the durable reminders that scale near-linearly when adding new Silos to the cluster.
+The `ScheduledTaskGrain` is the workhorse of the Scheduler. It is responsible for managing the state of the `ScheduledTaskGrain` and for triggering the executing of the scheduled task per the desired schedule..
+
+The grain acts as a CRUD interface for the `ScheduledTaskMetadata` state. The `ScheduledTaskMetadata', as the name implies, holds all of the information required to schedule and execute the task.
+
+#### Scheduling the Task
 
 Orleans has a mechanism called [Reminders](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders) which enable you to specify periodic tasks that are executed by a grain. Reminders are durable and the Orleans runtime guarantees reminders will *always* be fired. This is a great way to implement a cron-like scheduling system, except they don't exactly allow for [cron-like scheduling...yet](https://github.com/dotnet/orleans/issues/7573)!
+
+The primary reason for selecting Orleans is because of the durable reminders that scale near-linearly when adding new Silos to the cluster.
 
 Reminders do have some limitations:
 * Reminders can only scheduled \\(\leq\\)49 days (`0xfffffffe` milliseconds) in the future
@@ -105,7 +111,14 @@ Reminders do have some limitations:
 * They don't speak [*crontab*](https://codebeautify.org/crontab-format)
 * There is no way to have a task run only once. It'll keep *ticking* at the specified interval until you [unregister the reminder](https://docs.microsoft.com/en-us/dotnet/orleans/grains/timers-and-reminders#reminder-usage).
 
-We'll have to work around these reminder issues.
+We'll be working around all of these limitations as part of the implementation.
+
+#### Executing the Task
+
+The type of trigger is determined by the `TriggerType` enum value stored in in `ScheduledTaskMetadata.TaskTriggerType`. For now, we're going implement a simple trigger, the `TaskTriggerType.HttpTrigger`, supporting only HTTP `GET` requests. The `ScheduledTaskMetadata.HttpTriggerProperties` holds information to use for the actual HTTP Request.
+
+In the future, we'll be adding support for all other HTTP verbs and message queueing systems such as RabbitMQ or Kafka. configuration for HTTP request task types. 
+
 
 ## Observability
 
