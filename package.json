@@ -57,7 +57,7 @@
     "masonry-layout": "^4.2.2",
     "mermaid": "^8.14.0",
     "mustache": "^4.2.0",
-    "npm": "^8.5.5",
+    "npm": "^8.11.0",
     "postcss-cli": "^9.1.0",
     "rtlcss": "^3.5.0",
     "terser-webpack-plugin": "^5.2.5",
