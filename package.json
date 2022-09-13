@@ -55,7 +55,7 @@
     "katex": "^0.15.2",
     "mark.js": "^8.11.1",
     "masonry-layout": "^4.2.2",
-    "mermaid": "^8.14.0",
+    "mermaid": "^9.1.7",
     "mustache": "^4.2.0",
     "npm": "^8.5.5",
     "postcss-cli": "^9.1.0",
