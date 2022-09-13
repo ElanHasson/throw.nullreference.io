@@ -165,6 +165,7 @@ The components of the WebScheduler system.
 
 {{< svg "/images/LogicalDeploymentDiagram.svg" "LogicalDeploymentDiagram" "0 0 10 20" "xMidYMid meet" >}}
 
+The next article in the series will focus on how to consume the Web Scheduler and reuse it within your own system.
 
 {{<svg-alert type="info" icon="code-square">}}
 The code for the project can be found here [in these repositories](https://github.com/web-scheduler).
