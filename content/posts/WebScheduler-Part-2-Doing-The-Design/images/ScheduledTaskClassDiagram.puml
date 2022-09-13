@@ -6,7 +6,7 @@ skinparam svgLinkTarget _blank
 title "ScheduledTask Class Diagram"
  
 
-class ScheduledTaskGrain [[http://localhost:9081/posts/webscheduler-part-2-doing-the-design/#the-scheduledtaskgrain{Jump to the ScheduledTaskGrain details}]] {
+class ScheduledTaskGrain [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs{Jump to the ScheduledTaskGrain details}]] {
      +ValueTask<ScheduledTaskMetadata> CreateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
      +ValueTask<ScheduledTaskMetadata> UpdateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
      +ValueTask<ScheduledTaskMetadata> GetAsync()
