@@ -97,7 +97,7 @@ We'll be modeling our Scheduled Tasks as a Grain running on the Orleans cluster.
 
 The `ScheduledTaskGrain` is the workhorse of the Scheduler. It is responsible for managing the state of the `ScheduledTaskGrain` and for triggering the executing of the scheduled task per the desired schedule..
 
-The grain acts as a CRUD interface for the `ScheduledTaskMetadata` state. The `ScheduledTaskMetadata', as the name implies, holds all of the information required to schedule and execute the task.
+The grain acts as a CRUD interface for the `ScheduledTaskMetadata` state. The `ScheduledTaskMetadata`, as the name implies, holds all of the information required to schedule and execute the task.
 
 #### Scheduling the Task
 
