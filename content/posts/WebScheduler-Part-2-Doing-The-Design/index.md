@@ -1,10 +1,10 @@
 +++
 title = "WebScheduler Part II: Designing the Web Scheduler"
 description = "In this installment of building a distributed task scheduler, we'll go over the system design and implementation details."
-date = 2022-03-19T02:07:52Z
+date = 2022-09-13T02:07:52Z
 featured = true
 viewer = false
-draft = true
+draft = false
 comment = true
 toc = true
 reward = true
