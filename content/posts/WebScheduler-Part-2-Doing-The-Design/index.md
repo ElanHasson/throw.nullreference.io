@@ -149,7 +149,7 @@ For grain storage and other orleans data persistence, We'll be using [MySQL](htt
 
 ## Redis
 
-[Redis](https://redis.com) will be used for request distributed caching for API requests.
+[Redis](https://redis.com) will be used for distributed caching for API requests.
 
 ## Duende IdentityServer with ASP.NET Core Identity
 
