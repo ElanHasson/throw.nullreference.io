@@ -80,7 +80,7 @@
   },
   "name": "throw-nullreference-io",
   "otherDependencies": {
-    "hugo": "0.97.3"
+    "hugo": "0.102.3"
   },
   "scripts": {
     "build": "webpack",

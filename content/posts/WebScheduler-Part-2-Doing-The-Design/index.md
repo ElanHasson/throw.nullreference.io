@@ -25,7 +25,7 @@ series = [
 
 [[resources]]
 name = 'thumbnail'
-src = 'images/PhysicalDeploymentDiagram.svg'
+src = 'images/PhysicalDeploymentDiagram.png'
 
 +++
 This is the second post in the series, if you haven't read the first, you should stop here and [read the first part]({{< ref  "Building-a-Distributed-Task-Scheduler-on-DigitalOcean-App-Platform" >}}) before continuing. 
