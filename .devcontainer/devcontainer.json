@@ -14,7 +14,16 @@
 	"settings": {
 		"[markdown]": {
 			"editor.quickSuggestions": true
-		  }
+		  },
+		"plantuml.exportFormat": "svg",
+		"plantuml.exportMapFile": false,
+		"plantuml.exportSubFolder": false,
+		"plantuml.exportOutDir": "./",
+		"markdown.extension.preview.autoShowPreviewToSide": false,
+		"markdown.extension.toc.updateOnSave": false,
+		"remote.extensionKind": {
+			"telesoho.vscode-markdown-paste-image": ["ui"],
+		}
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
@@ -26,7 +35,10 @@
 		"bungcip.better-toml",
 		"akmittal.hugofy",
 		"streetsidesoftware.code-spell-checker",
-		"GitHub.copilot"
+		"GitHub.copilot",
+		"jebbs.plantuml",
+		"yzhang.markdown-all-in-one",
+		"telesoho.vscode-markdown-paste-image"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

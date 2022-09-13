@@ -1,0 +1,76 @@
+{
+    "version": "0.2",
+    "cache": {
+        "useCache": true,
+        "cacheLocation": "./.cspell/.cspellcache",
+        "cacheStrategy": "content"
+    },
+    "dictionaryDefinitions": [
+        {
+            "name": "workspace",
+            "path": "./cspell-dict.txt",
+            "description": "Custom Workspace Dictionary",
+            "addWords": true,
+            "scope": "workspace"
+        },
+        {
+            "name": "ignore words",
+            "path": "./cspell-ignore-words.txt",
+            "description": "Words to be Ignored",
+            "addWords": true,
+            "noSuggest": true
+        }
+    ],
+    "dictionaries": [
+        "workspace",
+        "ignore words"
+    ],
+    "ignorePaths": [
+        ".eslintignore",
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".pnp.{js,cjs}",
+        ".prettierignore",
+        ".yarn",
+        "*.{png,jpg,pdf}",
+        "/cspell-dict.txt",
+        "/cspell-ignore-words.txt",
+        "**/.gitignore",
+        "**/.vscode/**",
+        "**/{cspell.*,cSpell.*,.cspell.*,cspell.config.*}",
+        "**/*.snap",
+        "**/*.trie",
+        "**/coverage/**",
+        "**/dist/**",
+        "**/jest.config.js",
+        "**/node_modules/**",
+        "**/tsconfig.json",
+        "/.cspell",
+        "cspell.json",
+        "integration-tests/config/config.json",
+        "integration-tests/config/repositories/**",
+        "integration-tests/repositories/**",
+        "integration-tests/snapshots/**",
+        "lcov.info",
+        "package.json",
+        "package-lock.json",
+        "packages/*/samples/**",
+        "packages/Samples/**",
+        "temp",
+        "test-fixtures/**",
+        "test-packages/test-cspell-tools/src/*.txt"
+    ],
+    "useGitignore": true,
+    "flagWords": [],
+    "ignoreWords": [
+        "commitcomment"
+    ],
+    "words": [
+        "Blazor",
+        "Jaegar"
+    ],
+    "features": {
+        "weighted-suggestions": true
+    }
+}
