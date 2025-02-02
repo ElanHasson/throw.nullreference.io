@@ -39,7 +39,7 @@
 				"budparr.language-hugo-vscode",
 				"rusnasonov.vscode-hugo",
 				"eamodio.gitlens",
-				"bungcip.better-toml",
+				"tamasfe.even-better-toml",
 				"akmittal.hugofy",
 				"streetsidesoftware.code-spell-checker",
 				"GitHub.copilot",
