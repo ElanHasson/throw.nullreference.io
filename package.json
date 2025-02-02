@@ -52,7 +52,7 @@
     "autoprefixer": "^10.4.2",
     "bootstrap": "~5.1.3",
     "fuse.js": "^6.5.3",
-    "katex": "^0.15.2",
+    "katex": "^0.16.21",
     "mark.js": "^8.11.1",
     "masonry-layout": "^4.2.2",
     "mermaid": "^10.9.3",
