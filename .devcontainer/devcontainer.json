@@ -3,43 +3,58 @@
 {
 	"name": "throw-nullreference-io",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"features": {
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/devcontainers/features/git-lfs:1": {},
-		"ghcr.io/devcontainers/features/github-cli:1": {}
-	},
-	
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"[markdown]": {
-			"editor.quickSuggestions": {
-				"other": true,
-				"comments": false,
-				"strings": true
-			}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"installYarnUsingApt": true,
+			"version": "lts",
+			"pnpmVersion": "latest",
+			"nvmVersion": "latest"
+		},
+		"ghcr.io/devcontainers-extra/features/apt-packages:1": {
+			"clean_ppas": true,
+			"preserve_apt_list": true,
+			"packages": true,
+			"ppas": "ppa:deadsnakes/ppa"
 		}
 	},
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"dbaeumer.vscode-eslint",
-		"budparr.language-hugo-vscode",
-		"rusnasonov.vscode-hugo",
-		"eamodio.gitlens",
-		"bungcip.better-toml",
-		"akmittal.hugofy",
-		"streetsidesoftware.code-spell-checker",
-		"GitHub.copilot",
-		"jebbs.plantuml",
-		"yzhang.markdown-all-in-one",
-		"telesoho.vscode-markdown-paste-image"
-	],
+	// Set *default* container specific settings.json values on container create.
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"[markdown]": {
+					"editor.quickSuggestions": {
+						"other": true,
+						"comments": false,
+						"strings": true
+					}
+				}
+			},
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"budparr.language-hugo-vscode",
+				"rusnasonov.vscode-hugo",
+				"eamodio.gitlens",
+				"bungcip.better-toml",
+				"akmittal.hugofy",
+				"streetsidesoftware.code-spell-checker",
+				"GitHub.copilot",
+				"jebbs.plantuml",
+				"yzhang.markdown-all-in-one",
+				"telesoho.vscode-markdown-paste-image"
+			]
+		}
+	},
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "git submodule update --init --recursive && npm install npm && npm install && npm run build && sudo ln -s /workspaces/throw.nullreference.io/bin/hugo/hugo /usr/local/bin/hugo && hugo mod npm pack &&  npm run build",	// Configure tool-specific properties.
+	"postCreateCommand": "git submodule update --init --recursive && npm install && npm run build && sudo ln -s /workspaces/throw.nullreference.io/bin/hugo/hugo /usr/local/bin/hugo && hugo mod npm pack &&  npm run build", // Configure tool-specific properties.
 	// "customizations": {},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
