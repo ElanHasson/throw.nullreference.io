@@ -1,0 +1,216 @@
+---
+title: "WebScheduler Part II: Designing the Web Scheduler"
+description: "In this installment of building a distributed task scheduler, we'll go over the system design and implementation details."
+date: 2022-09-13T02:07:52Z
+featured: true
+draft: false
+thumbnail: "/images/webscheduler-part-2/PhysicalDeploymentDiagram.png"
+categories: ["Microsoft Orleans", "DigitalOcean App Platform", ".NET", "Systems Design", "Blazor", "WebScheduler", "ASP.NET Core"]
+tags: []
+series: "Building a Distributed Task Scheduler on DigitalOcean App Platform"
+---
+
+import { Alert } from '@/components/mdx/alert'
+import { MermaidDiagram } from '@/components/mdx/mermaid'
+import Link from 'next/link'
+
+This is the second post in the series, if you haven't read the first, you should stop here and [read the first part](/blog/building-distributed-task-scheduler) before continuing.
+
+This post covers the system design of the Web Scheduler and the decisions made during the design process.
+
+The code for the project can be found here [in these repositories](https://github.com/web-scheduler).
+
+## The Tech Stack
+
+- Hosting Platform: [DigitalOcean's App Platform](#digitaloceans-app-platform)
+- Web Frontend Application: [ASP.NET Core Blazor](#aspnet-core-blazor)
+- Frontend API: ASP.NET Core Web API
+- Backend: [Microsoft Orleans](#microsoft-orleans)
+- Durable Data Persistence: [MySQL](#mysql)
+- Caching: [Redis](#redis)
+- Claims-based Identity: [Duende IdentityServer with ASP.NET Core Identity](#duende-identityserver-with-aspnet-core-identity)
+- Build, Test, Package, and Containerize: [GitHub Actions](#github-actions)
+- Observability: [OpenTelemetry and Jaegar](#opentelemetry-and-jaeger)
+
+## DigitalOcean's App Platform
+
+The WebScheduler will be deployed to [DigitalOcean's App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste) and leveraging their managed PaaS offerings for support services.
+
+App Platform is a fully-managed solution that allows you to build, deploy, and scale your apps so you can focus on what you do best: building great software!
+
+The WebScheduler will be deployed as an App Platform App using different *component types*: [Database](https://docs.digitalocean.com/products/app-platform/concepts/database/), [Service](https://docs.digitalocean.com/products/app-platform/concepts/service/), and [Static Site](https://docs.digitalocean.com/products/app-platform/concepts/static-site/).
+
+Our WebScheduler App will be deployed as depicted below. You can click each component to jump to the relevant portion of the [App Spec](https://docs.digitalocean.com/products/app-platform/references/app-specification-reference/).
+
+<MermaidDiagram chart={`
+graph TB
+    subgraph "🌊 identity-server"
+        IdentityServerWeb["🐳 IdentityServer.Host"]
+        IdentityServerMySQL["🐬 identity-server-mysql"]
+        
+        IdentityServerWeb --> IdentityServerMySQL
+    end
+    
+    subgraph "🌊 web-scheduler"
+        WebSchedulerServer["🐳 web-scheduler-server"]
+        WebSchedulerApi["🐳 web-scheduler-api"]
+        WebSchedulerFrontEnd["🐳 web-scheduler-frontend"]
+        WebSchedulerRedis["🔴 web-scheduler-redis"]
+        WebSchedulerMySQL["🐬 web-scheduler-mysql"]
+        
+        WebSchedulerApi --> WebSchedulerServer
+        WebSchedulerApi --> WebSchedulerMySQL
+        WebSchedulerApi --> WebSchedulerRedis
+        WebSchedulerServer --> WebSchedulerMySQL
+        WebSchedulerFrontEnd --> WebSchedulerApi
+    end
+    
+    WebSchedulerFrontEnd --> IdentityServerWeb
+    
+    click IdentityServerWeb "https://github.com/NullReferenceCorp/accounts.nullreference.io/blob/main/.do/account-nullreference-io.yaml#L16-L60"
+    click WebSchedulerServer "https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L23-L69"
+    click WebSchedulerApi "https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L70-L119"
+    click WebSchedulerFrontEnd "https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml#L120-L130"
+`} />
+
+### DigitalOcean's App Platform Deployment Architecture
+
+The diagram above shows how the WebScheduler is deployed on DigitalOcean's App Platform. Each component runs in its own container with dedicated resources.
+
+## ASP.NET Core Blazor
+
+[Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) is a framework for building interactive web UIs using C# instead of JavaScript. It's part of ASP.NET Core.
+
+The WebScheduler uses Blazor WebAssembly, which runs client-side in the browser on a WebAssembly-based .NET runtime.
+
+You can see it in action below:
+
+![Blazor Dashboard](/images/webscheduler-part-2/Blazor.png)
+
+## Microsoft Orleans
+
+[Orleans](https://dotnet.github.io/orleans/) is a framework that provides a straightforward approach to building distributed high-scale computing applications, without the need to learn and apply complex concurrency or other scaling patterns.
+
+Orleans allows you to build scalable, distributed systems using the actor model. Actors are lightweight, single-threaded, and location-transparent. They are called *Grains* in Orleans.
+
+<MermaidDiagram chart={`
+classDiagram
+    class ScheduledTaskGrain {
+        +CreateAsync(ScheduledTaskMetadata) ValueTask~ScheduledTaskMetadata~
+        +UpdateAsync(ScheduledTaskMetadata) ValueTask~ScheduledTaskMetadata~
+        +GetAsync() ValueTask~ScheduledTaskMetadata~
+        +DeleteAsync() ValueTask~ScheduledTaskMetadata~
+    }
+    
+    class ScheduledTaskMetadata {
+        +DateTime CreatedAt
+        +DateTime ModifiedAt
+        +string Name
+        +string Description
+        +DateTime? NextRunAt
+        +DateTime? LastRunAt
+        +bool IsEnabled
+        +bool IsDeleted
+        +DateTime? DeletedAt
+        +string CronExpression
+        +TaskTriggerType TriggerType
+        +HttpTriggerProperties HttpTriggerProperties
+    }
+    
+    class TaskTriggerType {
+        <<enumeration>>
+        HttpTrigger
+    }
+    
+    class HttpTriggerProperties {
+        +string EndPointUrl
+        +string HttpMethod
+    }
+    
+    ScheduledTaskGrain ..> ScheduledTaskMetadata : uses
+    ScheduledTaskMetadata --> TaskTriggerType
+    ScheduledTaskMetadata --> HttpTriggerProperties
+    
+    click ScheduledTaskGrain "https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs"
+    click ScheduledTaskMetadata "https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs"
+    click TaskTriggerType "https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/TaskTriggerType.cs"
+    click HttpTriggerProperties "https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/HttpTriggerProperties.cs"
+`} />
+
+### The Orleans Silo
+
+Orleans applications are deployed as a cluster of processes, called silos. The WebScheduler uses a single silo, but can be scaled horizontally by adding more silos to the cluster.
+
+Orleans includes a built-in dashboard that allows you to monitor the health of your silos, grains, and more.
+
+You can see the dashboard below:
+
+![Orleans Dashboard](/images/webscheduler-part-2/OrleansDashboard.png)
+
+## MySQL
+
+[MySQL](https://www.mysql.com/) is the world's most popular open source database. The WebScheduler uses MySQL to store durable data. When grains are activated, they are loaded from MySQL. When grains are deactivated, they are persisted to MySQL.
+
+## Redis
+
+[Redis](https://redis.io/) is an open source, in-memory data structure store, used as a database, cache, and message broker. The WebScheduler uses Redis as a distributed cache, so grains across silos can share data.
+
+## Duende IdentityServer with ASP.NET Core Identity
+
+[Duende IdentityServer](https://duendesoftware.com/products/identityserver) is an OpenID Connect and OAuth 2.0 framework for ASP.NET Core. The WebScheduler uses IdentityServer to provide authentication and authorization.
+
+[ASP.NET Core Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=visual-studio) is used for user management.
+
+## GitHub Actions
+
+[GitHub Actions](https://github.com/features/actions) makes it easy to automate all your software workflows, now with world-class CI/CD. The WebScheduler uses GitHub Actions to build, test, package, and containerize the application. The workflow can be found [here](https://github.com/web-scheduler/web-scheduler/blob/main/.github/workflows/build-and-deploy.yaml).
+
+## OpenTelemetry and Jaeger
+
+[OpenTelemetry](https://opentelemetry.io/) is a collection of tools, APIs, and SDKs. You can use it to instrument, generate, collect, and export telemetry data (metrics, logs, and traces) for analysis in order to understand your software's performance and behavior.
+
+[Jaeger](https://www.jaegertracing.io/) is an open source, end-to-end distributed tracing system. The WebScheduler uses Jaeger to visualize traces.
+
+## The Logical Deployment
+
+Now that you have an understanding of the tech stack, let's look at the logical deployment of the WebScheduler.
+
+<MermaidDiagram chart={`
+graph TB
+    subgraph "WebScheduler.Server"
+        OrleansSilo["🟣 Orleans Silo"]
+        OrleansDashboard[Orleans Dashboard]
+        OrleansHealthChecks[Health Checks]
+        
+        OrleansDashboard --> OrleansSilo
+        OrleansHealthChecks --> OrleansSilo
+    end
+    
+    subgraph "WebScheduler.FrontEnd.BlazorApp"
+        BlazorApp["⚡ Blazor WebAssembly"]
+    end
+    
+    subgraph "WebScheduler.Api"
+        WebApiHost[Web API Host]
+        WebApiHealthChecks[Health Checks]
+        
+        WebApiHealthChecks --> WebApiHost
+    end
+    
+    WebApiHost --> OrleansSilo
+    BlazorApp --> WebApiHost
+    
+    click OrleansSilo "https://github.com/web-scheduler/web-scheduler/tree/main/Source/WebScheduler.Server"
+`} />
+
+### Summary
+
+The WebScheduler is a distributed task scheduler built on top of DigitalOcean's App Platform. It uses ASP.NET Core Blazor for the frontend, Microsoft Orleans for the backend, MySQL for durable data persistence, Redis for caching, Duende IdentityServer for authentication and authorization, GitHub Actions for CI/CD, and OpenTelemetry and Jaeger for observability.
+
+<Alert type="info" icon="code-square">
+  The code for the project can be found here [in these repositories](https://github.com/web-scheduler).
+</Alert>
+
+<Alert type="success" icon="check-circle-fill">
+  Head over to DigitalOcean and [sign-up and give App Platform a try](https://m.do.co/c/0759a4937a7a) and get a $100 credit to use over 60 days.
+</Alert>
