@@ -64,6 +64,7 @@ export default async function BlogPage() {
                 <div className="flex gap-6">
                   {post.thumbnail && (
                     <div className="flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={post.thumbnail}
                         alt={post.title}

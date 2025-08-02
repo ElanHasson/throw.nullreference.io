@@ -37,16 +37,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       )
     },
     
-    img: (props) => (
-      <Image
-        {...props}
-        alt={props.alt || ''}
-        width={800}
-        height={400}
-        className="rounded-lg"
-        unoptimized
-      />
-    ),
+    img: ({ src, alt, ...props }) => {
+      if (!src) return null
+      return (
+        <Image
+          src={src}
+          alt={alt || ''}
+          width={800}
+          height={400}
+          className="rounded-lg"
+          unoptimized
+        />
+      )
+    },
     
     // Add typography styles
     h1: (props) => <h1 className="text-4xl font-bold mb-4 mt-8" {...props} />,

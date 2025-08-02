@@ -27,7 +27,9 @@ describe('YouTube', () => {
 
   it('maintains 16:9 aspect ratio', () => {
     const { container } = render(<YouTube id="abc123" />)
-    const wrapper = container.querySelector('[style*="paddingBottom"]')
-    expect(wrapper).toHaveStyle({ paddingBottom: '56.25%' })
+    const wrapper = container.querySelector('.relative')
+    expect(wrapper).toBeInTheDocument()
+    // Check the inline style directly on the wrapper
+    expect(wrapper?.getAttribute('style')).toContain('padding-bottom: 56.25%')
   })
 })

@@ -15,6 +15,7 @@ export function SVG({ src, title, className }: SVGProps) {
         className="w-full h-auto"
         aria-label={title || 'Diagram'}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt={title || 'Diagram'} />
       </object>
     </div>
