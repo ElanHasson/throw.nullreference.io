@@ -1,14 +1,12 @@
 import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
-import { getFullPost } from '@/lib/posts'
-import { allPostMeta } from '@/.contentlayer/generated'
+import { getFullPost, getAllPosts } from '@/lib/posts'
 
 export async function generateStaticParams() {
-  return allPostMeta
-    .filter(post => !post.draft)
-    .map((post) => ({
-      slug: post.slug,
-    }))
+  const posts = await getAllPosts()
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

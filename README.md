@@ -5,7 +5,7 @@ Personal blog built with Next.js, MDX, and Tailwind CSS. Deployed on DigitalOcea
 ## Tech Stack
 
 - **Framework**: [Next.js 14](https://nextjs.org/) with App Router
-- **Content**: [MDX](https://mdxjs.com/) with [ContentLayer](https://contentlayer.dev/)
+- **Content**: [MDX](https://mdxjs.com/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Deployment**: [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/)
 - **Diagrams**: [Mermaid](https://mermaid.js.org/)

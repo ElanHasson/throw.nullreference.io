@@ -1,36 +1,68 @@
-import { allPostMeta } from '@/.contentlayer/generated'
+import fs from 'fs'
+import path from 'path'
+import matter from 'gray-matter'
 import { compareDesc } from 'date-fns'
 import { PostMeta } from './types'
 
+const postsDirectory = path.join(process.cwd(), 'app/blog')
+
 /**
- * Convert ContentLayer post metadata to PostMeta
+ * Get all blog post directories
  */
-function postMetaToPostMeta(postMeta: typeof allPostMeta[0]): PostMeta {
-  return {
-    title: postMeta.title,
-    date: postMeta.date,
-    description: postMeta.description,
-    thumbnail: postMeta.thumbnail,
-    tags: postMeta.tags,
-    categories: postMeta.categories,
-    draft: postMeta.draft,
-    featured: postMeta.featured,
-    slug: postMeta.slug,
-    series: postMeta.series,
-    // Add computed fields
-    readingTime: postMeta.readingTime,
-    wordCount: postMeta.wordCount,
+function getPostDirectories(): string[] {
+  const entries = fs.readdirSync(postsDirectory, { withFileTypes: true })
+  return entries
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => !name.startsWith('[')) // Exclude dynamic routes
+}
+
+/**
+ * Read post metadata from page.mdx file
+ */
+function getPostMetadata(slug: string): PostMeta | null {
+  try {
+    const postPath = path.join(postsDirectory, slug, 'page.mdx')
+    if (!fs.existsSync(postPath)) {
+      return null
+    }
+    
+    const fileContents = fs.readFileSync(postPath, 'utf8')
+    const { data } = matter(fileContents)
+    
+    return {
+      title: data.title || '',
+      date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
+      description: data.description || '',
+      thumbnail: data.thumbnail || '',
+      tags: data.tags || [],
+      categories: data.categories || [],
+      draft: data.draft || false,
+      featured: data.featured || false,
+      series: data.series || '',
+      slug,
+    }
+  } catch (error) {
+    console.error(`Error reading post metadata for ${slug}:`, error)
+    return null
   }
 }
 
 /**
- * Get all blog posts from ContentLayer
+ * Get all blog posts
  */
 export async function getAllPosts(): Promise<PostMeta[]> {
-  return allPostMeta
-    .filter(post => !post.draft)
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
-    .map(postMetaToPostMeta)
+  const directories = getPostDirectories()
+  const posts: PostMeta[] = []
+  
+  for (const slug of directories) {
+    const metadata = getPostMetadata(slug)
+    if (metadata && !metadata.draft) {
+      posts.push(metadata)
+    }
+  }
+  
+  return posts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
 }
 
 /**
@@ -52,16 +84,14 @@ export async function getPostsForBlog(): Promise<PostMeta[]> {
  * Get a specific post by slug
  */
 export async function getPostBySlug(slug: string): Promise<PostMeta | null> {
-  const post = allPostMeta.find(post => post.slug === slug && !post.draft)
-  return post ? postMetaToPostMeta(post) : null
+  return getPostMetadata(slug)
 }
 
 /**
- * Get the full post metadata (no longer returns compiled content)
+ * Get the full post metadata
  */
-export function getFullPost(slug: string) {
-  const post = allPostMeta.find(post => post.slug === slug && !post.draft)
-  return post ? postMetaToPostMeta(post) : null
+export function getFullPost(slug: string): PostMeta | null {
+  return getPostMetadata(slug)
 }
 
 /**

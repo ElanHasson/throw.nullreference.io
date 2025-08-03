@@ -13,8 +13,8 @@ export interface PostMeta {
   featured?: boolean
   series?: string
   slug: string
-  // Computed fields from ContentLayer
-  readingTime?: any
+  // Optional computed fields
+  readingTime?: { text: string; minutes: number; words: number }
   wordCount?: number
 }
 

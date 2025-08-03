@@ -1,7 +1,5 @@
-import { withContentlayer } from 'next-contentlayer'
 import createMDX from '@next/mdx'
 import remarkGfm from 'remark-gfm'
-import remarkFrontmatter from 'remark-frontmatter'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeHighlight from 'rehype-highlight'
@@ -21,7 +19,7 @@ const nextConfig = {
 
 const withMDX = createMDX({
   options: {
-    remarkPlugins: [remarkGfm, remarkFrontmatter],
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [
       rehypeSlug,
       [
@@ -37,4 +35,4 @@ const withMDX = createMDX({
   },
 })
 
-export default withContentlayer(withMDX(nextConfig))
+export default withMDX(nextConfig)

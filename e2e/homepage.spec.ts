@@ -12,9 +12,10 @@ test.describe('Homepage', () => {
     await expect(heading).toBeVisible()
 
     // Check navigation links are present
-    await expect(page.getByRole('link', { name: 'Blog' })).toBeVisible()
-    await expect(page.getByRole('link', { name: 'About' })).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Archive' })).toBeVisible()
+    const nav = page.getByRole('navigation')
+    await expect(nav.getByRole('link', { name: 'Blog' })).toBeVisible()
+    await expect(nav.getByRole('link', { name: 'About' })).toBeVisible()
+    await expect(nav.getByRole('link', { name: 'Archive' })).toBeVisible()
   })
 
   test('should have working navigation', async ({ page }) => {
@@ -26,7 +27,7 @@ test.describe('Homepage', () => {
 
     // Go back and click Archive
     await page.goBack()
-    await page.getByRole('link', { name: 'Archive' }).click()
+    await page.getByRole('navigation').getByRole('link', { name: 'Archive' }).click()
     await expect(page).toHaveURL('/archive')
   })
 

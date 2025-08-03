@@ -18,6 +18,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     MermaidDiagram,
     RawHTML,
     SVG,
+    Link,
 
     // Override default elements
     a: ({ href, children, ...props }) => {
