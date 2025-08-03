@@ -22,9 +22,7 @@ describe('Figure', () => {
   })
 
   it('uses provided width and height over URL params', () => {
-    render(
-      <Figure src="/test.jpg?width=300px" alt="Test image" width={500} height={400} />
-    )
+    render(<Figure src="/test.jpg?width=300px" alt="Test image" width={500} height={400} />)
     const img = screen.getByAltText('Test image')
     expect(img).toHaveAttribute('width', '500')
     expect(img).toHaveAttribute('height', '400')
@@ -32,7 +30,7 @@ describe('Figure', () => {
 
   it('applies custom className', () => {
     const { container } = render(
-      <Figure src="/test.jpg" alt="Test image" className="custom-class" />
+      <Figure src="/test.jpg" alt="Test image" className="custom-class" />,
     )
     expect(container.querySelector('.custom-class')).toBeInTheDocument()
   })

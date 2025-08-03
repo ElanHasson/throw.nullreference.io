@@ -4,9 +4,9 @@ interface RawHTMLProps {
 
 export function RawHTML({ children }: RawHTMLProps) {
   return (
-    <div 
+    <div
       className="prose prose-lg dark:prose-invert max-w-none"
-      dangerouslySetInnerHTML={{ __html: children }} 
+      dangerouslySetInnerHTML={{ __html: children }}
     />
   )
 }

@@ -1,62 +1,21 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
+import { getPostsForBlog } from '@/lib/posts'
+import type { PostMeta } from '@/lib/types'
 
 export const metadata = {
-  title: 'Blog | Throwin\' Exceptions',
+  title: "Blog | Throwin' Exceptions",
   description: 'All blog posts about software development, technology, and life',
 }
 
-interface PostMeta {
-  title: string
-  date: string
-  description?: string
-  thumbnail?: string
-  tags?: string[]
-  categories?: string[]
-  draft?: boolean
-  slug: string
-}
-
-async function getPosts(): Promise<PostMeta[]> {
-  const postsDirectory = path.join(process.cwd(), 'app/blog')
-  const entries = fs.readdirSync(postsDirectory, { withFileTypes: true })
-  
-  const posts: PostMeta[] = []
-  
-  for (const entry of entries) {
-    if (entry.isDirectory() && entry.name !== '[slug]') {
-      const mdxPath = path.join(postsDirectory, entry.name, 'page.mdx')
-      if (fs.existsSync(mdxPath)) {
-        const fileContents = fs.readFileSync(mdxPath, 'utf8')
-        const { data } = matter(fileContents)
-        
-        if (!data.draft) {
-          posts.push({
-            ...data,
-            slug: entry.name,
-          } as PostMeta)
-        }
-      }
-    }
-  }
-  
-  // Sort posts by date
-  return posts.sort((a, b) => 
-    new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
-}
-
 export default async function BlogPage() {
-  const posts = await getPosts()
+  const posts = await getPostsForBlog()
 
   return (
     <div className="container mx-auto px-4 py-16">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-12">Blog</h1>
-        
+      <div className="mx-auto max-w-4xl">
+        <h1 className="mb-12 text-4xl font-bold">Blog</h1>
+
         <div className="space-y-8">
           {posts.map((post) => (
             <article key={post.slug} className="group">
@@ -64,7 +23,6 @@ export default async function BlogPage() {
                 <div className="flex gap-6">
                   {post.thumbnail && (
                     <div className="flex-shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={post.thumbnail}
                         alt={post.title}
@@ -75,10 +33,10 @@ export default async function BlogPage() {
                     </div>
                   )}
                   <div className="flex-1">
-                    <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                    <h2 className="mb-2 text-2xl font-semibold transition-colors group-hover:text-rose-600">
                       {post.title}
                     </h2>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                    <div className="text-muted-foreground mb-2 flex items-center gap-4 text-sm">
                       <time>{format(new Date(post.date), 'LLLL d, yyyy')}</time>
                     </div>
                     {post.description && (
@@ -89,7 +47,7 @@ export default async function BlogPage() {
                         {post.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="inline-block px-3 py-1 text-xs bg-secondary rounded-full"
+                            className="bg-secondary inline-block rounded-full px-3 py-1 text-xs"
                           >
                             {tag}
                           </span>

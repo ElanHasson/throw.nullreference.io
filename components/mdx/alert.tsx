@@ -24,13 +24,11 @@ const typeStyles = {
 
 export function Alert({ type = 'info', icon, children }: AlertProps) {
   const IconComponent = icon ? iconMap[icon as keyof typeof iconMap] || Info : Info
-  
+
   return (
     <div className={`alert alert-${type} ${typeStyles[type]}`}>
       <IconComponent className="h-5 w-5 flex-shrink-0" />
-      <div className="prose prose-sm dark:prose-invert max-w-none">
-        {children}
-      </div>
+      <div className="prose prose-sm dark:prose-invert max-w-none">{children}</div>
     </div>
   )
 }

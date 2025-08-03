@@ -9,51 +9,13 @@ import rehypeHighlight from 'rehype-highlight'
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   reactStrictMode: true,
-  swcMinify: true,
   output: 'export',
   images: {
     unoptimized: true,
   },
-  async redirects() {
-    return [
-      // Posts redirects
-      {
-        source: '/posts/:slug*',
-        destination: '/blog/:slug*',
-        permanent: true,
-      },
-      // Docs redirects
-      {
-        source: '/docs/Learning-Go/:path*',
-        destination: '/learn/go/:path*',
-        permanent: true,
-      },
-      // Category redirects
-      {
-        source: '/categories/:slug*',
-        destination: '/topics/:slug*',
-        permanent: true,
-      },
-      // Tags redirects
-      {
-        source: '/tags/:slug*',
-        destination: '/topics/:slug*',
-        permanent: true,
-      },
-      // Series redirects
-      {
-        source: '/series/:slug*',
-        destination: '/topics/:slug*',
-        permanent: true,
-      },
-      // Archives redirect
-      {
-        source: '/archives',
-        destination: '/archive',
-        permanent: true,
-      },
-    ]
-  },
+  trailingSlash: true,
+  // Note: redirects() is not supported with static export
+  // Redirects should be handled at the server/hosting level
 }
 
 const withMDX = createMDX({

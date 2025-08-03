@@ -14,10 +14,10 @@ export function Figure({ src, alt, width, height, caption, className }: FigurePr
   const cleanSrc = src.split('?')[0]
   const params = new URLSearchParams(src.split('?')[1] || '')
   const widthParam = params.get('width')
-  
+
   const finalWidth = width || (widthParam ? parseInt(widthParam) : 800)
-  const finalHeight = height || (finalWidth * 0.75) // Default aspect ratio
-  
+  const finalHeight = height || finalWidth * 0.75 // Default aspect ratio
+
   return (
     <figure className={`my-8 ${className || ''}`}>
       <div className="flex justify-center">
@@ -31,7 +31,7 @@ export function Figure({ src, alt, width, height, caption, className }: FigurePr
         />
       </div>
       {caption && (
-        <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+        <figcaption className="text-muted-foreground mt-2 text-center text-sm">
           {caption}
         </figcaption>
       )}

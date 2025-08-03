@@ -39,7 +39,7 @@ describe('Alert', () => {
     const { container } = render(
       <Alert type="info" icon="check-circle-fill">
         Alert with custom icon
-      </Alert>
+      </Alert>,
     )
     expect(container.querySelector('svg')).toBeInTheDocument()
   })

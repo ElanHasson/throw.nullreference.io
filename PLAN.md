@@ -1,9 +1,11 @@
 # Hugo to Next.js Migration Plan
 
 ## Project Overview
+
 Migrate throw.nullreference.io from Hugo to Next.js with modern React components, preserving all content and URLs while improving developer experience.
 
 ## Tech Stack
+
 - **Framework**: Next.js 14+ (App Router)
 - **Content**: MDX with ContentLayer
 - **Styling**: Tailwind CSS + shadcn/ui components
@@ -14,12 +16,15 @@ Migrate throw.nullreference.io from Hugo to Next.js with modern React components
 ## Migration Strategy
 
 ### Phase 1: Project Setup
+
 1. Initialize Next.js with TypeScript
+
    ```bash
    npx create-next-app@latest . --typescript --tailwind --app --use-npm
    ```
 
 2. Install dependencies:
+
    ```json
    {
      "dependencies": {
@@ -47,6 +52,7 @@ Migrate throw.nullreference.io from Hugo to Next.js with modern React components
 ### Phase 2: URL Structure & Redirects
 
 #### Current Hugo URLs → New Next.js URLs
+
 ```
 /posts/[slug]/                    → /blog/[slug]
 /docs/Learning-Go/[...path]       → /learn/go/[...path]
@@ -59,6 +65,7 @@ Migrate throw.nullreference.io from Hugo to Next.js with modern React components
 ```
 
 #### Redirect Configuration (next.config.js)
+
 ```javascript
 module.exports = {
   async redirects() {
@@ -101,10 +108,11 @@ module.exports = {
 #### Shortcode → React Component Mapping
 
 1. **Figure** (Hugo built-in → Next.js Image)
+
    ```jsx
    // components/Figure.tsx
    import Image from 'next/image'
-   
+
    export function Figure({ src, alt, caption, width, height }) {
      return (
        <figure>
@@ -116,6 +124,7 @@ module.exports = {
    ```
 
 2. **Alert** (svg-alert → Alert component)
+
    ```jsx
    // components/Alert.tsx
    export function Alert({ type, icon, children }) {
@@ -129,41 +138,42 @@ module.exports = {
    ```
 
 3. **YouTube** (youtube → YouTube component)
+
    ```jsx
    // components/YouTube.tsx
    export function YouTube({ id, title }) {
-     return (
-       <iframe
-         src={`https://www.youtube.com/embed/${id}`}
-         title={title}
-         allowFullScreen
-       />
-     )
+     return <iframe src={`https://www.youtube.com/embed/${id}`} title={title} allowFullScreen />
    }
    ```
 
 4. **MermaidDiagram** (PlantUML replacement)
+
    ```jsx
    // components/MermaidDiagram.tsx
    'use client'
    import { useEffect, useRef } from 'react'
    import mermaid from 'mermaid'
-   
+
    export function MermaidDiagram({ chart }) {
      const ref = useRef(null)
-     
+
      useEffect(() => {
        mermaid.initialize({ startOnLoad: true })
        mermaid.contentLoaded()
      }, [])
-     
-     return <div ref={ref} className="mermaid">{chart}</div>
+
+     return (
+       <div ref={ref} className="mermaid">
+         {chart}
+       </div>
+     )
    }
    ```
 
 ### Phase 4: Content Migration
 
 #### Content Structure
+
 ```
 content/
 ├── blog/           (from posts/)
@@ -184,6 +194,7 @@ content/
 ```
 
 #### Migration Process for Each File
+
 1. Copy content to new location
 2. Update frontmatter for ContentLayer
 3. Replace Hugo shortcodes with React components
@@ -192,21 +203,22 @@ content/
 6. Delete original Hugo file
 
 #### Example Content Migration
+
 ```mdx
 ---
-title: "Hello World"
+title: 'Hello World'
 date: 2021-12-10T21:35:43-05:00
 draft: false
-thumbnail: "./images/helloworld-2.png"
+thumbnail: './images/helloworld-2.png'
 ---
 
 import { Figure } from '@/components/Figure'
 
-<Figure 
-  src="/images/helloworld-2.png" 
-  width={300} 
-  height={300} 
-  alt="The words 'Hello World' in neon green on a black background." 
+<Figure
+  src="/images/helloworld-2.png"
+  width={300}
+  height={300}
+  alt="The words 'Hello World' in neon green on a black background."
 />
 
 [Scott Hanselman](https://twitter.com/shanselman) wrote a post...
@@ -215,37 +227,39 @@ import { Figure } from '@/components/Figure'
 ### Phase 5: PlantUML to Mermaid Conversion
 
 #### Example: Logical Deployment Diagram
+
 ```mermaid
 graph TB
     subgraph "WebScheduler.Server"
         OrleansSilo["🟣 Orleans Silo"]
         OrleansDashboard[Orleans Dashboard]
         OrleansHealthChecks[Health Checks]
-        
+
         OrleansDashboard --> OrleansSilo
         OrleansHealthChecks --> OrleansSilo
     end
-    
+
     subgraph "WebScheduler.FrontEnd.BlazorApp"
         BlazorApp["⚡ Blazor WebAssembly"]
     end
-    
+
     subgraph "WebScheduler.Api"
         WebApiHost[Web API Host]
         WebApiHealthChecks[Health Checks]
-        
+
         WebApiHealthChecks --> WebApiHost
     end
-    
+
     WebApiHost --> OrleansSilo
     BlazorApp --> WebApiHost
-    
+
     click OrleansSilo "https://github.com/web-scheduler/web-scheduler/tree/main/Source/WebScheduler.Server"
 ```
 
 ### Phase 6: DigitalOcean Deployment
 
 #### .do/app.yaml Configuration
+
 ```yaml
 name: throw-nullreference-io
 region: nyc
@@ -273,6 +287,7 @@ domains:
 ```
 
 #### Build Configuration (package.json)
+
 ```json
 {
   "scripts": {

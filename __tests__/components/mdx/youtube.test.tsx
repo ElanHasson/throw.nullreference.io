@@ -21,7 +21,7 @@ describe('YouTube', () => {
     expect(iframe).toHaveAttribute('allowFullScreen')
     expect(iframe).toHaveAttribute(
       'allow',
-      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
     )
   })
 

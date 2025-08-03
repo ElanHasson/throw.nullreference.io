@@ -17,7 +17,7 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/blog')
     expect(screen.getByRole('link', { name: 'Learn' })).toHaveAttribute('href', '/learn')
     expect(screen.getByRole('link', { name: 'Topics' })).toHaveAttribute('href', '/topics')
-    expect(screen.getByRole('link', { name: 'Archive' })).toHaveAttribute('href', '/archive')
+    expect(screen.getByRole('link', { name: 'Search' })).toHaveAttribute('href', '/search')
   })
 
   it('renders theme toggle', () => {
