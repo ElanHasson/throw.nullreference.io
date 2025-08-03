@@ -1,0 +1,48 @@
+
+@startuml "ScheduledTaskClassDiagram"
+!theme cerulean-outline
+
+skinparam svgLinkTarget _blank
+title "ScheduledTask Class Diagram"
+ 
+
+class ScheduledTaskGrain [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Grains/Scheduler/ScheduledTaskGrain.cs{Jump to the ScheduledTaskGrain details}]] {
+     +ValueTask<ScheduledTaskMetadata> CreateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
+     +ValueTask<ScheduledTaskMetadata> UpdateAsync(ScheduledTaskMetadata scheduledTaskMetadata)
+     +ValueTask<ScheduledTaskMetadata> GetAsync()
+     +ValueTask<ScheduledTaskMetadata> DeleteAsync()
+ }
+
+class ScheduledTaskMetadata [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/ScheduledTaskMetadata.cs{Goto Souce}]]{
+    
+    +DateTime CreatedAt
+    +DateTime ModifiedAt
+    +string Name
+    +string Description
+    +DateTime? NextRunAt
+    +DateTime? LastRunAt
+    +bool IsEnabled
+    +bool IsDeleted
+    +DateTime? DeletedAt
+    +string CronExpression
+    +TaskTriggerType TriggerType  
+    +HttpTriggerProperties HttpTriggerProperties
+}
+hide empty member
+ScheduledTaskGrain ..> ScheduledTaskMetadata
+
+enum TaskTriggerType [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/TaskTriggerType.cs{Goto Source}]]
+{   
+    HttpTrigger
+}
+class HttpTriggerProperties [[https://github.com/web-scheduler/web-scheduler/blob/main/Source/WebScheduler.Abstractions/Grains/Scheduler/HttpTriggerProperties.cs{Goto Source}]]
+{
+    +string EndPointUrl
+    +string HttpMethod
+}
+
+ScheduledTaskMetadata .right.> TaskTriggerType
+ScheduledTaskMetadata .left.> HttpTriggerProperties
+
+
+@enduml

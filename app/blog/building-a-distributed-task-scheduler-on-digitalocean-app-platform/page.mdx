@@ -1,15 +1,14 @@
 ---
 title: "Building a Distributed Task Scheduler on DigitalOcean's App Platform"
-description: "A multi-part series on building a complex application on DigitalOcean's App Platform"
 date: 2022-01-19T02:07:52Z
-featured: true
 draft: false
-thumbnail: "/images/building-distributed-task-scheduler/scheduled-25134.png"
-categories: ["Microsoft Orleans", "DigitalOcean App Platform", ".NET"]
+description: "A multi-part series on building a complex application on DigitalOcean's App Platform"
+thumbnail: "./scheduled-25134.png"
+featured: true
+categories: []
 tags: []
 series: "Building a Distributed Task Scheduler on DigitalOcean App Platform"
 ---
-
 ## New Beginnings
 
 I'm a new engineer on the [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/?refcode=0759a4937a7a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste) team. I've spent the last 20 years writing C# code full-time. I've made the switch to [Go](https://go.dev/) and to be perfectly honest, I miss writing C#. You know that itch you have for doing something you love so much? Well, I've got to scratch that [.NET](https://dot.net) itch somehow while learning Golang and the amazingly capable App Platform product.
@@ -19,6 +18,8 @@ I figured I'd kill two birds with one stone and build a complex distributed syst
 This [series](/series/building-a-distributed-task-scheduler-on-digitalocean-app-platform) is going to document my journey of building a highly-available Task Scheduling system hosted on App Platform.
 
 I've selected a very fancy name for the project: *Web Scheduler*. It's 100% open source, and can be found in the [repository](https://github.com/web-scheduler/web-scheduler) at GitHub.
+
+
 
 ## Scope
 
@@ -33,47 +34,32 @@ The Web Scheduler will be a highly-available, distributed, task-scheduling syste
 ### Delivery Mechanisms
 
 I've listed a few below that were top of mind.
+- **Web Hook**: A simple HTTP request to a URL.
+- **Event Publishing**:
+  - [Azure Event Grid](https://docs.microsoft.com/en-us/azure/event-grid/overview)
+  - [RabbitMQ](https://rabbitmq.com/)
+  - [Kafka](https://kafka.apache.org/)
+  - [Amazon SNS](https://aws.amazon.com/sns/)
+  - [Google PubSub](https://cloud.google.com/pubsub/)
+  - [Amazon SQS](https://aws.amazon.com/sqs/)
+  - [Redis](https://redis.io/)
+  - *Suggest more in the comments below!*
 
-#### HTTP Webhook
+### Delivery Guarantees
 
-- `GET`, `POST`, `PUT`, `PATCH`, `DELETE` HTTP verbs.
-- Add ability to templatize the body of the request.
-- Add additional headers to the request.
-- Retry with exponential backoff.
+The delivery of a message is guaranteed to be received by the destination, *at least once*. This will help keep complexity of the system low versus *at most once* delivery.
 
-#### WebSockets
-
-- Send a message to a WebSocket endpoint.
-- Retry with exponential backoff.
-
-#### gRPC
-
-- Send a message to a gRPC endpoint.
-- Retry with exponential backoff.
-
-#### Database
-
-- Execute a query against a database.
-- Support for MySQL, PostgreSQL, and SQL Server initially.
-
-#### Message Queues
-
-- Send a message to a message queue.
-- Support for RabbitMQ, Kafka, and Azure Service Bus initially.
-
-#### Other
-
-- Send an email.
-- Send an SMS.
-- Send a Slack message.
-- Send a Discord message.
+As for timeliness of the delivery, there are many factors involved, such as:
+* How busy the system is delivering other tasks across all users
+* Per-User Rate Limits
+* System-Level Rate Limits
 
 Sub-second delivery guarantees would be great 😊
 
-<Alert type="info" icon="info-circle-fill">
-  Check out <Link href="/blog/webscheduler-part-2-designing">Part II: Designing the Web Scheduler</Link> for implementation details.
+<Alert type="info">
+Check out [Part II: Designing the Web Scheduler](/blog/webscheduler-part-2-doing-the-design/) for implementation details.
 </Alert>
 
-<Alert type="success" icon="check-circle-fill">
-  Head over to DigitalOcean and [sign-up and give App Platform a try](https://m.do.co/c/0759a4937a7a) and get a $100 credit to use over 60 days.
+<Alert type="success">
+Head over to DigitalOcean and [sign-up and give App Platform a try](https://m.do.co/c/0759a4937a7a) and get a $100 credit to use over 60 days.
 </Alert>

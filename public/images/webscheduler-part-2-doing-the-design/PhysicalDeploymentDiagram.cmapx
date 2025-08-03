@@ -1,0 +1,9 @@
+<map id="plantuml_map" name="plantuml_map">
+<area shape="rect" id="id1" href="https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L70-L119" title="Goto App Spec for web-scheduler-api" alt="" coords="545,143,731,251"/>
+<area shape="rect" id="id2" href="https://github.com/NullReferenceCorp/accounts.nullreference.io/blob/main/.do/account-nullreference-io.yaml#L16-L60" title="Goto App Spec for identity-server" alt="" coords="58,143,245,251"/>
+<area shape="rect" id="id3" href="https://github.com/web-scheduler/web-scheduler/blob/efe115e6c03d55cfc3d362b9025a56ccf7fc09b7/.do/app.yaml#L23-L69" title="Goto App Spec for web-scheduler-api" alt="" coords="768,143,977,251"/>
+<area shape="rect" id="id4" href="https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml#L120-L130" title="Goto App Spec for web-scheduler-api" alt="" coords="282,143,508,251"/>
+<area shape="rect" id="id5" href="https://github.com/NullReferenceCorp/accounts.nullreference.io/blob/main/.do/account-nullreference-io.yaml" title="Goto to full App Spec for identity-server" alt="" coords="17,86,263,430"/>
+<area shape="rect" id="id6" href="https://github.com/web-scheduler/web-scheduler/blob/main/.do/app.yaml" title="Goto full App Spec" alt="" coords="273,86,986,430"/>
+</map>
+
