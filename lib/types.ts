@@ -13,6 +13,9 @@ export interface PostMeta {
   featured?: boolean
   series?: string
   slug: string
+  // Computed fields from ContentLayer
+  readingTime?: any
+  wordCount?: number
 }
 
 export interface PostsByYear {

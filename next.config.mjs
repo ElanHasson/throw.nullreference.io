@@ -1,3 +1,4 @@
+import { withContentlayer } from 'next-contentlayer'
 import createMDX from '@next/mdx'
 import remarkGfm from 'remark-gfm'
 import remarkFrontmatter from 'remark-frontmatter'
@@ -36,4 +37,4 @@ const withMDX = createMDX({
   },
 })
 
-export default withMDX(nextConfig)
+export default withContentlayer(withMDX(nextConfig))
