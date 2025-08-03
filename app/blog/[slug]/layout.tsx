@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: post.description,
       type: 'article',
       publishedTime: post.date,
-      authors: ['Jagadesh'],
+      authors: ['Elan Hasson'],
     },
   }
 }

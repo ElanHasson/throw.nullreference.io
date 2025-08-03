@@ -86,7 +86,7 @@ export default async function HomePage() {
             <div className="rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 p-12 dark:from-gray-800 dark:to-gray-900">
               <div className="grid items-center gap-8 md:grid-cols-2">
                 <div>
-                  <h2 className="mb-6 text-4xl font-bold">Hey, I'm Jagadesh 👋</h2>
+                  <h2 className="mb-6 text-4xl font-bold">Hey, I'm Elan 👋</h2>
                   <p className="mb-4 text-lg text-gray-600 dark:text-gray-300">
                     I'm a software engineer passionate about building distributed systems, exploring
                     new technologies, and sharing what I learn along the way.
@@ -114,7 +114,7 @@ export default async function HomePage() {
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-rose-400 to-purple-400 opacity-20 blur-3xl"></div>
                   <img
                     src="/static/images/profile.jpg"
-                    alt="Jagadesh's profile"
+                    alt="Elan's profile"
                     className="relative rounded-2xl shadow-2xl"
                   />
                 </div>

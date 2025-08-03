@@ -8,7 +8,7 @@ test.describe('Homepage', () => {
     await expect(page).toHaveTitle(/Throwin' Exceptions/)
 
     // Check main heading is visible
-    const heading = page.getByRole('heading', { name: /Hey, I'm Jagadesh/i })
+    const heading = page.getByRole('heading', { name: /Hey, I'm Elan/i })
     await expect(heading).toBeVisible()
 
     // Check navigation links are present

@@ -14,7 +14,7 @@ jobs:
   # Dependency security audit
   security:
     name: Security Audit
-    runs-on: ubuntu-latest
+    runs-on: gh-runners
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: gh-runners
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -80,7 +80,7 @@ jobs:
 
   typecheck:
     name: Type Check
-    runs-on: ubuntu-latest
+    runs-on: gh-runners
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -107,7 +107,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: gh-runners
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -142,7 +142,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: gh-runners
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -179,7 +179,7 @@ jobs:
   all-checks:
     name: All Checks Passed
     needs: [security, lint, typecheck, test, build]
-    runs-on: ubuntu-latest
+    runs-on: gh-runners
     if: always()
     steps:
       - name: Check all jobs
