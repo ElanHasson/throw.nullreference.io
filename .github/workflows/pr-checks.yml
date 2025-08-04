@@ -46,8 +46,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-        run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
         with:
@@ -77,8 +75,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-        run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
         with:
@@ -105,8 +101,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-        run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
         with:
@@ -141,8 +135,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-        run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
         with:
