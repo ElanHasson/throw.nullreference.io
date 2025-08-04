@@ -30,12 +30,11 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Enable Corepack
-        run: corepack enable
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          cache: 'yarn'
+          node-version: '22'
+          cache: 'npm'
 
       - name: Run Claude Code
         id: claude
@@ -57,7 +56,7 @@ jobs:
           # assignee_trigger: "claude-bot"
 
           # Optional: Allow Claude to run specific commands
-          allowed_tools: "Bash(yarn :*),Bash(go :*),Bash(make :*),Bash(ls :*),Bash(find :*),Bash(grep :*),Bash(rg :*),Bash(buf :*)"
+          allowed_tools: 'Bash(yarn :*),Bash(go :*),Bash(make :*),Bash(ls :*),Bash(find :*),Bash(grep :*),Bash(rg :*),Bash(buf :*)'
 
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           custom_instructions: |

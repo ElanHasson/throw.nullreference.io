@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
 
+env:
+  NODE_VERSION: '22'
+
 jobs:
   # Dependency security audit
   security:
@@ -15,12 +18,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -52,12 +57,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -83,12 +90,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -111,12 +120,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -147,12 +158,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
