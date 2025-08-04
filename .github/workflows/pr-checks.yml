@@ -6,10 +6,6 @@ on:
   push:
     branches: [main]
 
-env:
-  NODE_VERSION: '20'
-  YARN_CACHE_KEY: yarn-cache-v2
-
 jobs:
   # Dependency security audit
   security:
@@ -22,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable
@@ -60,7 +56,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable
@@ -92,7 +88,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable
@@ -121,7 +117,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable
@@ -158,7 +154,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
       - name: Enable Corepack
         run: corepack enable

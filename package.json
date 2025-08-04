@@ -17,6 +17,10 @@
     "export": "next build",
     "check-all": "yarn typecheck && yarn lint && yarn format:check && yarn test"
   },
+  "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": ">=22.14.0 < 23.0.0"
+  },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
