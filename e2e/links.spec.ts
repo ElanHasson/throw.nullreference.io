@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Link Validation', () => {
+test.describe('Link Validation (Static)', () => {
   test('all internal links should be valid', async ({ page, baseURL }) => {
     // Start from the homepage
     await page.goto('/')

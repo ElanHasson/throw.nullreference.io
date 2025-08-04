@@ -17,10 +17,15 @@
     "export": "next build",
     "check-all": "yarn typecheck && yarn lint && yarn format:check && yarn test",
     "check-links": "remark app/**/*.mdx --use remark-validate-links --frail",
-    "check-links:external": "remark app/**/*.mdx --use remark-validate-links --frail --external",
     "check-links:site": "linkinator out --recurse --silent",
     "check-links:site:verbose": "linkinator out --recurse",
-    "check-links:ci": "yarn build && yarn check-links:site"
+    "check-links:ci": "yarn build && yarn check-links:site",
+    "test:e2e": "yarn test:e2e:static && yarn test:e2e:dev",
+    "test:e2e:static": "playwright test --config=playwright.config.static.ts",
+    "test:e2e:dev": "playwright test --config=playwright.config.dev.ts",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:ui:static": "playwright test --config=playwright.config.static.ts --ui",
+    "test:e2e:ui:dev": "playwright test --config=playwright.config.dev.ts --ui"
   },
   "packageManager": "yarn@1.22.22",
   "engines": {

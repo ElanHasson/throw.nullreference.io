@@ -58,10 +58,5 @@ export default defineConfig({
     },
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npx serve@latest out -p 3000',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-  },
+  /* webServer configuration is defined in playwright.config.static.ts and playwright.config.dev.ts */
 })
