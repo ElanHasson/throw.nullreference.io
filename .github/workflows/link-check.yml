@@ -1,0 +1,48 @@
+name: Link Check
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    name: Check Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build site
+        run: yarn build
+
+      - name: Check internal links
+        run: yarn check-links:site
+        continue-on-error: true
+
+      - name: Check MDX links
+        run: yarn check-links
+        continue-on-error: true
+
+      - name: Upload link check results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-check-results
+          path: |
+            linkinator-results.json
+            remark-results.txt
