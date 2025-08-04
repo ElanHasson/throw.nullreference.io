@@ -13,18 +13,12 @@ jobs:
   # Dependency security audit
   security:
     name: Security Audit
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Enable Corepack
-        run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
         with:
@@ -48,16 +42,11 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Enable Corepack
         run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
@@ -84,16 +73,11 @@ jobs:
 
   typecheck:
     name: Type Check
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Enable Corepack
         run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
@@ -117,16 +101,11 @@ jobs:
 
   test:
     name: Test
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Enable Corepack
         run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
@@ -158,16 +137,11 @@ jobs:
 
   build:
     name: Build
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Enable Corepack
         run: corepack enable
       - name: Setup Node.js for yarn
         uses: actions/setup-node@v4
@@ -201,7 +175,7 @@ jobs:
   all-checks:
     name: All Checks Passed
     needs: [security, lint, typecheck, test, build]
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
     if: always()
     steps:
       - name: Check all jobs

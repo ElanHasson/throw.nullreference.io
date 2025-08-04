@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code

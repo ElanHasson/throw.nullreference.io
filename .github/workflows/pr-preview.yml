@@ -14,7 +14,7 @@ env:
 jobs:
   deploy-preview:
     if: github.event.action != 'closed'
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -113,7 +113,7 @@ jobs:
 
   cleanup-preview:
     if: github.event.action == 'closed'
-    runs-on: gh-runners
+    runs-on: ubuntu-latest
 
     steps:
       - name: Install doctl
