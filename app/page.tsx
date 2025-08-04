@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { getRecentPosts, getFeaturedPosts } from '@/lib/posts'
-import type { PostMeta } from '@/lib/types'
 
 export default async function HomePage() {
   const recentPosts = await getRecentPosts()
@@ -86,13 +85,13 @@ export default async function HomePage() {
             <div className="rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 p-12 dark:from-gray-800 dark:to-gray-900">
               <div className="grid items-center gap-8 md:grid-cols-2">
                 <div>
-                  <h2 className="mb-6 text-4xl font-bold">Hey, I'm Elan 👋</h2>
+                  <h2 className="mb-6 text-4xl font-bold">Hey, I&apos;m Elan 👋</h2>
                   <p className="mb-4 text-lg text-gray-600 dark:text-gray-300">
-                    I'm a software engineer passionate about building distributed systems, exploring
+                    I&apos;m a software engineer passionate about building distributed systems, exploring
                     new technologies, and sharing what I learn along the way.
                   </p>
                   <p className="mb-6 text-lg text-gray-600 dark:text-gray-300">
-                    Currently working at DigitalOcean on the App Platform team, I've spent over 20
+                    Currently working at DigitalOcean on the App Platform team, I&apos;ve spent over 20
                     years writing code and love diving deep into complex problems.
                   </p>
                   <div className="flex flex-wrap gap-3">

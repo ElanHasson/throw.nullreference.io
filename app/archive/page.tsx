@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { getAllPosts, groupPostsByYear } from '@/lib/posts'
-import type { PostMeta } from '@/lib/types'
 
 export const metadata = {
   title: "Archive | Throwin' Exceptions",
