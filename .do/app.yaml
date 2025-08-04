@@ -3,7 +3,7 @@ region: nyc
 static_sites:
   - name: web
     source_dir: /
-    build_command: yarn install --frozen-lockfile && yarn build
+    build_command: corepack enable && yarn install --frozen-lockfile && yarn build
     output_dir: out
     environment_slug: node-js
     routes:

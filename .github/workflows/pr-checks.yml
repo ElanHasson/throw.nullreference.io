@@ -25,6 +25,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -61,6 +64,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -91,6 +97,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -117,6 +126,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -152,6 +164,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
