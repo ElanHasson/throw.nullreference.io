@@ -12,9 +12,9 @@ const postsDirectory = path.join(process.cwd(), 'app/blog')
 function getPostDirectories(): string[] {
   const entries = fs.readdirSync(postsDirectory, { withFileTypes: true })
   return entries
-    .filter(entry => entry.isDirectory())
-    .map(entry => entry.name)
-    .filter(name => !name.startsWith('[')) // Exclude dynamic routes
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter((name) => !name.startsWith('[')) // Exclude dynamic routes
 }
 
 /**
@@ -26,10 +26,10 @@ function getPostMetadata(slug: string): PostMeta | null {
     if (!fs.existsSync(postPath)) {
       return null
     }
-    
+
     const fileContents = fs.readFileSync(postPath, 'utf8')
     const { data } = matter(fileContents)
-    
+
     return {
       title: data.title || '',
       date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
@@ -54,14 +54,14 @@ function getPostMetadata(slug: string): PostMeta | null {
 export async function getAllPosts(): Promise<PostMeta[]> {
   const directories = getPostDirectories()
   const posts: PostMeta[] = []
-  
+
   for (const slug of directories) {
     const metadata = getPostMetadata(slug)
     if (metadata && !metadata.draft) {
       posts.push(metadata)
     }
   }
-  
+
   return posts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
 }
 
@@ -99,7 +99,7 @@ export function getFullPost(slug: string): PostMeta | null {
  */
 export async function getFeaturedPosts(limit: number = 3): Promise<PostMeta[]> {
   const posts = await getAllPosts()
-  const featuredPosts = posts.filter(post => post.featured)
+  const featuredPosts = posts.filter((post) => post.featured)
   return featuredPosts.length > 0 ? featuredPosts.slice(0, limit) : posts.slice(0, limit)
 }
 
@@ -108,7 +108,7 @@ export async function getFeaturedPosts(limit: number = 3): Promise<PostMeta[]> {
  */
 export async function getPostsByCategory(category: string): Promise<PostMeta[]> {
   const posts = await getAllPosts()
-  return posts.filter(post => post.categories?.includes(category))
+  return posts.filter((post) => post.categories?.includes(category))
 }
 
 /**
@@ -116,7 +116,7 @@ export async function getPostsByCategory(category: string): Promise<PostMeta[]> 
  */
 export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
   const posts = await getAllPosts()
-  return posts.filter(post => post.tags?.includes(tag))
+  return posts.filter((post) => post.tags?.includes(tag))
 }
 
 /**
@@ -124,7 +124,7 @@ export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
  */
 export async function getPostsBySeries(series: string): Promise<PostMeta[]> {
   const posts = await getAllPosts()
-  return posts.filter(post => post.series === series)
+  return posts.filter((post) => post.series === series)
 }
 
 /**
@@ -150,8 +150,8 @@ export function groupPostsByYear(posts: PostMeta[]): Record<number, PostMeta[]> 
 export async function getAllCategories(): Promise<string[]> {
   const posts = await getAllPosts()
   const categories = new Set<string>()
-  posts.forEach(post => {
-    post.categories?.forEach(cat => categories.add(cat))
+  posts.forEach((post) => {
+    post.categories?.forEach((cat) => categories.add(cat))
   })
   return Array.from(categories).sort()
 }
@@ -162,8 +162,8 @@ export async function getAllCategories(): Promise<string[]> {
 export async function getAllTags(): Promise<string[]> {
   const posts = await getAllPosts()
   const tags = new Set<string>()
-  posts.forEach(post => {
-    post.tags?.forEach(tag => tags.add(tag))
+  posts.forEach((post) => {
+    post.tags?.forEach((tag) => tags.add(tag))
   })
   return Array.from(tags).sort()
 }

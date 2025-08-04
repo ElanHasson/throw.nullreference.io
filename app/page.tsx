@@ -87,12 +87,12 @@ export default async function HomePage() {
                 <div>
                   <h2 className="mb-6 text-4xl font-bold">Hey, I&apos;m Elan 👋</h2>
                   <p className="mb-4 text-lg text-gray-600 dark:text-gray-300">
-                    I&apos;m a software engineer passionate about building distributed systems, exploring
-                    new technologies, and sharing what I learn along the way.
+                    I&apos;m a software engineer passionate about building distributed systems,
+                    exploring new technologies, and sharing what I learn along the way.
                   </p>
                   <p className="mb-6 text-lg text-gray-600 dark:text-gray-300">
-                    Currently working at DigitalOcean on the App Platform team, I&apos;ve spent over 20
-                    years writing code and love diving deep into complex problems.
+                    Currently working at DigitalOcean on the App Platform team, I&apos;ve spent over
+                    20 years writing code and love diving deep into complex problems.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <span className="rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">

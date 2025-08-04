@@ -1,41 +1,41 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import js from "@eslint/js";
-import jest from "eslint-plugin-jest";
-import jestDom from "eslint-plugin-jest-dom";
-import testingLibrary from "eslint-plugin-testing-library";
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { FlatCompat } from '@eslint/eslintrc'
+import js from '@eslint/js'
+import jest from 'eslint-plugin-jest'
+import jestDom from 'eslint-plugin-jest-dom'
+import testingLibrary from 'eslint-plugin-testing-library'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-});
+})
 
 const eslintConfig = [
   js.configs.recommended,
-  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
   {
     rules: {
-      "react/no-unescaped-entities": "error",
-      "no-console": [
-        "warn",
+      'react/no-unescaped-entities': 'error',
+      'no-console': [
+        'warn',
         {
-          "allow": ["warn", "error"]
-        }
+          allow: ['warn', 'error'],
+        },
       ],
-      "prefer-const": "error",
-      "no-duplicate-imports": "error",
-      "@next/next/no-img-element": "off"
-    }
+      'prefer-const': 'error',
+      'no-duplicate-imports': 'error',
+      '@next/next/no-img-element': 'off',
+    },
   },
   {
-    files: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**/*"],
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/__tests__/**/*'],
     plugins: {
       jest,
-      "jest-dom": jestDom,
-      "testing-library": testingLibrary
+      'jest-dom': jestDom,
+      'testing-library': testingLibrary,
     },
     languageOptions: {
       globals: {
@@ -47,15 +47,15 @@ const eslintConfig = [
         afterEach: true,
         beforeAll: true,
         afterAll: true,
-        it: true
-      }
+        it: true,
+      },
     },
     rules: {
       ...jest.configs.recommended.rules,
       ...jestDom.configs.recommended.rules,
-      ...testingLibrary.configs.react.rules
-    }
-  }
-];
+      ...testingLibrary.configs.react.rules,
+    },
+  },
+]
 
-export default eslintConfig;
+export default eslintConfig

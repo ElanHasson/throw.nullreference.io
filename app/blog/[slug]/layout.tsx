@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const post = getFullPost(slug)
-  
+
   if (!post) {
     return {}
   }
@@ -48,26 +48,24 @@ export default async function BlogPostLayout({ children, params }: BlogPostLayou
       <div className="mx-auto max-w-4xl">
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold md:text-5xl">{post.title}</h1>
-          
+
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <time dateTime={post.date}>
-              {format(new Date(post.date), 'LLLL d, yyyy')}
-            </time>
-            
+            <time dateTime={post.date}>{format(new Date(post.date), 'LLLL d, yyyy')}</time>
+
             {post.readingTime && (
               <>
                 <span>•</span>
                 <span>{post.readingTime.text}</span>
               </>
             )}
-            
+
             {post.wordCount && (
               <>
                 <span>•</span>
                 <span>{post.wordCount.toLocaleString()} words</span>
               </>
             )}
-            
+
             {post.categories && post.categories.length > 0 && (
               <>
                 <span>•</span>
@@ -88,17 +86,11 @@ export default async function BlogPostLayout({ children, params }: BlogPostLayou
 
         {post.thumbnail && (
           <div className="mb-12">
-            <img
-              src={post.thumbnail}
-              alt={post.title}
-              className="rounded-lg shadow-lg"
-            />
+            <img src={post.thumbnail} alt={post.title} className="rounded-lg shadow-lg" />
           </div>
         )}
 
-        <div className="prose prose-lg max-w-none dark:prose-invert">
-          {children}
-        </div>
+        <div className="prose prose-lg dark:prose-invert max-w-none">{children}</div>
 
         {post.tags && post.tags.length > 0 && (
           <footer className="mt-12 border-t pt-8">

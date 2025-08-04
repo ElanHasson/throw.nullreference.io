@@ -15,7 +15,7 @@ jobs:
   deploy-preview:
     if: github.event.action != 'closed'
     runs-on: gh-runners
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,11 +60,11 @@ jobs:
             echo "Creating new app..."
             doctl apps create --spec .do/app-pr.yaml --wait
           fi
-          
+
           # Get app ID and URL
           APP_ID=$(doctl apps get ${{ env.DO_APP_NAME }} --format ID --no-header)
           APP_URL=$(doctl apps get ${{ env.DO_APP_NAME }} --format LiveURL --no-header)
-          
+
           echo "app_id=$APP_ID" >> $GITHUB_OUTPUT
           echo "app_url=$APP_URL" >> $GITHUB_OUTPUT
 
@@ -80,19 +80,19 @@ jobs:
             const deploymentUrl = '${{ steps.app_deploy.outputs.app_url }}';
             const appName = '${{ env.DO_APP_NAME }}';
             const body = `### 🚀 Preview Deployment Ready!\n\nYour PR preview has been deployed to DigitalOcean App Platform:\n\n🔗 **[Preview URL](${deploymentUrl})**\n📱 **App Name:** \`${appName}\`\n\n---\n\n*This preview will be automatically removed when the PR is closed.*`;
-            
+
             // Find existing comment
             const comments = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            
+
             const botComment = comments.data.find(comment => 
               comment.user.login === 'github-actions[bot]' && 
               comment.body.includes('Preview Deployment Ready')
             );
-            
+
             if (botComment) {
               // Update existing comment
               await github.rest.issues.updateComment({
@@ -114,7 +114,7 @@ jobs:
   cleanup-preview:
     if: github.event.action == 'closed'
     runs-on: gh-runners
-    
+
     steps:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -135,7 +135,7 @@ jobs:
         with:
           script: |
             const body = `### 🧹 Preview Deployment Removed\n\nThe preview deployment for this PR has been removed from DigitalOcean App Platform.`;
-            
+
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

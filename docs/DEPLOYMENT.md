@@ -27,6 +27,7 @@ You need to set up the following GitHub secret:
 ### DigitalOcean App Configuration
 
 The app is configured as a static site with:
+
 - **Build Command**: `yarn install --frozen-lockfile && yarn build`
 - **Output Directory**: `out`
 - **Environment**: Node.js
@@ -54,6 +55,7 @@ You can monitor your deployments in the [DigitalOcean App Platform dashboard](ht
 ### Cost Optimization
 
 To minimize costs:
+
 - PR apps are automatically deleted when PRs are closed
 - Consider setting spending alerts in your DigitalOcean account
 - Review and clean up any orphaned apps regularly
@@ -61,6 +63,7 @@ To minimize costs:
 ### Troubleshooting
 
 If a deployment fails:
+
 1. Check the GitHub Actions logs
 2. Verify your DigitalOcean token has the correct permissions
 3. Check the DigitalOcean App Platform logs
