@@ -15,7 +15,6 @@ describe('Header', () => {
   it('renders navigation links', () => {
     render(<Header />)
     expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/blog')
-    expect(screen.getByRole('link', { name: 'Learn' })).toHaveAttribute('href', '/learn')
     expect(screen.getByRole('link', { name: 'Topics' })).toHaveAttribute('href', '/topics')
     expect(screen.getByRole('link', { name: 'Search' })).toHaveAttribute('href', '/search')
   })

@@ -14,22 +14,21 @@ Personal blog built with Next.js, MDX, and Tailwind CSS. Deployed on DigitalOcea
 
 ```bash
 # Install dependencies
-npm install
+yarn install
 
 # Run development server
-npm run dev
+yarn run dev
 
 # Build for production
-npm run build
+yarn run build
 
 # Export static site
-npm run export
+yarn run export
 ```
 
 ## Content Structure
 
 - `/content/blog/` - Blog posts in MDX format
-- `/content/learn/` - Learning resources and documentation
 - `/content/pages/` - Standalone pages
 
 ## Deployment

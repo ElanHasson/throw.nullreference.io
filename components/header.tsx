@@ -19,12 +19,6 @@ export function Header() {
               Blog
             </Link>
             <Link
-              href="/learn"
-              className="link-underline text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-400"
-            >
-              Learn
-            </Link>
-            <Link
               href="/topics"
               className="link-underline text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-400"
             >

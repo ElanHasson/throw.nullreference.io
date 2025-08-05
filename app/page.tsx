@@ -51,10 +51,10 @@ export default async function HomePage() {
               </Link>
 
               <Link
-                href="/learn"
+                href="/search"
                 className="inline-flex items-center justify-center rounded-full border-2 border-gray-200 bg-white/80 px-8 py-4 text-lg font-medium text-gray-700 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-rose-400 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800/80 dark:text-gray-200 dark:hover:border-rose-400"
               >
-                Start Learning
+                Search Posts
               </Link>
             </div>
           </div>

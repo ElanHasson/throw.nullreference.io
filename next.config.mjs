@@ -13,8 +13,6 @@ const nextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  // Allow cross-origin requests from localhost during development
-  allowedDevOrigins: ['http://127.0.0.1:3000', 'http://localhost:3000'],
   // Note: redirects() is not supported with static export
   // Redirects should be handled at the server/hosting level
 }

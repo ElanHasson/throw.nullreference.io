@@ -38,15 +38,48 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       )
     },
 
-    img: ({ src, alt, ...props }) => {
+    img: ({ src, alt, title, ...props }) => {
       if (!src) return null
+      
+      // Handle Hugo-style positioning (#center, #floatright, #floatleft)
+      let cleanSrc = src
+      let className = "rounded-lg"
+      
+      if (src.includes('#')) {
+        const [imagePath, position] = src.split('#')
+        cleanSrc = imagePath
+        
+        switch (position) {
+          case 'center':
+            className += " mx-auto block"
+            break
+          case 'floatright':
+            className += " float-right ml-4 mb-4"
+            break
+          case 'floatleft':
+            className += " float-left mr-4 mb-4"
+            break
+        }
+      }
+      
+      // Handle query params for width
+      const urlParts = cleanSrc.split('?')
+      cleanSrc = urlParts[0]
+      const params = new URLSearchParams(urlParts[1] || '')
+      const widthParam = params.get('width')
+      const heightParam = params.get('height')
+      
+      const width = widthParam ? parseInt(widthParam) : 800
+      const height = heightParam ? parseInt(heightParam) : 400
+      
       return (
         <Image
-          src={src}
+          src={cleanSrc}
           alt={alt || ''}
-          width={800}
-          height={400}
-          className="rounded-lg"
+          title={title}
+          width={width}
+          height={height}
+          className={className}
           unoptimized
         />
       )
