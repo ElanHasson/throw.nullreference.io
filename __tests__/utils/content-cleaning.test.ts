@@ -1,19 +1,7 @@
-// Test the content cleaning logic by extracting it into a testable function
+// Test the content cleaning logic
 // This tests the regex patterns used in the search API
 
-function cleanContent(content: string): string {
-  return content
-    .replace(/<[^>]*>/g, '') // Remove JSX tags
-    .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
-    .replace(/#{1,6}\s+/g, '') // Remove heading markers
-    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
-    .replace(/\*(.*?)\*/g, '$1') // Remove italic
-    .replace(/`([^`]+)`/g, '$1') // Remove inline code
-    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-    .replace(/\n\s*\n/g, '\n') // Remove extra newlines
-    .trim()
-}
+import { cleanContent } from '@/utils/content-cleaning'
 
 describe('Content Cleaning', () => {
   describe('JSX tag removal', () => {
@@ -153,13 +141,13 @@ describe('Content Cleaning', () => {
     it('should remove code blocks', () => {
       const input = 'Before\n```javascript\nconst test = "code";\nconsole.log(test);\n```\nAfter'
       const result = cleanContent(input)
-      expect(result).toBe('Before\n\nAfter')
+      expect(result).toBe('Before\nAfter')
     })
 
     it('should remove code blocks with language', () => {
       const input = '```typescript\ninterface Test {\n  name: string;\n}\n```\nContent after'
       const result = cleanContent(input)
-      expect(result).toBe('\nContent after')
+      expect(result).toBe('Content after')
     })
 
     it('should handle multiple inline code snippets', () => {

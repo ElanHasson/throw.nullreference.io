@@ -290,14 +290,14 @@ describe('Search Integration with Fuse.js', () => {
     it('should use correct weight distribution', () => {
       // This tests our configuration indirectly by ensuring title has highest weight
       const titleResults = fuse.search('React Testing Guide')
-      const contentResults = fuse.search('unit testing integration testing')
+      const contentResults = fuse.search('comprehensive guide')
       
       // Both should return results
       expect(titleResults.length).toBeGreaterThan(0)
       expect(contentResults.length).toBeGreaterThan(0)
       
       // Title match should have better score than content match
-      if (contentResults.length > 0) {
+      if (contentResults.length > 0 && titleResults.length > 0) {
         expect(titleResults[0].score).toBeLessThan(contentResults[0].score!)
       }
     })

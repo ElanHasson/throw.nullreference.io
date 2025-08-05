@@ -1,0 +1,138 @@
+---
+title: "MDX Features Demo"
+date: 2024-01-08T10:00:00Z
+description: "Showcasing all the MDX features and plugins available in this blog"
+featured: false
+tags: ["mdx", "markdown", "demo"]
+categories: ["documentation"]
+---
+
+## Table of Contents
+
+This page demonstrates all the MDX features and plugins configured in this blog.
+
+## GitHub References
+
+Thanks to `remark-github`, GitHub references are automatically linked:
+
+- Commit: 4dbd32b
+- Issue: #123
+- Pull Request: #456
+- User: @nullreferencecorp
+
+## Code Blocks
+
+```javascript
+// Example JavaScript code
+async function fetchData() {
+  const response = await fetch('/api/data')
+  return response.json()
+}
+```
+
+```typescript
+interface User {
+  id: string
+  name: string  
+  email: string
+}
+```
+
+## Mermaid Diagrams
+
+<MermaidDiagram chart={`graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> A`} />
+
+<MermaidDiagram chart={`sequenceDiagram
+    participant User
+    participant API
+    participant Database
+    
+    User->>API: Request data
+    API->>Database: Query
+    Database-->>API: Results
+    API-->>User: Response`} />
+
+## GitHub Flavored Markdown
+
+### Tables
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Tables | ✅ | Working great |
+| Task lists | ✅ | See below |
+| Strikethrough | ✅ | ~~Like this~~ |
+| Footnotes | ✅ | See below[^1] |
+
+### Task Lists
+
+- [x] Configure MDX
+- [x] Add syntax highlighting
+- [x] Add Mermaid support
+- [ ] Write more blog posts
+
+### Footnotes
+
+This text has a footnote[^1].
+
+[^1]: This is the footnote content.
+
+
+## Syntax Highlighting
+
+```python
+def fibonacci(n):
+    """Generate Fibonacci sequence up to n"""
+    a, b = 0, 1
+    while a < n:
+        yield a
+        a, b = b, a + b
+
+# Usage
+for num in fibonacci(100):
+    print(num)
+```
+
+```rust
+fn main() {
+    let mut count = 0;
+    
+    'counting_up: loop {
+        println!("count = {}", count);
+        let mut remaining = 10;
+        
+        loop {
+            println!("remaining = {}", remaining);
+            if remaining == 9 {
+                break;
+            }
+            if count == 2 {
+                break 'counting_up;
+            }
+            remaining -= 1;
+        }
+        
+        count += 1;
+    }
+    println!("End count = {}", count);
+}
+```
+
+## Images
+
+Images are automatically unwrapped from paragraphs for better styling:
+
+![Demo Image](https://via.placeholder.com/800x400)
+
+## Links
+
+- External links: [Google](https://google.com)
+- Internal links: [Home](/)
+- Auto-linked URLs: https://example.com
+
+## Conclusion
+
+This page demonstrates the rich set of features available for MDX content in this blog!

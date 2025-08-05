@@ -1,13 +1,22 @@
 /**
  * @jest-environment node
  */
+
+// Mock modules before any imports
+jest.mock('fs', () => ({
+  promises: {
+    readdir: jest.fn(),
+    readFile: jest.fn()
+  }
+}))
+jest.mock('path')
+
 import { GET } from '@/app/api/search/route'
-import fs from 'fs/promises'
+import { promises as fs } from 'fs'
 import path from 'path'
 
-// Mock fs and path modules
-jest.mock('fs/promises')
-jest.mock('path')
+// Mock process.cwd to ensure consistent paths
+jest.spyOn(process, 'cwd').mockReturnValue('/test')
 
 const mockFs = fs as jest.Mocked<typeof fs>
 const mockPath = path as jest.Mocked<typeof path>
@@ -21,7 +30,12 @@ const consoleSpy = {
 describe('/api/search', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    // Reset path.join implementation
+    mockPath.join.mockReset()
     mockPath.join.mockImplementation((...args) => args.join('/'))
+    // Reset fs mocks
+    mockFs.readdir.mockReset()
+    mockFs.readFile.mockReset()
   })
 
   afterAll(() => {
@@ -30,7 +44,7 @@ describe('/api/search', () => {
   })
 
   it('should return empty array when blog directory does not exist', async () => {
-    mockFs.readdir.mockRejectedValue(new Error('Directory not found'))
+    mockFs.readdir.mockRejectedValue(new Error('ENOENT: no such file or directory'))
 
     const response = await GET()
     const data = await response.json()

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { cleanContent } from '@/utils/content-cleaning'
 
 export const dynamic = 'force-static'
 
@@ -33,17 +34,7 @@ async function getBlogPosts(): Promise<SearchResult[]> {
           const { data: frontmatter, content } = matter(fileContent)
           
           // Clean content by removing JSX components and markdown syntax
-          const cleanContent = content
-            .replace(/<[^>]*>/g, '') // Remove JSX tags
-            .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
-            .replace(/#{1,6}\s+/g, '') // Remove heading markers
-            .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
-            .replace(/\*(.*?)\*/g, '$1') // Remove italic
-            .replace(/`([^`]+)`/g, '$1') // Remove inline code
-            .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-            .replace(/\n\s*\n/g, '\n') // Remove extra newlines
-            .trim()
+          const cleanedContent = cleanContent(content)
           
           posts.push({
             title: frontmatter.title || entry.name,
@@ -51,7 +42,7 @@ async function getBlogPosts(): Promise<SearchResult[]> {
             date: frontmatter.date ? new Date(frontmatter.date).toISOString() : '',
             slug: entry.name,
             url: `/blog/${entry.name}`,
-            content: cleanContent,
+            content: cleanedContent,
             featured: frontmatter.featured || false,
             tags: frontmatter.tags || [],
             categories: frontmatter.categories || []
