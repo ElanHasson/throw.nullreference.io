@@ -54,11 +54,24 @@ jobs:
           print_build_logs: true
           print_deploy_logs: true
 
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Get app URL
+        id: get_url
+        run: |
+          # Wait a moment for app to be fully registered
+          sleep 10
+          APP_URL=$(doctl apps get ${{ env.DO_APP_NAME }} --format LiveURL --no-header)
+          echo "app_url=$APP_URL" >> $GITHUB_OUTPUT
+
       - name: Comment PR with deployment URL
         uses: actions/github-script@v7
         with:
           script: |
-            const deploymentUrl = '${{ fromJson(steps.app_deploy.outputs.app).live_url }}';
+            const deploymentUrl = '${{ steps.get_url.outputs.app_url }}';
             const appName = '${{ env.DO_APP_NAME }}';
             const body = `### 🚀 Preview Deployment Ready!\n\nYour PR preview has been deployed to DigitalOcean App Platform:\n\n🔗 **[Preview URL](${deploymentUrl})**\n📱 **App Name:** \`${appName}\`\n\n---\n\n*This preview will be automatically removed when the PR is closed.*`;
 
