@@ -33,7 +33,7 @@ jobs:
                 branch: ${{ github.head_ref }}
                 deploy_on_push: false
               source_dir: /
-              build_command: corepack enable && yarn install --frozen-lockfile && yarn build
+              build_command: corepack enable && yarn install --frozen-lockfile --production=false && yarn build
               output_dir: out
               environment_slug: node-js
               routes:
