@@ -48,7 +48,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         
         // Render the diagram
         await mermaid.run({
-          querySelector: '.mermaid',
+          nodes: [ref.current],
         })
       } catch (err) {
         console.error('Mermaid rendering error:', err)

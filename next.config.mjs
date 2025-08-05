@@ -1,7 +1,6 @@
 import createMDX from '@next/mdx'
 import remarkGfm from 'remark-gfm'
 import remarkToc from 'remark-toc'
-import remarkGithub from 'remark-github'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrettyCode from 'rehype-pretty-code'
@@ -18,16 +17,15 @@ const nextConfig = {
   trailingSlash: true,
   // Note: redirects() is not supported with static export
   // Redirects should be handled at the server/hosting level
+  experimental: {
+    mdxRs: true
+  }
 }
 
 const withMDX = createMDX({
   options: {
     remarkPlugins: [
       remarkGfm, // GitHub Flavored Markdown
-      [remarkGithub, {
-        // Auto-link GitHub references
-        repository: 'https://github.com/nullreferencecorp/throw.nullreference.io'
-      }],
       [remarkToc, {
         // Table of contents generation
         heading: 'Table of Contents',
