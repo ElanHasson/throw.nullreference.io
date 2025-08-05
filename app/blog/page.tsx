@@ -52,7 +52,7 @@ export default async function BlogPage() {
                 key={post.slug}
                 className={`group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg dark:border-gray-800 dark:bg-gray-900 ${colSpan}`}
               >
-                {hasImage && (
+                {hasImage && post.featuredImage && (
                   <Link href={`/blog/${post.slug}`} className="block">
                     <FeaturedImage
                       src={post.featuredImage}
