@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useSearch } from '@/hooks/use-search'
+import { useKeyboardShortcut } from '@/hooks/use-os'
 
 function SearchResultItem({
   title,
@@ -55,6 +56,7 @@ function SearchContent() {
   const searchParams = useSearchParams()
   const [query, setQuery] = useState(searchParams.get('q') || '')
   const { search, loading, error } = useSearch()
+  const { searchShortcut, modifierKeyName } = useKeyboardShortcut()
 
   const results = query ? search(query) : []
 
@@ -94,7 +96,7 @@ function SearchContent() {
           <h1 className="text-3xl font-bold">Search</h1>
           <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <kbd className="rounded border border-gray-300 px-2 py-1 text-xs font-mono dark:border-gray-600">
-              ⌘K
+              {searchShortcut}
             </kbd>
             <span>to focus</span>
             <kbd className="rounded border border-gray-300 px-2 py-1 text-xs font-mono dark:border-gray-600">
@@ -144,7 +146,7 @@ function SearchContent() {
         </div>
         
         <p id="search-description" className="sr-only">
-          Use keyboard shortcuts: Command or Control + K to focus the search input, Escape to clear the search
+          Use keyboard shortcuts: {modifierKeyName} + K to focus the search input, Escape to clear the search
         </p>
       </div>
 
