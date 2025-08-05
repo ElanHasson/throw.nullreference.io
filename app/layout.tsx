@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { GlobalKeyboardShortcuts } from '@/components/global-keyboard-shortcuts'
+import { GoogleAnalytics } from '@/components/google-analytics'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </div>
         </ThemeProvider>
+        <GoogleAnalytics />
       </body>
     </html>
   )
