@@ -47,12 +47,10 @@ jobs:
 
       - name: Deploy to DigitalOcean App Platform
         id: app_deploy
-        uses: digitalocean/app_action@v2
+        uses: digitalocean/app_action/deploy@v2
         with:
           app_spec_location: .do/app-pr.yaml
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          print_build_logs: true
-          print_deploy_logs: true
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
