@@ -20,6 +20,8 @@ export type PostMetadata = {
   excerpt: string;
   tags: string[];
   seo: SEO;
+  featured?: boolean;
+  series?: string;
 };
 
 export type Post = PostMetadata & {
