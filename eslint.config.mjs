@@ -28,6 +28,7 @@ const eslintConfig = [
       'prefer-const': 'error',
       'no-duplicate-imports': 'error',
       '@next/next/no-img-element': 'off',
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
   {

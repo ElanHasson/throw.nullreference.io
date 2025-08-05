@@ -1,19 +1,42 @@
-/**
- * Shared type definitions for the blog application
- */
+export interface Author {
+  name: string
+  bio?: string
+  avatar?: string
+}
+
+export interface SEO {
+  metaTitle?: string
+  metaDescription?: string
+}
+
+export interface PostMetadata {
+  title: string
+  featuredImage?: string
+  publishDate: string
+  lastModified?: string
+  author: Author
+  excerpt?: string
+  description?: string
+  tags?: string[]
+  categories?: string[]
+  series?: string
+  featured?: boolean
+  draft?: boolean
+  seo?: SEO
+}
 
 export interface PostMeta {
   title: string
   date: string
   description?: string
   thumbnail?: string
+  featuredImage?: string
   tags?: string[]
   categories?: string[]
   draft?: boolean
   featured?: boolean
   series?: string
   slug: string
-  // Optional computed fields
   readingTime?: { text: string; minutes: number; words: number }
   wordCount?: number
 }

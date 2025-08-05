@@ -112,7 +112,7 @@ export default async function HomePage() {
                 <div className="relative">
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-rose-400 to-purple-400 opacity-20 blur-3xl"></div>
                   <img
-                    src="/static/images/profile.jpg"
+                    src="/images/profile.jpg"
                     alt="Elan's profile"
                     className="relative rounded-2xl shadow-2xl"
                   />
@@ -162,7 +162,7 @@ export default async function HomePage() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="bg-gray-50 py-20 dark:bg-gray-900/50">
+      <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-5xl">
             <div className="mb-12 text-center">
@@ -239,7 +239,7 @@ export default async function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20">
+      <section className="bg-gray-50 py-20 dark:bg-gray-900/50">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-5xl">
             <div className="mb-12 text-center">
@@ -297,7 +297,7 @@ export default async function HomePage() {
               ].map((feature, index) => (
                 <div
                   key={index}
-                  className="rounded-2xl bg-gray-50 p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
+                  className="rounded-2xl bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
                 >
                   <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400">
                     {feature.icon}

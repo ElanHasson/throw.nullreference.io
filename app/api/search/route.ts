@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
+import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { cleanContent } from '@/utils/content-cleaning'
+import { PostMetadata } from '@/lib/types'
 
 export const dynamic = 'force-static'
 
@@ -18,38 +19,79 @@ interface SearchResult {
   categories: string[]
 }
 
+function getPostMetadata(slug: string): SearchResult | null {
+  try {
+    const filePath = path.join(process.cwd(), 'private/posts', `${slug}.mdx`)
+    if (!fs.existsSync(filePath)) {
+      return null
+    }
+
+    const fileContent = fs.readFileSync(filePath, 'utf8')
+    
+    // First try to extract JS-style metadata export
+    const metadataMatch = fileContent.match(/export const metadata = ({[\s\S]*?});/)
+    let metadata: Partial<PostMetadata> = {}
+    let content = fileContent
+
+    if (metadataMatch) {
+      try {
+        // Use eval to parse the metadata object (safe since we control the content)
+        metadata = eval(`(${metadataMatch[1]})`) as PostMetadata
+        // Extract content after metadata
+        const contentMatch = fileContent.match(/export const metadata = {[\s\S]*?};\s*([\s\S]*)/)
+        content = contentMatch ? contentMatch[1] : ''
+      } catch {
+        console.warn(`Failed to parse JS metadata for ${slug}, trying regex fallback`)
+      }
+    } else {
+      // Fallback: try to parse as frontmatter
+      try {
+        const matterResult = matter(fileContent)
+        metadata = matterResult.data as PostMetadata
+        content = matterResult.content
+      } catch {
+        console.warn(`Failed to parse frontmatter for ${slug}`)
+        return null
+      }
+    }
+
+    const cleanedContent = cleanContent(content)
+
+    return {
+      title: metadata.title || '',
+      description: metadata.excerpt || metadata.description || '',
+      date: metadata.publishDate || new Date().toISOString(),
+      slug,
+      url: `/blog/${slug}`,
+      content: cleanedContent,
+      featured: metadata.featured || false,
+      tags: metadata.tags || [],
+      categories: metadata.categories || [],
+    }
+  } catch (error) {
+    console.error(`Error reading post metadata for ${slug}:`, error)
+    return null
+  }
+}
+
 async function getBlogPosts(): Promise<SearchResult[]> {
-  const blogDir = path.join(process.cwd(), 'app', 'blog')
+  const postsDirectory = path.join(process.cwd(), 'private/posts')
 
   try {
-    const entries = await fs.readdir(blogDir, { withFileTypes: true })
+    if (!fs.existsSync(postsDirectory)) {
+      return []
+    }
+    
+    const files = fs.readdirSync(postsDirectory)
+      .filter(file => file.endsWith('.mdx'))
+      .map(file => file.replace('.mdx', ''))
+
     const posts: SearchResult[] = []
 
-    for (const entry of entries) {
-      if (entry.isDirectory() && !entry.name.startsWith('[')) {
-        const mdxPath = path.join(blogDir, entry.name, 'page.mdx')
-
-        try {
-          const fileContent = await fs.readFile(mdxPath, 'utf8')
-          const { data: frontmatter, content } = matter(fileContent)
-
-          // Clean content by removing JSX components and markdown syntax
-          const cleanedContent = cleanContent(content)
-
-          posts.push({
-            title: frontmatter.title || entry.name,
-            description: frontmatter.description || '',
-            date: frontmatter.date ? new Date(frontmatter.date).toISOString() : '',
-            slug: entry.name,
-            url: `/blog/${entry.name}`,
-            content: cleanedContent,
-            featured: frontmatter.featured || false,
-            tags: frontmatter.tags || [],
-            categories: frontmatter.categories || [],
-          })
-        } catch (error) {
-          console.warn(`Failed to read ${mdxPath}:`, error)
-        }
+    for (const slug of files) {
+      const metadata = getPostMetadata(slug)
+      if (metadata) {
+        posts.push(metadata)
       }
     }
 

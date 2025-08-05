@@ -1,0 +1,393 @@
+export const metadata = {
+  title: "Vibe Coding a Next.js Blog with Claude: A Journey Through Modern Web Development",
+  featuredImage: "/posts/feature-image-1.jpg",
+  publishDate: "2025-08-05",
+  lastModified: "2025-08-05",
+  author: {
+    name: "Elan Hasson",
+    bio: "Software Developer and Tech Enthusiast",
+    avatar: "/authors/avatar-1.jpg",
+  },
+  excerpt: "How we built a sophisticated Next.js MDX blog through iterative AI-assisted development - complete with search, RSS feeds, dark mode, and all the modern features you'd expect",
+  tags: ["vibe-coding", "next-js", "mdx", "ai-assisted-development", "web-development"],
+  categories: ["ai-assisted-development", "meta", "experiments"],
+  series: "AI-Assisted Development",
+  seo: {
+    metaTitle: "Vibe Coding a Next.js Blog with Claude",
+    metaDescription: "How we built a sophisticated Next.js MDX blog through iterative AI-assisted development - complete with search, RSS feeds, dark mode, and all the modern features you'd expect",
+  },
+};
+
+OK, so here's the thing - I just built an entire modern blog platform using nothing but conversations with Claude AI, and honestly? It's been one of the most fascinating development experiences I've had in years. This isn't your typical "I asked ChatGPT to write some code" story. This is about what I call "vibe coding" - that iterative, conversational dance between human intent and AI capability that somehow produces better software than either could create alone.
+
+<Alert type="info">
+**What you're reading right now** is being rendered by the very platform we built together. Every feature I'm about to show you is working live on this page. How's that for eating your own dog food?
+</Alert>
+
+## The Journey Started Simple (As They Always Do)
+
+Like most developers, I started with the classic "I need a blog" problem. Sure, I could have used WordPress, Ghost, or any of the dozen static site generators out there. But where's the fun in that? I wanted something modern, fast, and completely under my control. More importantly, I wanted to see what this whole "AI-assisted development" thing was really about.
+
+The conversation with Claude started innocently enough:
+
+*"Hey, can you help me set up a Next.js blog with MDX support?"*
+
+Little did I know that simple question would lead to building one of the most feature-rich blog platforms I've ever worked with. But let me back up and tell you the whole story.
+
+## The Tech Stack That Emerged
+
+Through our iterative conversations, we ended up with what I can only describe as a beautifully modern stack:
+
+- **Next.js 15** with App Router (because life's too short for the Pages router)
+- **MDX** with a full suite of rehype/remark plugins
+- **TypeScript** throughout (no `any` types allowed - we're civilized here)
+- **Tailwind CSS** with custom design system
+- **Fuse.js** for blazing-fast client-side search
+- **RSS feeds** with proper image enclosures
+- **Series support** for multi-part posts
+- **Dark/light theme** switching that actually works
+- **Full static site generation** for those sweet, sweet performance gains
+
+But the real magic isn't just in the stack - it's in how all these pieces work together seamlessly. Here's a quick example of how we set up MDX:
+
+```typescript
+// next.config.mjs
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [
+      remarkGfm, // GitHub Flavored Markdown
+      remarkToc, // Table of contents generation
+    ],
+    rehypePlugins: [
+      rehypeSlug, // Add IDs to headings
+      rehypeAutolinkHeadings, // Add links to headings
+      rehypePrettyCode, // Syntax highlighting
+    ],
+  },
+})
+```
+
+## Feature Deep Dive: Let Me Show You What We Built
+
+### MDX Components That Actually Make Sense
+
+Remember the days when you had to write HTML in your Markdown files? Yeah, we don't do that anymore. Check out this alert component in action:
+
+<Alert type="success">
+**This is a live alert component!** It's got proper TypeScript interfaces, dark mode support, and Lucide React icons. The best part? It's just `<Alert type="success">` in the MDX file.
+</Alert>
+
+We built custom components for everything:
+- **Alerts** (info, success, warning, error) with proper semantics
+- **Figure components** with automatic image optimization
+- **YouTube embeds** that are privacy-friendly and responsive
+- **Mermaid diagrams** that render beautifully in both light and dark modes
+
+Speaking of Mermaid diagrams, here's the architecture of our search system:
+
+<MermaidDiagram chart={`graph TD
+    A[User Types Query] --> B[Fuse.js Search Engine]
+    B --> C[Static Search Index]
+    C --> D[MDX Content Processing]
+    D --> E[Clean Content Extraction]
+    E --> F[Search Results]
+    F --> G[Highlighted Results UI]
+    
+    H[Build Time] --> I[Generate Search Index]
+    I --> J[Process All MDX Files]
+    J --> K[Extract & Clean Content]
+    K --> C
+    
+    style A fill:#e1f5fe
+    style F fill:#c8e6c9
+    style H fill:#fff3e0`} />
+
+### Search That Actually Works
+
+OK, let's talk about the search functionality because this is where things get interesting. Most blog searches are terrible - they're either too simple (basic string matching) or too complex (full Elasticsearch setup). We found the sweet spot with Fuse.js.
+
+Here's what happens when you search:
+
+1. **At build time**, we generate a static search index from all MDX files
+2. **Content gets cleaned** - we strip out JSX components, code blocks, and formatting to focus on searchable text
+3. **Fuse.js creates a fuzzy search index** that handles typos and partial matches
+4. **Client-side search** happens instantly with no server requests needed
+
+The content cleaning part was particularly tricky. You can't just search raw MDX - you'll get matches on component names and syntax. We had to build a proper content sanitizer:
+
+```typescript
+// This strips JSX components while preserving readable content
+export function cleanContent(content: string): string {
+  return content
+    .replace(/<[^>]*>/g, '') // Remove JSX tags
+    .replace(/\{[^}]*\}/g, '') // Remove JSX expressions
+    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+    .replace(/`[^`]*`/g, '') // Remove inline code
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // Convert links to text
+    .replace(/[#*_~`]/g, '') // Remove markdown formatting
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim()
+}
+```
+
+### RSS Feeds Done Right
+
+I'm old school - I still use RSS readers. So we built RSS feeds that don't suck. Not only do we generate standard RSS 2.0, but we also include proper image enclosures for posts with thumbnails. Your RSS reader will actually show post images!
+
+<Figure 
+  src="/static/images/rss-example.png" 
+  alt="RSS feed with image enclosures showing proper thumbnails" 
+  caption="RSS feeds with image enclosures - because we're not savages"
+  width={600}
+  height={400}
+/>
+
+### Series Organization
+
+One feature I'm particularly proud of is the series support. Blog posts can belong to a series (like this "AI-Assisted Development" series), and we automatically generate:
+- Series landing pages with all posts in order
+- Navigation between posts in a series
+- Breadcrumb navigation that makes sense
+- Proper structured data for search engines
+
+### Dark Mode That Doesn't Hurt Your Eyes
+
+We implemented dark mode using `next-themes` with system preference detection. But here's the key - we didn't just invert colors and call it a day. Every component, every alert, every code block has carefully chosen dark mode variants.
+
+The theme toggle is in the header if you want to try it right now. Go ahead, I'll wait.
+
+See how the Mermaid diagram above adapts to your theme choice? That's the kind of attention to detail that makes the difference between "it works" and "it's actually pleasant to use."
+
+## The "Vibe Coding" Experience
+
+Now, let me tell you about what it was actually like to build this with Claude. It wasn't like traditional pair programming, and it definitely wasn't like outsourcing work to a contractor. It was something entirely different.
+
+### The Iterative Dance
+
+The development process went something like this:
+
+1. **I'd describe what I wanted** (often vaguely): "Can we make the search better?"
+2. **Claude would propose a solution** with multiple options and tradeoffs
+3. **We'd implement and test** the solution together
+4. **I'd notice edge cases or improvements**: "What about mobile? What about dark mode?"
+5. **Claude would iterate** on the solution, often suggesting improvements I hadn't thought of
+6. **Repeat** until we had something beautiful
+
+The magic happened in the gaps - Claude would often suggest architectural improvements or catch edge cases I'd missed. It was like having a really thoughtful senior developer who never got tired or frustrated.
+
+### What Worked Really Well
+
+**Rapid prototyping**: Going from idea to working implementation in minutes, not hours.
+
+**Edge case coverage**: Claude is surprisingly good at thinking through accessibility, mobile responsiveness, and error states.
+
+**Code quality**: The generated code follows modern best practices and includes proper TypeScript types throughout.
+
+**Learning**: Every conversation taught me something new about Next.js, React, or modern web development.
+
+### What Required Human Judgment
+
+**Design decisions**: Claude can implement designs beautifully, but the aesthetic choices still needed human input.
+
+**Content strategy**: Deciding what features to build and in what order required human product sense.
+
+**Testing strategy**: While Claude could write tests, deciding what to test required understanding the user experience.
+
+## The Technical Deep Dive
+
+Let me show you some of the more interesting technical pieces that emerged from our collaboration.
+
+### Static Site Generation with Dynamic Features
+
+One of the coolest aspects is how we balanced static generation with dynamic functionality. The entire site builds to static HTML/CSS/JS, but still provides rich interactivity:
+
+```typescript
+// This runs at build time to generate the search index
+export async function getBlogPosts(): Promise<SearchResult[]> {
+  const blogDir = path.join(process.cwd(), 'app', 'blog')
+  const entries = await fs.readdir(blogDir, { withFileTypes: true })
+  const posts: SearchResult[] = []
+
+  for (const entry of entries) {
+    if (entry.isDirectory() && !entry.name.startsWith('[')) {
+      const mdxPath = path.join(blogDir, entry.name, 'page.mdx')
+      const fileContent = await fs.readFile(mdxPath, 'utf8')
+      const { data: frontmatter, content } = matter(fileContent)
+      
+      // Clean content for search
+      const cleanedContent = cleanContent(content)
+      
+      posts.push({
+        title: frontmatter.title || entry.name,
+        description: frontmatter.description || '',
+        content: cleanedContent,
+        // ... more fields
+      })
+    }
+  }
+
+  return posts.sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+}
+```
+
+### TypeScript Throughout (No Cheating)
+
+We maintained strict TypeScript discipline throughout the project. Every component has proper interfaces, every API endpoint has typed responses, and we never once used `any`. Here's a sample of the type definitions:
+
+```typescript
+interface PostMeta {
+  title: string
+  date: string
+  description: string
+  thumbnail: string
+  tags: string[]
+  categories: string[]
+  draft: boolean
+  featured: boolean
+  series: string
+  slug: string
+}
+
+interface SearchResult extends PostMeta {
+  url: string
+  content: string
+}
+```
+
+### Component Architecture
+
+Every MDX component follows the same pattern - proper TypeScript interfaces, dark mode support, and semantic HTML:
+
+```typescript
+interface AlertProps {
+  type?: 'info' | 'success' | 'warning' | 'error'
+  icon?: string
+  children: ReactNode
+}
+
+const typeStyles = {
+  info: 'bg-blue-50 text-blue-900 dark:bg-blue-900/20 dark:text-blue-200',
+  success: 'bg-green-50 text-green-900 dark:bg-green-900/20 dark:text-green-200',
+  warning: 'bg-yellow-50 text-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-200',
+  error: 'bg-red-50 text-red-900 dark:bg-red-900/20 dark:text-red-200',
+}
+
+export function Alert({ type = 'info', children }: AlertProps) {
+  return (
+    <div className={`alert alert-${type} ${typeStyles[type]}`}>
+      <IconComponent className="h-5 w-5 flex-shrink-0" />
+      <div className="prose prose-sm dark:prose-invert max-w-none">
+        {children}
+      </div>
+    </div>
+  )
+}
+```
+
+## Performance and Accessibility
+
+Throughout the development process, Claude consistently suggested performance and accessibility improvements that I might have overlooked:
+
+- **Image optimization** with Next.js Image component
+- **Lazy loading** for heavy components like Mermaid diagrams
+- **Semantic HTML** throughout
+- **Proper ARIA labels** and focus management
+- **Color contrast** that meets WCAG guidelines
+- **Keyboard navigation** support
+
+We even set up comprehensive testing with Playwright that includes accessibility audits:
+
+```typescript
+// This runs on every build to catch accessibility issues
+test('homepage should be accessible', async ({ page }) => {
+  await page.goto('/')
+  const accessibilityScanResults = await new AxeBuilder({ page }).analyze()
+  expect(accessibilityScanResults.violations).toEqual([])
+})
+```
+
+## Lessons Learned from AI-Assisted Development
+
+After building this entire platform through AI-assisted development, I've learned a few things that might be useful for other developers:
+
+### What AI is Exceptional At
+
+1. **Boilerplate elimination**: Never write another TypeScript interface by hand
+2. **Best practices**: AI consistently suggests modern, maintainable patterns
+3. **Edge case thinking**: Surprisingly good at "what if the user does this?"
+4. **Documentation**: Every function gets proper JSDoc comments automatically
+5. **Testing**: Comprehensive test suites that actually test the right things
+
+### Where Human Oversight is Critical
+
+1. **Architecture decisions**: Big picture thinking still requires human judgment
+2. **User experience**: AI can implement UX but doesn't inherently understand user needs
+3. **Business logic**: Complex domain logic needs human validation
+4. **Performance tuning**: While AI suggests optimizations, profiling requires human analysis
+
+### The Workflow That Works
+
+The most effective pattern I found was:
+
+1. **Start with the outcome**: Describe what you want users to experience
+2. **Let AI propose the implementation**: Don't dictate the technical approach
+3. **Iterate quickly**: Build, test, refine in rapid cycles
+4. **Focus on integration**: Ensure new features work well with existing ones
+
+## The Results Speak for Themselves
+
+The blog platform we built together has:
+
+- **100% static generation** for maximum performance
+- **Full-text search** that works offline
+- **Comprehensive test coverage** (unit tests, integration tests, E2E tests)
+- **Accessibility compliance** verified with automated testing
+- **Mobile-first responsive design**
+- **RSS feeds** with image support
+- **Series organization** for multi-part content
+- **SEO optimization** with proper structured data
+- **Dark/light theme** with system preference detection
+
+But more importantly, it was built in a fraction of the time it would have taken with traditional development approaches, and the code quality is consistently high throughout.
+
+## What This Means for the Future
+
+This experience has fundamentally changed how I think about software development. We're not just getting better code completion - we're getting thought partners that can help us build better software faster.
+
+<Alert type="warning">
+**A word of caution**: AI-assisted development is incredibly powerful, but it's not magic. You still need to understand what you're building and why. The AI is a tool, albeit an incredibly sophisticated one.
+</Alert>
+
+The future of development isn't "AI replacing developers" - it's developers using AI to focus on the interesting problems while automating away the tedious parts. It's about having more time to think about user experience, architecture, and business value instead of wrestling with boilerplate code.
+
+## Try It Yourself
+
+Everything we built here is open source and available for you to explore. The codebase demonstrates modern Next.js patterns, proper TypeScript usage, and how to build a content platform that scales.
+
+Want to search through all the posts? Try the search functionality at the top of the page. Want to see the RSS feed? Check out `/feed.xml`. Want to explore the code? It's all there in the repository.
+
+<Alert type="success">
+**The best part?** You can start your own AI-assisted development journey right now. Pick a project, start a conversation with Claude (or your AI tool of choice), and begin that iterative dance between human creativity and AI capability.
+</Alert>
+
+## What's Next?
+
+This blog platform is just the beginning. We're already planning the next iteration:
+
+- **Comment system** integration
+- **Newsletter subscription** functionality  
+- **Advanced analytics** with privacy-first approach
+- **Multi-author support** with author profiles
+- **Content recommendation** engine
+
+But here's the thing - I'm not planning these features alone. They'll emerge from conversations, iterations, and that beautiful dance of human intent meeting AI capability.
+
+That's the future of development, and honestly? I can't wait to see what we build next.
+
+---
+
+*This post was written entirely by a human (me), but the platform it's running on was built through AI-assisted development. The code, the features, the architecture - all of it emerged from conversations with Claude. And you know what? It's some of the best code I've ever shipped.*
+
+*What are you going to build with AI assistance? The tools are here, the patterns are emerging, and the possibilities are endless. Start the conversation and see where it takes you.*

@@ -1,48 +1,36 @@
-# throw.nullreference.io
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Personal blog built with Next.js, MDX, and Tailwind CSS. Deployed on DigitalOcean App Platform.
+## Getting Started
 
-## Tech Stack
-
-- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
-- **Content**: [MDX](https://mdxjs.com/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Deployment**: [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/)
-- **Diagrams**: [Mermaid](https://mermaid.js.org/)
-
-## Development
+First, run the development server:
 
 ```bash
-# Install dependencies
-yarn install
-
-# Run development server
-yarn run dev
-
-# Build for production
-yarn run build
-
-# Export static site
-yarn run export
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Content Structure
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- `/content/blog/` - Blog posts in MDX format
-- `/content/pages/` - Standalone pages
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Deployment
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-The site is automatically deployed to DigitalOcean App Platform on push to the main branch.
+## Learn More
 
-See `.do/app.yaml` for deployment configuration.
+To learn more about Next.js, take a look at the following resources:
 
-## Contributing
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Pull requests welcomed and accepted.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## License
+## Deploy on Vercel
 
-Content is copyright © 2014-2024 Elan Hasson. All Rights Reserved.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Code samples and examples are MIT licensed.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

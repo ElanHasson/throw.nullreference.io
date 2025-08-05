@@ -70,6 +70,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/categories"
+                  className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
+                >
+                  Categories
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/topics"
                   className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
                 >
@@ -111,7 +119,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/feed.xml"
+                  href="/index.xml"
                   className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
                 >
                   RSS Feed

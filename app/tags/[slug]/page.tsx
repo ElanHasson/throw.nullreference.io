@@ -12,10 +12,7 @@ interface Props {
 export async function generateStaticParams() {
   const tags = await getAllTags()
   return tags.map((tag) => ({
-    slug: tag
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, ''),
+    slug: encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-')),
   }))
 }
 
@@ -38,11 +35,8 @@ export async function generateMetadata({ params }: Props) {
 
 function getTagNameFromSlug(tags: string[], slug: string) {
   for (const tag of tags) {
-    const tagSlug = tag
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')
-    if (tagSlug === slug) {
+    const tagSlug = encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))
+    if (tagSlug === decodeURIComponent(slug)) {
       return tag
     }
   }
@@ -104,10 +98,7 @@ export default async function TagPage({ params }: Props) {
                     {post.categories.slice(0, 3).map((category) => (
                       <Link
                         key={category}
-                        href={`/categories/${category
-                          .toLowerCase()
-                          .replace(/[^a-z0-9]+/g, '-')
-                          .replace(/^-|-$/g, '')}`}
+                        href={`/categories/${encodeURIComponent(category.toLowerCase().replace(/\s+/g, '-'))}`}
                         className="rounded bg-gray-100 px-2 py-1 text-xs transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
                       >
                         {category}
