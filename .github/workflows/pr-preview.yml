@@ -20,13 +20,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
       - name: Create app spec for PR
         run: |
+          mkdir -p .do
           cat > .do/app-pr.yaml << EOF
           name: ${{ env.DO_APP_NAME }}
           region: nyc
@@ -49,35 +45,20 @@ jobs:
                   value: "${{ github.event.pull_request.number }}"
           EOF
 
-      - name: Create or update app
+      - name: Deploy to DigitalOcean App Platform
         id: app_deploy
-        run: |
-          # Check if app exists
-          if doctl apps get ${{ env.DO_APP_NAME }} &>/dev/null; then
-            echo "App exists, updating..."
-            doctl apps update ${{ env.DO_APP_NAME }} --spec .do/app-pr.yaml
-          else
-            echo "Creating new app..."
-            doctl apps create --spec .do/app-pr.yaml --wait
-          fi
-
-          # Get app ID and URL
-          APP_ID=$(doctl apps get ${{ env.DO_APP_NAME }} --format ID --no-header)
-          APP_URL=$(doctl apps get ${{ env.DO_APP_NAME }} --format LiveURL --no-header)
-
-          echo "app_id=$APP_ID" >> $GITHUB_OUTPUT
-          echo "app_url=$APP_URL" >> $GITHUB_OUTPUT
-
-      - name: Wait for deployment
-        run: |
-          echo "Waiting for deployment to complete..."
-          doctl apps create-deployment ${{ steps.app_deploy.outputs.app_id }} --wait
+        uses: digitalocean/app_action@v2
+        with:
+          app_spec_location: .do/app-pr.yaml
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          print_build_logs: true
+          print_deploy_logs: true
 
       - name: Comment PR with deployment URL
         uses: actions/github-script@v7
         with:
           script: |
-            const deploymentUrl = '${{ steps.app_deploy.outputs.app_url }}';
+            const deploymentUrl = '${{ steps.app_deploy.outputs.live_url }}';
             const appName = '${{ env.DO_APP_NAME }}';
             const body = `### 🚀 Preview Deployment Ready!\n\nYour PR preview has been deployed to DigitalOcean App Platform:\n\n🔗 **[Preview URL](${deploymentUrl})**\n📱 **App Name:** \`${appName}\`\n\n---\n\n*This preview will be automatically removed when the PR is closed.*`;
 
