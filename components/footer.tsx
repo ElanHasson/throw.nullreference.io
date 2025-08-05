@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { GitHubIcon, MastodonIcon, LinkedInIcon } from './icons'
+import { GitHubIcon, MastodonIcon, LinkedInIcon, StackOverflowIcon, YouTubeIcon } from './icons'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -44,6 +44,24 @@ export function Footer() {
                 aria-label="LinkedIn"
               >
                 <LinkedInIcon />
+              </a>
+              <a
+                href="https://stackoverflow.com/users/103302/elan-hasson"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
+                aria-label="Stack Overflow"
+              >
+                <StackOverflowIcon />
+              </a>
+              <a
+                href="https://www.youtube.com/channel/ElanHasson"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
+                aria-label="YouTube"
+              >
+                <YouTubeIcon />
               </a>
             </div>
           </div>

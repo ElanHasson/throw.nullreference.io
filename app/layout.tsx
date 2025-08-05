@@ -63,6 +63,12 @@ export const metadata: Metadata = {
       'https://mastodon.social/@elanhasson',
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Throwin' Exceptions",
+    description: 'A blog about software development, technology, and life',
+    creator: '@elan@publicsquare.global',
+  },
   robots: {
     index: true,
     follow: true,
