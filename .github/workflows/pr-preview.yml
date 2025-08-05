@@ -31,7 +31,7 @@ jobs:
               github:
                 repo: ${{ github.repository }}
                 branch: ${{ github.head_ref }}
-                deploy_on_push: false
+                deploy_on_push: true
               source_dir: /
               build_command: corepack enable && yarn install --frozen-lockfile --production=false && yarn build
               output_dir: out
