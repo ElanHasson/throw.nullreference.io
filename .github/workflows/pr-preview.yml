@@ -64,7 +64,14 @@ jobs:
         run: |
           # Wait a moment for app to be fully registered
           sleep 10
-          APP_URL=$(doctl apps get ${{ env.DO_APP_NAME }} --format LiveURL --no-header)
+          # Find app ID by name
+          APP_ID=$(doctl apps list --format Name,ID --no-header | grep "^${{ env.DO_APP_NAME }}" | awk '{print $2}')
+          if [ -z "$APP_ID" ]; then
+            echo "App not found: ${{ env.DO_APP_NAME }}"
+            exit 1
+          fi
+          # Get app URL using ID
+          APP_URL=$(doctl apps get "$APP_ID" --format LiveURL --no-header)
           echo "app_url=$APP_URL" >> $GITHUB_OUTPUT
 
       - name: Comment PR with deployment URL
@@ -136,4 +143,3 @@ jobs:
               repo: context.repo.repo,
               body: body
             });
-# Triggering workflow run after PR cleanup
