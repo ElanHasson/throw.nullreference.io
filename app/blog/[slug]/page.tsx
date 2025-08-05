@@ -1,6 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { format } from "date-fns";
 import { getPost } from "./_queries/get-post";
+import Breadcrumb from "@/components/breadcrumb";
+import { FeaturedImage } from "@/components/featured-image";
 
 export default async function BlogPostPage({
   params,
@@ -17,55 +21,106 @@ export default async function BlogPostPage({
   const Content = post.content;
 
   return (
-    <article className="mx-auto py-20 max-w-screen-md">
-      <header className="text-center">
-        <p className="mb-8 text-sm text-muted-foreground">
-          {new Date(post.publishDate).toLocaleDateString([], {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </p>
-        <h1 className="text-4xl">{post.title}</h1>
-        <p className="mb-4 text-lg text-muted-foreground">{post.excerpt}</p>
+    <div className="container mx-auto max-w-4xl px-4 py-16">
+      <Breadcrumb 
+        items={[
+          { label: 'Blog', href: '/blog' }, 
+          { label: post.title }
+        ]} 
+      />
 
-        {post.featuredImage && (
-          <div className="relative mb-8 h-64 w-full md:h-[500px]">
-            <Image
-              src={post.featuredImage}
-              alt={post.title}
-              fill
-              className="rounded-lg object-cover"
-              priority
-            />
-          </div>
-        )}
-      </header>
-
-      <section className="prose prose-lg prose-li:mb-2 prose-ul:mt-4 hover:prose-a:text-primary hover:prose-a:decoration-primary prose-a:underline prose-p:mt-2 prose-p:mb-4 max-w-none dark:prose-invert prose-headings:font-bold prose-headings:mt-6 prose-headings:mb-2">
-        <Content />
-      </section>
-
-      <footer className="mt-16">
-        <div className="flex items-center gap-4 rounded-lg border p-6">
-          {post.author.avatar && (
-            <div className="relative h-16 w-16 flex-shrink-0">
-              <Image
-                src={post.author.avatar}
-                alt={post.author.name}
-                fill
-                className="rounded-full object-cover"
-              />
-            </div>
-          )}
-          <div>
-            <h3 className="font-semibold">{post.author.name}</h3>
-            {post.author.bio && (
-              <p className="text-sm text-muted-foreground">{post.author.bio}</p>
+      <article className="animate-fade-in">
+        <header className="mb-12 text-center">
+          <div className="mb-6 flex flex-wrap items-center justify-center gap-4 text-sm">
+            <time className="font-medium text-rose-600 dark:text-rose-400">
+              {format(new Date(post.publishDate), 'LLLL d, yyyy')}
+            </time>
+            
+            {post.featured && (
+              <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-800 dark:bg-rose-900 dark:text-rose-200">
+                Featured
+              </span>
             )}
           </div>
-        </div>
-      </footer>
-    </article>
+
+          <h1 className="mb-6 text-4xl font-bold md:text-5xl">
+            {post.title}
+          </h1>
+          
+          {post.excerpt && (
+            <p className="mx-auto mb-8 max-w-2xl text-xl text-gray-600 dark:text-gray-300">
+              {post.excerpt}
+            </p>
+          )}
+
+          {post.featuredImage && (
+            <FeaturedImage
+              src={post.featuredImage}
+              alt={post.title}
+              variant="hero"
+              priority
+              className="mb-12 rounded-2xl shadow-2xl"
+            />
+          )}
+        </header>
+
+        <section className="prose prose-lg prose-gray max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-p:leading-relaxed prose-a:text-rose-600 prose-a:no-underline hover:prose-a:text-rose-700 hover:prose-a:underline prose-code:rounded prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-rose-600 prose-pre:bg-gray-900 prose-pre:text-gray-100 dark:prose-a:text-rose-400 dark:hover:prose-a:text-rose-300 dark:prose-code:bg-gray-800 dark:prose-code:text-rose-400 dark:prose-pre:bg-gray-950">
+          <Content />
+        </section>
+
+        <footer className="mt-16 space-y-8">
+          {/* Author Bio */}
+          {post.author && (
+            <div className="rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 p-8 dark:from-gray-800 dark:to-gray-900">
+              <div className="flex items-start gap-6">
+                {post.author.avatar && (
+                  <div className="relative h-20 w-20 flex-shrink-0">
+                    <Image
+                      src={post.author.avatar}
+                      alt={post.author.name}
+                      fill
+                      className="rounded-full object-cover shadow-lg"
+                    />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="mb-2 text-xl font-bold">
+                    Written by {post.author.name}
+                  </h3>
+                  {post.author.bio && (
+                    <p className="text-gray-600 dark:text-gray-300">
+                      {post.author.bio}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div className="flex justify-center">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-6 py-3 font-medium text-white transition-all duration-300 hover:bg-rose-700 hover:scale-105 hover:shadow-lg"
+            >
+              <svg 
+                className="h-4 w-4" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M7 16l-4-4m0 0l4-4m-4 4h18" 
+                />
+              </svg>
+              Back to Blog
+            </Link>
+          </div>
+        </footer>
+      </article>
+    </div>
   );
 }

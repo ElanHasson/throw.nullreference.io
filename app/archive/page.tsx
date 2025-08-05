@@ -16,7 +16,7 @@ export default async function ArchivePage() {
   const totalPosts = posts.length
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16">
+    <div className="container mx-auto max-w-7xl px-4 py-16 lg:px-8">
       <div className="mb-12">
         <h1 className="mb-4 text-4xl font-bold">Archive</h1>
         <p className="text-gray-600 dark:text-gray-400">

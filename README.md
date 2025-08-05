@@ -1,24 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Throwin' Exceptions Blog
+
+A modern, feature-rich blog built with Next.js 15, TypeScript, and MDX. Live at [throw.nullreference.io](https://throw.nullreference.io).
+
+## Features
+
+- **MDX Blog Posts**: Write posts in Markdown with JSX components
+- **Dynamic Mosaic Layout**: Blog posts display in a Pinterest-style grid with tiles that adapt size based on content
+- **Series Support**: Group related posts into series
+- **Categories & Tags**: Organize content with categories and tags
+- **Dark Mode**: Toggle between light and dark themes
+- **Search**: Full-text search powered by Fuse.js
+- **RSS Feed**: Available at `/index.xml`
+- **Responsive Design**: Optimized for all screen sizes including ultra-wide displays
+- **Featured Images**: Clickable featured images with dynamic sizing
+
+## Recent Updates
+
+### Wide Screen Support
+- All pages now use `max-w-7xl` containers for better wide screen utilization
+- Blog page features responsive grid layouts (2-5 columns based on screen size)
+- Header and content areas properly expand on ultra-wide displays
+
+### Dynamic Blog Layout
+- Implemented mosaic/tile layout where post cards vary in width based on:
+  - Featured status
+  - Presence of featured image
+  - Title length (posts with titles >40 chars get wider tiles)
+  - Description length
+- Posts without featured images display with gradient backgrounds
+- All images and post areas are clickable for better UX
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
 
 ```bash
-npm run dev
-# or
+yarn install
+```
+
+Then run the development server:
+
+```bash
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Blog posts are located in `/content/posts/`
+- Add series metadata to posts using the `series` frontmatter field
+- Categories and tags are automatically extracted from post frontmatter
+- Featured images use the `featuredImage` frontmatter field
 
 ## Learn More
 

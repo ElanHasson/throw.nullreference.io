@@ -168,13 +168,13 @@ Example testing:
 
 ```bash
 # Accessibility testing
-npm run test:a11y
+yarn run test:a11y
 
 # Visual regression testing
-npm run test:visual
+yarn run test:visual
 
 # Lighthouse audit
-npm run lighthouse
+yarn run lighthouse
 ```
 
 Component patterns:

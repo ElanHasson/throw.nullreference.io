@@ -30,11 +30,11 @@ export default async function SeriesPage() {
   const seriesArray = Array.from(seriesMap.entries()).sort()
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16">
+    <div className="container mx-auto max-w-7xl px-4 py-16 lg:px-8">
       <h1 className="mb-12 text-4xl font-bold">Series</h1>
 
       {seriesArray.length > 0 ? (
-        <div className="space-y-12">
+        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
           {seriesArray.map(([seriesName, seriesPosts]) => {
             const seriesSlug = seriesName
               .toLowerCase()
@@ -44,7 +44,7 @@ export default async function SeriesPage() {
             return (
               <section
                 key={seriesName}
-                className="border-b border-gray-200 pb-8 dark:border-gray-800"
+                className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
               >
                 <h2 className="mb-4 text-2xl font-semibold">
                   <Link
