@@ -19,42 +19,23 @@ interface SearchResult {
   categories: string[]
 }
 
-function getPostMetadata(slug: string): SearchResult | null {
+async function getPostMetadata(slug: string): Promise<SearchResult | null> {
   try {
-    const filePath = path.join(process.cwd(), 'private/posts', `${slug}.mdx`)
-    if (!fs.existsSync(filePath)) {
+    // Dynamically import the MDX file to get metadata safely
+    const post = await import(`@/private/posts/${slug}.mdx`)
+    const metadata = post.metadata as PostMetadata
+
+    if (!metadata) {
       return null
     }
 
+    // Read the file content for search indexing
+    const filePath = path.join(process.cwd(), 'private/posts', `${slug}.mdx`)
     const fileContent = fs.readFileSync(filePath, 'utf8')
     
-    // First try to extract JS-style metadata export
-    const metadataMatch = fileContent.match(/export const metadata = ({[\s\S]*?});/)
-    let metadata: Partial<PostMetadata> = {}
-    let content = fileContent
-
-    if (metadataMatch) {
-      try {
-        // Use eval to parse the metadata object (safe since we control the content)
-        metadata = eval(`(${metadataMatch[1]})`) as PostMetadata
-        // Extract content after metadata
-        const contentMatch = fileContent.match(/export const metadata = {[\s\S]*?};\s*([\s\S]*)/)
-        content = contentMatch ? contentMatch[1] : ''
-      } catch {
-        console.warn(`Failed to parse JS metadata for ${slug}, trying regex fallback`)
-      }
-    } else {
-      // Fallback: try to parse as frontmatter
-      try {
-        const matterResult = matter(fileContent)
-        metadata = matterResult.data as PostMetadata
-        content = matterResult.content
-      } catch {
-        console.warn(`Failed to parse frontmatter for ${slug}`)
-        return null
-      }
-    }
-
+    // Extract content after metadata
+    const contentMatch = fileContent.match(/export const metadata = {[\s\S]*?};\s*([\s\S]*)/)
+    const content = contentMatch ? contentMatch[1] : ''
     const cleanedContent = cleanContent(content)
 
     return {
@@ -89,7 +70,7 @@ async function getBlogPosts(): Promise<SearchResult[]> {
     const posts: SearchResult[] = []
 
     for (const slug of files) {
-      const metadata = getPostMetadata(slug)
+      const metadata = await getPostMetadata(slug)
       if (metadata) {
         posts.push(metadata)
       }

@@ -15,6 +15,95 @@ function getPostFiles(): string[] {
     .map(file => file.replace('.mdx', ''))
 }
 
+// Parse metadata manually from the export statement without eval
+function parseMetadataFromExport(metadataString: string): PostMetadata | null {
+  try {
+    // Create a safe parsing function that extracts key-value pairs
+    const parseValue = (value: string): any => {
+      value = value.trim()
+      // Handle strings
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        return value.slice(1, -1)
+      }
+      // Handle booleans
+      if (value === 'true') return true
+      if (value === 'false') return false
+      // Handle numbers
+      if (/^\d+$/.test(value)) return parseInt(value, 10)
+      if (/^\d+\.\d+$/.test(value)) return parseFloat(value)
+      // Handle arrays
+      if (value.startsWith('[') && value.endsWith(']')) {
+        const items = value.slice(1, -1).split(',').map(item => parseValue(item.trim()))
+        return items.filter(item => item !== null)
+      }
+      // Handle nested objects (simplified)
+      if (value.startsWith('{') && value.endsWith('}')) {
+        // For now, return empty object - in production, use a proper JSON parser
+        return {}
+      }
+      return null
+    }
+
+    // Extract simple properties using regex patterns
+    const metadata: Partial<PostMetadata> = {}
+    
+    // Extract title
+    const titleMatch = metadataString.match(/title:\s*["']([^"']+)["']/)
+    if (titleMatch) metadata.title = titleMatch[1]
+    
+    // Extract featuredImage
+    const featuredImageMatch = metadataString.match(/featuredImage:\s*["']([^"']+)["']/)
+    if (featuredImageMatch) metadata.featuredImage = featuredImageMatch[1]
+    
+    // Extract dates
+    const publishDateMatch = metadataString.match(/publishDate:\s*["']([^"']+)["']/)
+    if (publishDateMatch) metadata.publishDate = publishDateMatch[1]
+    
+    // Extract excerpt
+    const excerptMatch = metadataString.match(/excerpt:\s*["']([^"']+)["']/)
+    if (excerptMatch) metadata.excerpt = excerptMatch[1]
+    
+    // Extract description
+    const descriptionMatch = metadataString.match(/description:\s*["']([^"']+)["']/)
+    if (descriptionMatch) metadata.description = descriptionMatch[1]
+    
+    // Extract series
+    const seriesMatch = metadataString.match(/series:\s*["']([^"']+)["']/)
+    if (seriesMatch) metadata.series = seriesMatch[1]
+    
+    // Extract booleans
+    const featuredMatch = metadataString.match(/featured:\s*(true|false)/)
+    if (featuredMatch) metadata.featured = featuredMatch[1] === 'true'
+    
+    const draftMatch = metadataString.match(/draft:\s*(true|false)/)
+    if (draftMatch) metadata.draft = draftMatch[1] === 'true'
+    
+    // Extract tags array
+    const tagsMatch = metadataString.match(/tags:\s*\[([^\]]+)\]/)
+    if (tagsMatch) {
+      metadata.tags = tagsMatch[1]
+        .split(',')
+        .map(tag => tag.trim().replace(/["']/g, ''))
+        .filter(tag => tag.length > 0)
+    }
+    
+    // Extract categories array
+    const categoriesMatch = metadataString.match(/categories:\s*\[([^\]]+)\]/)
+    if (categoriesMatch) {
+      metadata.categories = categoriesMatch[1]
+        .split(',')
+        .map(cat => cat.trim().replace(/["']/g, ''))
+        .filter(cat => cat.length > 0)
+    }
+
+    return metadata as PostMetadata
+  } catch (error) {
+    console.error('Failed to parse metadata:', error)
+    return null
+  }
+}
+
 function getPostMetadata(slug: string): PostMeta | null {
   try {
     const filePath = path.join(postsDirectory, `${slug}.mdx`)
@@ -27,10 +116,8 @@ function getPostMetadata(slug: string): PostMeta | null {
     // First try to extract JS-style metadata export
     const metadataMatch = fileContent.match(/export const metadata = ({[\s\S]*?});/)
     if (metadataMatch) {
-      try {
-        // Use eval to parse the metadata object (safe since we control the content)
-        const metadataObj = eval(`(${metadataMatch[1]})`) as PostMetadata
-        
+      const metadataObj = parseMetadataFromExport(metadataMatch[1])
+      if (metadataObj) {
         return {
           title: metadataObj.title || '',
           date: metadataObj.publishDate || new Date().toISOString(),
@@ -43,8 +130,6 @@ function getPostMetadata(slug: string): PostMeta | null {
           featuredImage: metadataObj.featuredImage || '',
           slug,
         }
-      } catch (evalError) {
-        console.warn(`Failed to parse JS metadata for ${slug}, trying regex fallback`)
       }
     }
 
