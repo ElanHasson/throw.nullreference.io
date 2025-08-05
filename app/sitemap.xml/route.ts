@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getAllPosts, getAllTags, getAllSeries } from '@/lib/posts'
 
+export const dynamic = 'force-static'
+
 export async function GET() {
   const posts = await getAllPosts()
   const tags = await getAllTags()

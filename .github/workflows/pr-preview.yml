@@ -36,6 +36,8 @@ jobs:
               build_command: corepack enable && yarn install --frozen-lockfile --production=false && yarn build
               output_dir: out
               environment_slug: node-js
+              cache_directories:
+                - .next/cache
               routes:
                 - path: /
               envs:

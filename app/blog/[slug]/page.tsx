@@ -124,3 +124,17 @@ export default async function BlogPostPage({
     </div>
   );
 }
+
+export async function generateStaticParams() {
+  const { readdirSync } = await import('fs');
+  const { join } = await import('path');
+  
+  const postsDirectory = join(process.cwd(), 'private/posts');
+  const filenames = readdirSync(postsDirectory);
+  
+  return filenames
+    .filter(filename => filename.endsWith('.mdx'))
+    .map(filename => ({
+      slug: filename.replace('.mdx', '')
+    }));
+}
