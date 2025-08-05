@@ -13,9 +13,9 @@ const mockFuseSearch = jest.fn()
 jest.mock('fuse.js', () => ({
   __esModule: true,
   default: jest.fn().mockImplementation(() => ({
-    search: mockFuseSearch
+    search: mockFuseSearch,
   })),
-  IFuseOptions: {}
+  IFuseOptions: {},
 }))
 
 const mockPosts = [
@@ -25,10 +25,11 @@ const mockPosts = [
     date: '2023-01-15T00:00:00.000Z',
     slug: 'react-testing-guide',
     url: '/blog/react-testing-guide',
-    content: 'This guide covers unit testing, integration testing, and end-to-end testing for React applications.',
+    content:
+      'This guide covers unit testing, integration testing, and end-to-end testing for React applications.',
     featured: true,
     tags: ['react', 'testing', 'javascript'],
-    categories: ['frontend', 'development']
+    categories: ['frontend', 'development'],
   },
   {
     title: 'Node.js Performance Tips',
@@ -39,8 +40,8 @@ const mockPosts = [
     content: 'Learn how to profile and optimize Node.js applications for better performance.',
     featured: false,
     tags: ['nodejs', 'performance'],
-    categories: ['backend', 'development']
-  }
+    categories: ['backend', 'development'],
+  },
 ]
 
 describe('useSearch', () => {
@@ -52,7 +53,7 @@ describe('useSearch', () => {
   it('should load posts on mount', async () => {
     mockFetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(mockPosts)
+      json: () => Promise.resolve(mockPosts),
     })
 
     const { result } = renderHook(() => useSearch())
@@ -73,7 +74,7 @@ describe('useSearch', () => {
   it('should handle fetch errors', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
-      status: 500
+      status: 500,
     })
 
     const { result } = renderHook(() => useSearch())
@@ -116,7 +117,7 @@ describe('useSearch', () => {
     beforeEach(async () => {
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockPosts)
+        json: () => Promise.resolve(mockPosts),
       })
     })
 
@@ -147,7 +148,7 @@ describe('useSearch', () => {
     it('should use Fuse.js for non-empty queries', async () => {
       const mockSearchResults = [
         { item: mockPosts[0], score: 0.1 },
-        { item: mockPosts[1], score: 0.3 }
+        { item: mockPosts[1], score: 0.3 },
       ]
       mockFuseSearch.mockReturnValue(mockSearchResults)
 
@@ -158,7 +159,7 @@ describe('useSearch', () => {
       })
 
       const results = result.current.search('react')
-      
+
       expect(mockFuseSearch).toHaveBeenCalledWith('react')
       expect(results).toEqual([mockPosts[0], mockPosts[1]])
     })
@@ -187,20 +188,20 @@ describe('useSearch', () => {
           { name: 'description', weight: 0.6 },
           { name: 'content', weight: 0.4 },
           { name: 'tags', weight: 0.3 },
-          { name: 'categories', weight: 0.3 }
+          { name: 'categories', weight: 0.3 },
         ],
         threshold: 0.3,
         includeScore: true,
         includeMatches: true,
         minMatchCharLength: 2,
-        shouldSort: true
+        shouldSort: true,
       })
     })
 
     it('should recreate Fuse instance when posts change', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve([mockPosts[0]])
+        json: () => Promise.resolve([mockPosts[0]]),
       })
 
       const { result, rerender } = renderHook(() => useSearch())
@@ -214,7 +215,7 @@ describe('useSearch', () => {
       // Simulate posts changing (though this wouldn't happen in real usage)
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockPosts)
+        json: () => Promise.resolve(mockPosts),
       })
 
       rerender()

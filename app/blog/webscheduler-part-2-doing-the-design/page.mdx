@@ -5,9 +5,9 @@ draft: false
 description: "In this installment of building a distributed task scheduler, we'll go over the system design and implementation details."
 thumbnail: "/blog/webscheduler-part-2-doing-the-design/PhysicalDeploymentDiagram.png"
 featured: true
-categories: []
-tags: []
-series: ""
+categories: [".NET", "ASP.NET Core", "Blazor", "DigitalOcean App Platform", "Microsoft Orleans", "Systems Design", "WebScheduler"]
+tags: [".NET", "Go Scheduler"]
+series: "Building a Distributed Task Scheduler on DigitalOcean App Platform"
 ---
 This is the second post in the series, if you haven't read the first, you should stop here and [read the first part](/blog/building-a-distributed-task-scheduler-on-digitalocean-app-platform/) before continuing. 
 
@@ -34,7 +34,7 @@ The WebScheduler will be deployed to [DigitalOcean's App Platform](https://www.d
 
 App Platform is a fully-managed solution that allows you to build, deploy, and scale your apps so you can focus on what you do best: building great software!
 
-The WebScheduler will be deployed as an App Platform App using different *component types*: [Database](https://docs.digitalocean.com/products/app-platform/concepts/database/), [Service](https://docs.digitalocean.com/products/app-platform/concepts/service/), and [Static Site](https://docs.digitalocean.com/products/app-platform/concepts/static-site/).
+The WebScheduler will be deployed as an App Platform App using different *component types*: [Database](https://docs.digitalocean.com/products/app-platform/how-to/manage-databases/), [Service](https://docs.digitalocean.com/products/app-platform/concepts/service/), and [Static Site](https://docs.digitalocean.com/products/app-platform/how-to/manage-static-sites/).
 
 Our WebScheduler App will be deployed as depicted below. You can click each component to jump to the relevant portion of the [App Spec](https://docs.digitalocean.com/products/app-platform/references/app-specification-reference/).
 <MermaidDiagram chart={`

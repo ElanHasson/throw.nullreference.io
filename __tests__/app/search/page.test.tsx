@@ -5,11 +5,11 @@ import { useSearch } from '@/hooks/use-search'
 
 // Mock the dependencies
 jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn()
+  useSearchParams: jest.fn(),
 }))
 
 jest.mock('@/hooks/use-search', () => ({
-  useSearch: jest.fn()
+  useSearch: jest.fn(),
 }))
 
 const mockUseSearchParams = useSearchParams as jest.MockedFunction<typeof useSearchParams>
@@ -25,7 +25,7 @@ const mockPosts = [
     content: 'This guide covers unit testing, integration testing, and end-to-end testing.',
     featured: true,
     tags: ['react', 'testing'],
-    categories: ['frontend']
+    categories: ['frontend'],
   },
   {
     title: 'Node.js Performance Tips',
@@ -36,13 +36,13 @@ const mockPosts = [
     content: 'Learn how to profile and optimize Node.js applications.',
     featured: false,
     tags: ['nodejs', 'performance'],
-    categories: ['backend']
-  }
+    categories: ['backend'],
+  },
 ]
 
 describe('SearchPage', () => {
   const mockSearchParams = {
-    get: jest.fn()
+    get: jest.fn(),
   }
 
   beforeEach(() => {
@@ -52,16 +52,18 @@ describe('SearchPage', () => {
       posts: [],
       search: jest.fn().mockReturnValue([]),
       loading: false,
-      error: null
+      error: null,
     })
   })
 
   it('should render search page with input field', () => {
     render(<SearchPage />)
-    
+
     expect(screen.getByText('Search')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Search posts...')).toBeInTheDocument()
-    expect(screen.getByText('Enter a search term to find posts by title, content, tags, or categories.')).toBeInTheDocument()
+    expect(
+      screen.getByText('Enter a search term to find posts by title, content, tags, or categories.'),
+    ).toBeInTheDocument()
   })
 
   it('should show loading state', () => {
@@ -69,11 +71,11 @@ describe('SearchPage', () => {
       posts: [],
       search: jest.fn(),
       loading: true,
-      error: null
+      error: null,
     })
 
     render(<SearchPage />)
-    
+
     expect(screen.getByText('Loading search index...')).toBeInTheDocument()
     // Check for loading spinner by class instead of role
     expect(document.querySelector('.animate-spin')).toBeInTheDocument()
@@ -84,19 +86,19 @@ describe('SearchPage', () => {
       posts: [],
       search: jest.fn(),
       loading: false,
-      error: 'Failed to load search index'
+      error: 'Failed to load search index',
     })
 
     render(<SearchPage />)
-    
+
     expect(screen.getByText('Failed to load search index')).toBeInTheDocument()
   })
 
   it('should initialize with query from URL params', () => {
     mockSearchParams.get.mockReturnValue('react testing')
-    
+
     render(<SearchPage />)
-    
+
     const input = screen.getByPlaceholderText('Search posts...')
     expect(input).toHaveValue('react testing')
   })
@@ -107,15 +109,15 @@ describe('SearchPage', () => {
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     render(<SearchPage />)
-    
+
     const input = screen.getByPlaceholderText('Search posts...')
-    
+
     fireEvent.change(input, { target: { value: 'react' } })
-    
+
     expect(input).toHaveValue('react')
   })
 
@@ -125,17 +127,17 @@ describe('SearchPage', () => {
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('react')
-    
+
     render(<SearchPage />)
-    
+
     expect(screen.getByText('1 result for "react"')).toBeInTheDocument()
     expect(screen.getByText('React Testing Guide')).toBeInTheDocument()
     expect(screen.getByText('Complete guide to testing React applications')).toBeInTheDocument()
-    expect(screen.getByText('January 15, 2023')).toBeInTheDocument()
+    expect(screen.getByText('January 14, 2023')).toBeInTheDocument()
     expect(screen.getByText('Featured')).toBeInTheDocument()
   })
 
@@ -145,13 +147,13 @@ describe('SearchPage', () => {
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('performance')
-    
+
     render(<SearchPage />)
-    
+
     expect(screen.getByText('2 results for "performance"')).toBeInTheDocument()
     expect(screen.getByText('React Testing Guide')).toBeInTheDocument()
     expect(screen.getByText('Node.js Performance Tips')).toBeInTheDocument()
@@ -163,13 +165,13 @@ describe('SearchPage', () => {
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('nonexistent')
-    
+
     render(<SearchPage />)
-    
+
     expect(screen.getByText('No results found for "nonexistent"')).toBeInTheDocument()
     expect(screen.getByText(/Try adjusting your search terms/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'blog section' })).toHaveAttribute('href', '/blog')
@@ -178,23 +180,25 @@ describe('SearchPage', () => {
   it('should render post without description', () => {
     const postWithoutDescription = {
       ...mockPosts[0],
-      description: undefined
+      description: undefined,
     }
-    
+
     const mockSearch = jest.fn().mockReturnValue([postWithoutDescription])
     mockUseSearch.mockReturnValue({
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('react')
-    
+
     render(<SearchPage />)
-    
+
     expect(screen.getByText('React Testing Guide')).toBeInTheDocument()
-    expect(screen.queryByText('Complete guide to testing React applications')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Complete guide to testing React applications'),
+    ).not.toBeInTheDocument()
   })
 
   it('should render non-featured post without featured badge', () => {
@@ -203,13 +207,13 @@ describe('SearchPage', () => {
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('nodejs')
-    
+
     render(<SearchPage />)
-    
+
     expect(screen.getByText('Node.js Performance Tips')).toBeInTheDocument()
     expect(screen.queryByText('Featured')).not.toBeInTheDocument()
   })
@@ -220,63 +224,67 @@ describe('SearchPage', () => {
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('react')
-    
+
     render(<SearchPage />)
-    
+
     const titleLink = screen.getByRole('link', { name: 'React Testing Guide' })
     expect(titleLink).toHaveAttribute('href', '/blog/react-testing-guide')
   })
 
   it('should handle empty query gracefully', () => {
     mockSearchParams.get.mockReturnValue('')
-    
+
     render(<SearchPage />)
-    
+
     const input = screen.getByPlaceholderText('Search posts...')
     expect(input).toHaveValue('')
-    expect(screen.getByText('Enter a search term to find posts by title, content, tags, or categories.')).toBeInTheDocument()
+    expect(
+      screen.getByText('Enter a search term to find posts by title, content, tags, or categories.'),
+    ).toBeInTheDocument()
   })
 
   it('should handle null query param', () => {
     mockSearchParams.get.mockReturnValue(null)
-    
+
     render(<SearchPage />)
-    
+
     const input = screen.getByPlaceholderText('Search posts...')
     expect(input).toHaveValue('')
   })
 
   it('should format dates correctly', () => {
-    const mockSearch = jest.fn().mockReturnValue([{
-      ...mockPosts[0],
-      date: '2023-12-25T15:30:00.000Z'
-    }])
-    
+    const mockSearch = jest.fn().mockReturnValue([
+      {
+        ...mockPosts[0],
+        date: '2023-12-25T15:30:00.000Z',
+      },
+    ])
+
     mockUseSearch.mockReturnValue({
       posts: mockPosts,
       search: mockSearch,
       loading: false,
-      error: null
+      error: null,
     })
 
     mockSearchParams.get.mockReturnValue('test')
-    
+
     render(<SearchPage />)
-    
+
     expect(screen.getByText('December 25, 2023')).toBeInTheDocument()
   })
 
   it('should have proper accessibility attributes', () => {
     render(<SearchPage />)
-    
+
     const input = screen.getByPlaceholderText('Search posts...')
     expect(input).toHaveAttribute('type', 'text')
     // Note: autoFocus is present in component but may not appear in test DOM
-    
+
     // Check for search icon by class instead of role
     expect(document.querySelector('svg')).toBeInTheDocument()
   })

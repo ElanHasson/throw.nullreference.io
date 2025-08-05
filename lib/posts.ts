@@ -30,11 +30,17 @@ function getPostMetadata(slug: string): PostMeta | null {
     const fileContents = fs.readFileSync(postPath, 'utf8')
     const { data } = matter(fileContents)
 
+    // Process thumbnail path - convert relative paths to absolute blog paths
+    let thumbnailPath = data.thumbnail || ''
+    if (thumbnailPath && thumbnailPath.startsWith('./')) {
+      thumbnailPath = `/blog/${slug}/${thumbnailPath.substring(2)}`
+    }
+
     return {
       title: data.title || '',
       date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
       description: data.description || '',
-      thumbnail: data.thumbnail || '',
+      thumbnail: thumbnailPath,
       tags: data.tags || [],
       categories: data.categories || [],
       draft: data.draft || false,
@@ -166,4 +172,21 @@ export async function getAllTags(): Promise<string[]> {
     post.tags?.forEach((tag) => tags.add(tag))
   })
   return Array.from(tags).sort()
+}
+
+/**
+ * Get previous and next posts for navigation
+ */
+export async function getAdjacentPosts(currentSlug: string) {
+  const posts = await getAllPosts()
+  const currentIndex = posts.findIndex((post) => post.slug === currentSlug)
+
+  if (currentIndex === -1) {
+    return { previousPost: null, nextPost: null }
+  }
+
+  return {
+    previousPost: currentIndex > 0 ? posts[currentIndex - 1] : null,
+    nextPost: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+  }
 }

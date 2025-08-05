@@ -62,6 +62,22 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/series"
+                  className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
+                >
+                  Series
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/topics"
+                  className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
+                >
+                  Topics
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/search"
                   className="text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400"
                 >
@@ -108,7 +124,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 md:flex-row dark:border-gray-800">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            © 2020-{currentYear} Elan Hasson. All Rights Reserved.
+            © 2014-{currentYear} Elan Hasson. All Rights Reserved.
           </p>
           <div className="flex items-center gap-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">

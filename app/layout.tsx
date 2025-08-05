@@ -36,6 +36,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  verification: {
+    me: [
+      'https://publicsquare.global/@elan',
+      'https://hachyderm.io/@elan',
+      'https://mastodon.social/@elanhasson',
+    ],
+  },
   twitter: {
     card: 'summary_large_image',
     title: "Throwin' Exceptions",

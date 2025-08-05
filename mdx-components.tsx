@@ -40,38 +40,38 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
     img: ({ src, alt, title, ...props }) => {
       if (!src) return null
-      
+
       // Handle Hugo-style positioning (#center, #floatright, #floatleft)
       let cleanSrc = src
-      let className = "rounded-lg"
-      
+      let className = 'rounded-lg'
+
       if (src.includes('#')) {
         const [imagePath, position] = src.split('#')
         cleanSrc = imagePath
-        
+
         switch (position) {
           case 'center':
-            className += " mx-auto block"
+            className += ' mx-auto block'
             break
           case 'floatright':
-            className += " float-right ml-4 mb-4"
+            className += ' float-right ml-4 mb-4'
             break
           case 'floatleft':
-            className += " float-left mr-4 mb-4"
+            className += ' float-left mr-4 mb-4'
             break
         }
       }
-      
+
       // Handle query params for width
       const urlParts = cleanSrc.split('?')
       cleanSrc = urlParts[0]
       const params = new URLSearchParams(urlParts[1] || '')
       const widthParam = params.get('width')
       const heightParam = params.get('height')
-      
+
       const width = widthParam ? parseInt(widthParam) : 800
       const height = heightParam ? parseInt(heightParam) : 400
-      
+
       return (
         <Image
           src={cleanSrc}
@@ -97,12 +97,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     blockquote: (props) => (
       <blockquote className="my-4 border-l-4 border-gray-300 pl-4 italic" {...props} />
     ),
-    code: (props) => (
-      <code className="rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-800" {...props} />
-    ),
-    pre: (props) => (
-      <pre className="mb-4 overflow-x-auto rounded-md bg-gray-900 p-4 text-gray-100" {...props} />
-    ),
+    // Don't override code and pre - let rehype-pretty-code handle them
     table: (props) => (
       <div className="mb-4 overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-300" {...props} />

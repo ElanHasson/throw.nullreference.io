@@ -202,14 +202,14 @@ This is a custom component.
 Use \`useState\` for state management.`
 
       const result = cleanContent(input)
-      
+
       expect(result).toContain('Getting Started with React')
       expect(result).toContain('This is an introduction to React development')
       expect(result).toContain('What is React?')
       expect(result).toContain('React is a JavaScript library')
       expect(result).toContain('official docs')
       expect(result).toContain('Use useState for state management')
-      
+
       expect(result).not.toContain('#')
       expect(result).not.toContain('**')
       expect(result).not.toContain('*')

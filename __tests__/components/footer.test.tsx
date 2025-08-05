@@ -6,7 +6,7 @@ describe('Footer', () => {
     const currentYear = new Date().getFullYear()
     render(<Footer />)
     expect(
-      screen.getByText(`© 2020-${currentYear} Elan Hasson. All Rights Reserved.`),
+      screen.getByText(`© 2014-${currentYear} Elan Hasson. All Rights Reserved.`),
     ).toBeInTheDocument()
   })
 

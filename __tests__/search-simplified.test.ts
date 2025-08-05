@@ -15,17 +15,18 @@ const mockPosts: SearchResult[] = [
   {
     title: 'React Testing Guide',
     description: 'Complete guide to testing React applications',
-    content: 'This guide covers unit testing, integration testing, and end-to-end testing for React applications.',
+    content:
+      'This guide covers unit testing, integration testing, and end-to-end testing for React applications.',
     tags: ['react', 'testing', 'javascript'],
-    categories: ['frontend', 'development']
+    categories: ['frontend', 'development'],
   },
   {
     title: 'Node.js Performance Tips',
     description: 'Optimize your Node.js applications',
     content: 'Learn how to profile and optimize Node.js applications for better performance.',
     tags: ['nodejs', 'performance'],
-    categories: ['backend', 'development']
-  }
+    categories: ['backend', 'development'],
+  },
 ]
 
 const fuseOptions = {
@@ -34,13 +35,13 @@ const fuseOptions = {
     { name: 'description', weight: 0.6 },
     { name: 'content', weight: 0.4 },
     { name: 'tags', weight: 0.3 },
-    { name: 'categories', weight: 0.3 }
+    { name: 'categories', weight: 0.3 },
   ],
   threshold: 0.3,
   includeScore: true,
   includeMatches: true,
   minMatchCharLength: 2,
-  shouldSort: true
+  shouldSort: true,
 }
 
 describe('Search Functionality', () => {
@@ -52,29 +53,29 @@ describe('Search Functionality', () => {
 
   it('should find posts by title', () => {
     const results = fuse.search('React')
-    
+
     expect(results.length).toBeGreaterThan(0)
     expect(results[0].item.title).toBe('React Testing Guide')
   })
 
   it('should find posts by description', () => {
     const results = fuse.search('Optimize Node.js')
-    
+
     expect(results.length).toBeGreaterThan(0)
     expect(results[0].item.title).toBe('Node.js Performance Tips')
   })
 
   it('should find posts by tags', () => {
     const results = fuse.search('performance')
-    
+
     expect(results.length).toBeGreaterThan(0)
-    const titles = results.map(r => r.item.title)
+    const titles = results.map((r) => r.item.title)
     expect(titles).toContain('Node.js Performance Tips')
   })
 
   it('should find posts by categories', () => {
     const results = fuse.search('frontend')
-    
+
     expect(results.length).toBeGreaterThan(0)
     expect(results[0].item.title).toBe('React Testing Guide')
   })
@@ -91,7 +92,7 @@ describe('Search Functionality', () => {
 
   it('should sort results by relevance', () => {
     const results = fuse.search('development')
-    
+
     expect(results.length).toBeGreaterThan(1)
     // Scores should be in ascending order (lower = more relevant)
     for (let i = 1; i < results.length; i++) {

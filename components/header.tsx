@@ -19,6 +19,12 @@ export function Header() {
               Blog
             </Link>
             <Link
+              href="/series"
+              className="link-underline text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-400"
+            >
+              Series
+            </Link>
+            <Link
               href="/topics"
               className="link-underline text-gray-600 transition-colors hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-400"
             >

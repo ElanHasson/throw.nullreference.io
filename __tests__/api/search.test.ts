@@ -6,8 +6,8 @@
 jest.mock('fs', () => ({
   promises: {
     readdir: jest.fn(),
-    readFile: jest.fn()
-  }
+    readFile: jest.fn(),
+  },
 }))
 jest.mock('path')
 
@@ -24,7 +24,7 @@ const mockPath = path as jest.Mocked<typeof path>
 // Mock console methods to avoid noise in tests
 const consoleSpy = {
   warn: jest.spyOn(console, 'warn').mockImplementation(),
-  error: jest.spyOn(console, 'error').mockImplementation()
+  error: jest.spyOn(console, 'error').mockImplementation(),
 }
 
 describe('/api/search', () => {
@@ -51,25 +51,26 @@ describe('/api/search', () => {
 
     expect(response.status).toBe(200)
     expect(data).toEqual([])
-    expect(consoleSpy.error).toHaveBeenCalledWith('Failed to read blog directory:', expect.any(Error))
+    expect(consoleSpy.error).toHaveBeenCalledWith(
+      'Failed to read blog directory:',
+      expect.any(Error),
+    )
   })
 
   it('should skip directories starting with [', async () => {
     const mockEntries = [
       { name: 'valid-post', isDirectory: () => true },
       { name: '[slug]', isDirectory: () => true },
-      { name: 'another-post', isDirectory: () => true }
+      { name: 'another-post', isDirectory: () => true },
     ]
 
     mockFs.readdir.mockResolvedValue(mockEntries as any)
-    mockFs.readFile
-      .mockResolvedValueOnce(`---
+    mockFs.readFile.mockResolvedValueOnce(`---
 title: "Valid Post"
 date: 2023-01-01
 description: "A valid post"
 ---
-This is post content.`)
-      .mockResolvedValueOnce(`---
+This is post content.`).mockResolvedValueOnce(`---
 title: "Another Post"  
 date: 2023-01-02
 ---
@@ -86,9 +87,7 @@ More content here.`)
   })
 
   it('should parse frontmatter and clean content correctly', async () => {
-    const mockEntries = [
-      { name: 'test-post', isDirectory: () => true }
-    ]
+    const mockEntries = [{ name: 'test-post', isDirectory: () => true }]
 
     const mdxContent = `---
 title: "Test Post"
@@ -125,7 +124,7 @@ Final paragraph.`
 
     expect(response.status).toBe(200)
     expect(data).toHaveLength(1)
-    
+
     const post = data[0]
     expect(post.title).toBe('Test Post')
     expect(post.description).toBe('A test post')
@@ -135,7 +134,7 @@ Final paragraph.`
     expect(post.categories).toEqual(['development'])
     expect(post.slug).toBe('test-post')
     expect(post.url).toBe('/blog/test-post')
-    
+
     // Content should be cleaned
     expect(post.content).not.toContain('**')
     expect(post.content).not.toContain('*')
@@ -151,9 +150,7 @@ Final paragraph.`
   })
 
   it('should handle missing frontmatter fields gracefully', async () => {
-    const mockEntries = [
-      { name: 'minimal-post', isDirectory: () => true }
-    ]
+    const mockEntries = [{ name: 'minimal-post', isDirectory: () => true }]
 
     const mdxContent = `---
 title: "Minimal Post"
@@ -168,7 +165,7 @@ Just some content.`
 
     expect(response.status).toBe(200)
     expect(data).toHaveLength(1)
-    
+
     const post = data[0]
     expect(post.title).toBe('Minimal Post')
     expect(post.description).toBe('')
@@ -179,9 +176,7 @@ Just some content.`
   })
 
   it('should handle posts without frontmatter', async () => {
-    const mockEntries = [
-      { name: 'no-frontmatter', isDirectory: () => true }
-    ]
+    const mockEntries = [{ name: 'no-frontmatter', isDirectory: () => true }]
 
     const mdxContent = `Just plain content without frontmatter.`
 
@@ -193,7 +188,7 @@ Just some content.`
 
     expect(response.status).toBe(200)
     expect(data).toHaveLength(1)
-    
+
     const post = data[0]
     expect(post.title).toBe('no-frontmatter') // Falls back to directory name
     expect(post.content).toBe('Just plain content without frontmatter.')
@@ -203,22 +198,19 @@ Just some content.`
     const mockEntries = [
       { name: 'old-post', isDirectory: () => true },
       { name: 'new-post', isDirectory: () => true },
-      { name: 'middle-post', isDirectory: () => true }
+      { name: 'middle-post', isDirectory: () => true },
     ]
 
     mockFs.readdir.mockResolvedValue(mockEntries as any)
-    mockFs.readFile
-      .mockResolvedValueOnce(`---
+    mockFs.readFile.mockResolvedValueOnce(`---
 title: "Old Post"
 date: 2023-01-01
 ---
-Old content`)
-      .mockResolvedValueOnce(`---
+Old content`).mockResolvedValueOnce(`---
 title: "New Post"
 date: 2023-03-01
 ---
-New content`)
-      .mockResolvedValueOnce(`---
+New content`).mockResolvedValueOnce(`---
 title: "Middle Post"
 date: 2023-02-01
 ---
@@ -237,15 +229,17 @@ Middle content`)
   it('should handle file read errors gracefully', async () => {
     const mockEntries = [
       { name: 'good-post', isDirectory: () => true },
-      { name: 'bad-post', isDirectory: () => true }
+      { name: 'bad-post', isDirectory: () => true },
     ]
 
     mockFs.readdir.mockResolvedValue(mockEntries as any)
     mockFs.readFile
-      .mockResolvedValueOnce(`---
+      .mockResolvedValueOnce(
+        `---
 title: "Good Post"
 ---
-Good content`)
+Good content`,
+      )
       .mockRejectedValueOnce(new Error('File not found'))
 
     const response = await GET()
@@ -256,7 +250,7 @@ Good content`)
     expect(data[0].title).toBe('Good Post')
     expect(consoleSpy.warn).toHaveBeenCalledWith(
       expect.stringContaining('Failed to read'),
-      expect.any(Error)
+      expect.any(Error),
     )
   })
 

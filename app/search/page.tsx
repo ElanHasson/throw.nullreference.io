@@ -5,12 +5,12 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useSearch } from '@/hooks/use-search'
 
-function SearchResultItem({ 
-  title, 
-  description, 
-  date, 
-  url, 
-  featured 
+function SearchResultItem({
+  title,
+  description,
+  date,
+  url,
+  featured,
 }: {
   title: string
   description?: string
@@ -22,11 +22,11 @@ function SearchResultItem({
     <article className="border-b border-gray-200 pb-6 dark:border-gray-800">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2 flex items-center gap-2">
             <h2 className="text-xl font-semibold">
-              <Link 
+              <Link
                 href={url}
-                className="text-gray-900 hover:text-rose-600 dark:text-gray-100 dark:hover:text-rose-400 transition-colors"
+                className="text-gray-900 transition-colors hover:text-rose-600 dark:text-gray-100 dark:hover:text-rose-400"
               >
                 {title}
               </Link>
@@ -37,16 +37,12 @@ function SearchResultItem({
               </span>
             )}
           </div>
-          {description && (
-            <p className="text-gray-600 dark:text-gray-400 mb-2">
-              {description}
-            </p>
-          )}
+          {description && <p className="mb-2 text-gray-600 dark:text-gray-400">{description}</p>}
           <time className="text-sm text-gray-500 dark:text-gray-500">
             {new Date(date).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
-              day: 'numeric'
+              day: 'numeric',
             })}
           </time>
         </div>
@@ -59,32 +55,32 @@ function SearchContent() {
   const searchParams = useSearchParams()
   const [query, setQuery] = useState(searchParams.get('q') || '')
   const { search, loading, error } = useSearch()
-  
+
   const results = query ? search(query) : []
-  
+
   useEffect(() => {
     const q = searchParams.get('q')
     if (q) {
       setQuery(q)
     }
   }, [searchParams])
-  
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-6">Search</h1>
-        
+        <h1 className="mb-6 text-3xl font-bold">Search</h1>
+
         <div className="relative">
           <input
             type="text"
             placeholder="Search posts..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full px-4 py-3 pl-12 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 pl-12 text-lg focus:border-transparent focus:ring-2 focus:ring-rose-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             autoFocus
           />
           <svg
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+            className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -98,33 +94,32 @@ function SearchContent() {
           </svg>
         </div>
       </div>
-      
+
       {loading && (
-        <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-rose-600"></div>
+        <div className="py-8 text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-rose-600"></div>
           <p className="mt-2 text-gray-600 dark:text-gray-400">Loading search index...</p>
         </div>
       )}
-      
+
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
           <p className="text-red-700 dark:text-red-400">{error}</p>
         </div>
       )}
-      
+
       {!loading && !error && (
         <>
           {query && (
             <div className="mb-6">
               <p className="text-gray-600 dark:text-gray-400">
-                {results.length === 0 
+                {results.length === 0
                   ? `No results found for "${query}"`
-                  : `${results.length} result${results.length === 1 ? '' : 's'} for "${query}"`
-                }
+                  : `${results.length} result${results.length === 1 ? '' : 's'} for "${query}"`}
               </p>
             </div>
           )}
-          
+
           <div className="space-y-8">
             {results.map((post) => (
               <SearchResultItem
@@ -137,11 +132,11 @@ function SearchContent() {
               />
             ))}
           </div>
-          
+
           {query && results.length === 0 && (
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <svg
-                className="mx-auto h-12 w-12 text-gray-400 mb-4"
+                className="mx-auto mb-4 h-12 w-12 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -162,11 +157,11 @@ function SearchContent() {
               </p>
             </div>
           )}
-          
+
           {!query && (
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <svg
-                className="mx-auto h-12 w-12 text-gray-400 mb-4"
+                className="mx-auto mb-4 h-12 w-12 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -191,14 +186,16 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-rose-600"></div>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">Loading search...</p>
+    <Suspense
+      fallback={
+        <div className="container mx-auto max-w-4xl px-4 py-8">
+          <div className="py-8 text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-rose-600"></div>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Loading search...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <SearchContent />
     </Suspense>
   )

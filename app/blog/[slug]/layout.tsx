@@ -1,6 +1,10 @@
 import { notFound } from 'next/navigation'
-import { format } from 'date-fns'
-import { getFullPost, getAllPosts } from '@/lib/posts'
+import { getFullPost, getAllPosts, getAdjacentPosts } from '@/lib/posts'
+import PostHeader from '@/components/post-header'
+import PostFooter from '@/components/post-footer'
+import PostThumbnail from '@/components/post-thumbnail'
+import PostNavigation from '@/components/post-navigation'
+import Breadcrumb from '@/components/breadcrumb'
 
 export async function generateStaticParams() {
   const posts = await getAllPosts()
@@ -43,76 +47,35 @@ export default async function BlogPostLayout({ children, params }: BlogPostLayou
     notFound()
   }
 
+  const { previousPost, nextPost } = await getAdjacentPosts(slug)
+
   return (
-    <article className="container mx-auto px-4 py-16">
-      <div className="mx-auto max-w-4xl">
-        <header className="mb-12">
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl">{post.title}</h1>
-
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <time dateTime={post.date}>{format(new Date(post.date), 'LLLL d, yyyy')}</time>
-
-            {post.readingTime && (
-              <>
-                <span>•</span>
-                <span>{post.readingTime.text}</span>
-              </>
-            )}
-
-            {post.wordCount && (
-              <>
-                <span>•</span>
-                <span>{post.wordCount.toLocaleString()} words</span>
-              </>
-            )}
-
-            {post.categories && post.categories.length > 0 && (
-              <>
-                <span>•</span>
-                <div className="flex flex-wrap gap-2">
-                  {post.categories.map((category) => (
-                    <span
-                      key={category}
-                      className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                    >
-                      {category}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )}
+    <article className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="container mx-auto px-4 py-12 lg:py-20">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-8">
+            <Breadcrumb items={[{ label: 'Blog', href: '/blog' }, { label: post.title }]} />
           </div>
-        </header>
 
-        {post.thumbnail && (
-          <div className="mb-12">
-            <img src={post.thumbnail} alt={post.title} className="rounded-lg shadow-lg" />
-          </div>
-        )}
+          <PostHeader post={post} />
 
-        <div className="prose prose-lg dark:prose-invert max-w-none">{children}</div>
-
-        {post.tags && post.tags.length > 0 && (
-          <footer className="mt-12 border-t pt-8">
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300"
-                >
-                  #{tag}
-                </span>
-              ))}
+          {post.thumbnail && (
+            <div className="mb-16">
+              <PostThumbnail src={post.thumbnail} alt={post.title} />
             </div>
-          </footer>
-        )}
+          )}
 
-        {post.series && (
-          <div className="mt-8 rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
-            <h3 className="mb-2 text-lg font-semibold">Part of the series:</h3>
-            <p className="text-rose-600 dark:text-rose-400">{post.series}</p>
+          <div className="mx-auto max-w-4xl">
+            <div className="prose prose-lg prose-gray dark:prose-invert prose-headings:scroll-mt-20 prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-p:text-lg prose-p:leading-8 prose-li:text-lg prose-li:leading-8 prose-blockquote:border-l-4 prose-blockquote:border-rose-500 prose-blockquote:bg-rose-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:my-6 dark:prose-blockquote:bg-rose-900/20 dark:prose-blockquote:border-rose-400 prose-pre:bg-transparent prose-pre:p-0 prose-code:bg-transparent prose-code:p-0 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none max-w-none">
+              {children}
+            </div>
           </div>
-        )}
+
+          <div className="mx-auto mt-16 max-w-4xl">
+            <PostFooter post={post} />
+            <PostNavigation previousPost={previousPost} nextPost={nextPost} />
+          </div>
+        </div>
       </div>
     </article>
   )

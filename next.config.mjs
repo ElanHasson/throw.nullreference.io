@@ -5,6 +5,8 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeUnwrapImages from 'rehype-unwrap-images'
+import inspectUrls from 'rehype-url-inspector'
+import rehypeMdxImportMedia from 'rehype-mdx-import-media'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -18,19 +20,22 @@ const nextConfig = {
   // Note: redirects() is not supported with static export
   // Redirects should be handled at the server/hosting level
   experimental: {
-    mdxRs: true
-  }
+    mdxRs: true,
+  },
 }
 
 const withMDX = createMDX({
   options: {
     remarkPlugins: [
       remarkGfm, // GitHub Flavored Markdown
-      [remarkToc, {
-        // Table of contents generation
-        heading: 'Table of Contents',
-        maxDepth: 3
-      }]
+      [
+        remarkToc,
+        {
+          // Table of contents generation
+          heading: 'Table of Contents',
+          maxDepth: 3,
+        },
+      ],
     ],
     rehypePlugins: [
       rehypeSlug, // Add IDs to headings
@@ -43,26 +48,42 @@ const withMDX = createMDX({
         },
       ],
       rehypeUnwrapImages, // Unwrap images from paragraphs for better styling
-      [rehypePrettyCode, {
-        // Use shiki for syntax highlighting
-        theme: 'github-dark',
-        onVisitLine(node) {
-          // Prevent lines from collapsing in `display: grid` mode, and
-          // allow empty lines to be copy/pasted
-          if (node.children.length === 0) {
-            node.children = [{type: 'text', value: ' '}]
-          }
+      rehypeMdxImportMedia, // Convert relative media paths to imports
+      [
+        inspectUrls, // Inspect and modify URLs
+        {
+          inspectEach({ url, node }) {
+            // Only modify external links
+            if (
+              url.href &&
+              !url.href.startsWith('/') &&
+              !url.href.startsWith('#') &&
+              !url.href.startsWith('mailto:')
+            ) {
+              if (!node.properties) node.properties = {}
+              node.properties.target = '_blank'
+              node.properties.rel = 'noopener noreferrer'
+            }
+          },
         },
-        onVisitHighlightedLine(node) {
-          if (!node.properties.className) {
-            node.properties.className = []
-          }
-          node.properties.className.push('highlighted')
+      ],
+      [
+        rehypePrettyCode,
+        {
+          theme: {
+            dark: 'one-dark-pro',
+            light: 'github-light',
+          },
+          keepBackground: true,
+          onVisitLine(node) {
+            // Prevent lines from collapsing in `display: grid` mode, and
+            // allow empty lines to be copy/pasted
+            if (node.children.length === 0) {
+              node.children = [{ type: 'text', value: ' ' }]
+            }
+          },
         },
-        onVisitHighlightedWord(node) {
-          node.properties.className = ['word']
-        }
-      }]
+      ],
     ],
   },
 })

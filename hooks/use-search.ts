@@ -19,25 +19,25 @@ const fuseOptions: IFuseOptions<SearchResult> = {
     { name: 'description', weight: 0.6 },
     { name: 'content', weight: 0.4 },
     { name: 'tags', weight: 0.3 },
-    { name: 'categories', weight: 0.3 }
+    { name: 'categories', weight: 0.3 },
   ],
   threshold: 0.3,
   includeScore: true,
   includeMatches: true,
   minMatchCharLength: 2,
-  shouldSort: true
+  shouldSort: true,
 }
 
 export function useSearch() {
   const [posts, setPosts] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
+
   const fuse = useMemo(() => {
     if (posts.length === 0) return null
     return new Fuse(posts, fuseOptions)
   }, [posts])
-  
+
   useEffect(() => {
     async function loadPosts() {
       try {
@@ -54,23 +54,23 @@ export function useSearch() {
         setLoading(false)
       }
     }
-    
+
     loadPosts()
   }, [])
-  
+
   const search = (query: string) => {
     if (!fuse || !query.trim()) {
       return posts
     }
-    
+
     const results = fuse.search(query)
-    return results.map(result => result.item)
+    return results.map((result) => result.item)
   }
-  
+
   return {
     posts,
     search,
     loading,
-    error
+    error,
   }
 }

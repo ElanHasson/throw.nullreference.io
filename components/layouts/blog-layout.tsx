@@ -19,7 +19,7 @@ export function BlogLayout({ children, frontmatter }: BlogLayoutProps) {
       {/* Back to blog link */}
       <Link
         href="/blog"
-        className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to blog
@@ -29,18 +29,14 @@ export function BlogLayout({ children, frontmatter }: BlogLayoutProps) {
       {frontmatter && (
         <header className="mb-8 space-y-4">
           {frontmatter.title && (
-            <h1 className="text-4xl font-bold tracking-tight">
-              {frontmatter.title}
-            </h1>
+            <h1 className="text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
           )}
-          
+
           {frontmatter.description && (
-            <p className="text-xl text-muted-foreground">
-              {frontmatter.description}
-            </p>
+            <p className="text-muted-foreground text-xl">{frontmatter.description}</p>
           )}
-          
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+
+          <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
             {frontmatter.date && (
               <time dateTime={frontmatter.date}>
                 {new Date(frontmatter.date).toLocaleDateString('en-US', {
@@ -50,28 +46,22 @@ export function BlogLayout({ children, frontmatter }: BlogLayoutProps) {
                 })}
               </time>
             )}
-            
+
             {frontmatter.categories && frontmatter.categories.length > 0 && (
               <div className="flex gap-2">
                 {frontmatter.categories.map((category) => (
-                  <span
-                    key={category}
-                    className="rounded-full bg-muted px-3 py-1 text-xs"
-                  >
+                  <span key={category} className="bg-muted rounded-full px-3 py-1 text-xs">
                     {category}
                   </span>
                 ))}
               </div>
             )}
           </div>
-          
+
           {frontmatter.tags && frontmatter.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {frontmatter.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary"
-                >
+                <span key={tag} className="bg-primary/10 text-primary rounded-md px-2 py-1 text-xs">
                   #{tag}
                 </span>
               ))}
@@ -81,9 +71,7 @@ export function BlogLayout({ children, frontmatter }: BlogLayoutProps) {
       )}
 
       {/* Article content with Tailwind Typography */}
-      <div className="prose prose-lg dark:prose-invert max-w-none">
-        {children}
-      </div>
+      <div className="prose prose-lg dark:prose-invert max-w-none">{children}</div>
     </article>
   )
 }

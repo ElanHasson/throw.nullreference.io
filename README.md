@@ -43,6 +43,6 @@ Pull requests welcomed and accepted.
 
 ## License
 
-Content is copyright © 2020-2024 Elan Hasson. All Rights Reserved.
+Content is copyright © 2014-2024 Elan Hasson. All Rights Reserved.
 
 Code samples and examples are MIT licensed.
