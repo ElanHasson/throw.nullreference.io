@@ -10,7 +10,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden">
+      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden py-20 sm:py-24">
         {/* Animated background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-rose-100 via-pink-50 to-purple-100 dark:from-rose-950/20 dark:via-pink-950/10 dark:to-purple-950/20" />
 
@@ -21,21 +21,21 @@ export default async function HomePage() {
           <div className="animate-blob animation-delay-4000 absolute top-1/2 left-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-purple-400 to-indigo-400 opacity-20 mix-blend-multiply blur-3xl filter" />
         </div>
 
-        <div className="relative z-10 container mx-auto px-4">
+        <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl text-center">
-            <h1 className="animate-fade-in mb-6 text-5xl font-bold md:text-7xl">
+            <h1 className="animate-fade-in mb-8 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="inline-block">Throwin&apos;</span>{' '}
               <span className="bg-gradient-to-r from-rose-600 to-purple-600 bg-clip-text text-transparent">
                 Exceptions
               </span>
             </h1>
 
-            <p className="animate-fade-in animation-delay-200 mx-auto mb-12 max-w-3xl text-xl text-gray-600 md:text-2xl dark:text-gray-300">
+            <p className="animate-fade-in animation-delay-200 mx-auto mb-16 max-w-3xl text-lg leading-relaxed text-gray-600 sm:text-xl md:text-2xl dark:text-gray-300">
               A blog about software development, technology, and the beautiful chaos of debugging
               life
             </p>
 
-            <div className="animate-fade-in animation-delay-400 flex flex-col justify-center gap-4 sm:flex-row">
+            <div className="animate-fade-in animation-delay-400 flex flex-col justify-center gap-6 sm:flex-row sm:gap-8">
               <Link
                 href="/blog"
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-rose-600 to-purple-600 px-8 py-4 text-lg font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl"
@@ -80,22 +80,22 @@ export default async function HomePage() {
       </section>
 
       {/* About Me Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-5xl">
-            <div className="rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 p-12 dark:from-gray-800 dark:to-gray-900">
-              <div className="grid items-center gap-8 md:grid-cols-2">
+      <section className="py-24 sm:py-28 lg:py-32">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 p-8 sm:p-12 lg:p-16 dark:from-gray-800 dark:to-gray-900">
+              <div className="grid items-center gap-12 md:grid-cols-2 lg:gap-16">
                 <div>
-                  <h2 className="mb-6 text-4xl font-bold">Hey, I&apos;m Elan 👋</h2>
-                  <p className="mb-4 text-lg text-gray-600 dark:text-gray-300">
+                  <h2 className="mb-8 text-3xl font-bold sm:text-4xl">Hey, I&apos;m Elan 👋</h2>
+                  <p className="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-300">
                     I&apos;m a software engineer passionate about building distributed systems,
                     exploring new technologies, and sharing what I learn along the way.
                   </p>
-                  <p className="mb-6 text-lg text-gray-600 dark:text-gray-300">
+                  <p className="mb-8 text-lg leading-relaxed text-gray-600 dark:text-gray-300">
                     Currently working at DigitalOcean on the App Platform team, I&apos;ve spent over
                     20 years writing code and love diving deep into complex problems.
                   </p>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-4">
                     <span className="rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">
                       .NET
                     </span>
@@ -127,28 +127,28 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Posts Section */}
-      <section className="bg-gray-50 py-20 dark:bg-gray-900/50">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-12 text-center">
-              <h2 className="mb-4 text-4xl font-bold">Featured Posts</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+      <section className="bg-gray-50 py-24 sm:py-28 lg:py-32 dark:bg-gray-900/50">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-16 text-center">
+              <h2 className="mb-6 text-3xl font-bold sm:text-4xl">Featured Posts</h2>
+              <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
                 Popular articles and deep dives worth reading
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {featuredPosts.map((post, index) => (
                 <article
                   key={post.slug}
-                  className={`group animate-fade-in rounded-2xl bg-white p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:bg-gray-800`}
+                  className={`group animate-fade-in rounded-2xl bg-white p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:bg-gray-800`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <Link href={`/blog/${post.slug}`} className="block">
                     <time className="text-sm font-medium text-rose-600 dark:text-rose-400">
                       {format(new Date(post.date), 'LLLL d, yyyy')}
                     </time>
-                    <h3 className="mt-2 mb-3 text-xl font-bold transition-colors group-hover:text-rose-600 dark:group-hover:text-rose-400">
+                    <h3 className="mt-4 mb-4 text-xl font-bold leading-tight transition-colors group-hover:text-rose-600 dark:group-hover:text-rose-400">
                       {post.title}
                     </h3>
                     {post.description && (
@@ -165,17 +165,17 @@ export default async function HomePage() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-12 text-center">
-              <h2 className="mb-4 text-4xl font-bold">Recent Posts</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+      <section className="py-24 sm:py-28 lg:py-32">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-16 text-center">
+              <h2 className="mb-6 text-3xl font-bold sm:text-4xl">Recent Posts</h2>
+              <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
                 Thoughts on code, technology, and everything in between
               </p>
             </div>
 
-            <div className="grid gap-8">
+            <div className="space-y-8">
               {recentPosts.map((post, index) => (
                 <article
                   key={post.slug}
@@ -190,7 +190,7 @@ export default async function HomePage() {
                         {format(new Date(post.date), 'LLLL d, yyyy')}
                       </time>
 
-                      <h3 className="mt-2 mb-3 text-2xl font-bold transition-colors group-hover:text-rose-600 dark:group-hover:text-rose-400">
+                      <h3 className="mt-4 mb-4 text-2xl font-bold leading-tight transition-colors group-hover:text-rose-600 dark:group-hover:text-rose-400">
                         {post.title}
                       </h3>
 
@@ -221,13 +221,13 @@ export default async function HomePage() {
               ))}
             </div>
 
-            <div className="mt-12 text-center">
+            <div className="mt-16 text-center">
               <Link
                 href="/blog"
-                className="inline-flex items-center justify-center px-6 py-3 text-lg font-medium text-rose-600 transition-colors hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300"
+                className="inline-flex items-center justify-center rounded-full border-2 border-rose-600 px-8 py-4 text-lg font-medium text-rose-600 transition-all duration-300 hover:bg-rose-600 hover:text-white hover:scale-105 hover:shadow-lg dark:text-rose-400 dark:border-rose-400 dark:hover:bg-rose-400 dark:hover:text-white"
               >
                 View all posts
-                <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -242,17 +242,17 @@ export default async function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="bg-gray-50 py-20 dark:bg-gray-900/50">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-12 text-center">
-              <h2 className="mb-4 text-4xl font-bold">What You&apos;ll Find Here</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+      <section className="bg-gray-50 py-24 sm:py-28 lg:py-32 dark:bg-gray-900/50">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-16 text-center">
+              <h2 className="mb-6 text-3xl font-bold sm:text-4xl">What You&apos;ll Find Here</h2>
+              <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
                 Deep dives, tutorials, and random musings
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-3 lg:gap-12">
               {[
                 {
                   icon: (
@@ -302,11 +302,11 @@ export default async function HomePage() {
                   key={index}
                   className="rounded-2xl bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800"
                 >
-                  <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400">
+                  <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-rose-100 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400">
                     {feature.icon}
                   </div>
-                  <h3 className="mb-3 text-xl font-bold">{feature.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
+                  <h3 className="mb-4 text-xl font-bold">{feature.title}</h3>
+                  <p className="leading-relaxed text-gray-600 dark:text-gray-400">{feature.description}</p>
                 </div>
               ))}
             </div>

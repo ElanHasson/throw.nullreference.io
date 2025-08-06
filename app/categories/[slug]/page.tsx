@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getAllPosts, getAllCategories } from '@/lib/posts-utils'
 import Breadcrumb from '@/components/breadcrumb'
+import { TagPill } from '@/components/ui/tag-pill'
+import { FeaturedBadge } from '@/components/ui/featured-badge'
+import { BrowseTopicsButton } from '@/components/ui/browse-topics-button'
 
 interface Props {
   params: Promise<{
@@ -62,7 +65,8 @@ export default async function CategoryPage({ params }: Props) {
   const categoryPosts = posts.filter((post) => post.categories?.includes(categoryName))
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16">
+    <div className="w-full">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 py-16 lg:px-8">
       <Breadcrumb items={[{ label: 'Topics', href: '/topics' }, { label: categoryName }]} />
 
       <h1 className="mb-4 text-4xl font-bold">{categoryName}</h1>
@@ -104,25 +108,12 @@ export default async function CategoryPage({ params }: Props) {
                       })}
                     </time>
 
-                    {post.featured && (
-                      <span className="inline-flex w-fit rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-800 dark:bg-rose-900 dark:text-rose-200">
-                        Featured
-                      </span>
-                    )}
+                    {post.featured && <FeaturedBadge />}
 
                     {post.tags && post.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {post.tags.slice(0, 3).map((tag) => (
-                          <Link
-                            key={tag}
-                            href={`/tags/${tag
-                              .toLowerCase()
-                              .replace(/[^a-z0-9]+/g, '-')
-                              .replace(/^-|-$/g, '')}`}
-                            className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:bg-gray-700"
-                          >
-                            {tag}
-                          </Link>
+                          <TagPill key={tag} tag={tag} showHash={false} />
                         ))}
                         {post.tags.length > 3 && (
                           <span className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-500 dark:bg-gray-800 dark:text-gray-500">
@@ -167,22 +158,13 @@ export default async function CategoryPage({ params }: Props) {
           <p className="mb-6 text-gray-600 dark:text-gray-400">
             Check back soon for new posts, or explore other categories.
           </p>
-          <Link
-            href="/topics"
-            className="inline-flex items-center rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
-          >
-            Browse All Topics
-          </Link>
+          <BrowseTopicsButton />
         </div>
       )}
 
-      <div className="mt-12 text-center">
-        <Link
-          href="/topics"
-          className="inline-flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-white transition-colors hover:bg-rose-700"
-        >
-          Browse All Topics
-        </Link>
+      <div className="mt-16 text-center">
+        <BrowseTopicsButton />
+      </div>
       </div>
     </div>
   )

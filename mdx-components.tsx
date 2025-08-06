@@ -5,6 +5,36 @@ import { Alert } from "./components/mdx/alert";
 import { MermaidDiagram } from "./components/mdx/mermaid";
 import { Pre } from "./components/mdx/pre";
 import { GistEmbed } from "./components/mdx/gist";
+import { 
+  InfoIcon, 
+  SuccessIcon, 
+  WarningIcon, 
+  ErrorIcon, 
+  TipIcon, 
+  NoteIcon,
+  ChevronRight,
+  GitHub,
+  Home,
+  LinkedIn,
+  Mail,
+  Mastodon,
+  Moon,
+  Search,
+  Sun,
+  StackOverflow,
+  YouTube,
+  ExternalLink,
+  ChevronUp,
+  Calendar,
+  ChevronLeft,
+  Copy,
+  Check,
+  Clock,
+  ArrowLeft,
+  ArrowRight,
+  Menu,
+  X
+} from "./components/icons";
 
 /**
  * MDX Components available in all MDX files
@@ -22,11 +52,17 @@ import { GistEmbed } from "./components/mdx/gist";
  * - CTACard: Call-to-action card component
  * - Figure: Enhanced image component with caption support
  * - Alert: Info/warning/error/success alert boxes
+ *   Example: <Alert type="info">Your message</Alert>
+ *   Example with custom icon: <Alert type="warning" icon={TipIcon}>Pro tip here</Alert>
  * - MermaidDiagram: Render Mermaid diagrams with theme support
  * - Pre: Enhanced code block with copy button functionality
  * - GistEmbed: Embed GitHub Gists with syntax highlighting
  *   Example: <GistEmbed gist="username/gistId" />
  *   Example: <GistEmbed gist="username/gistId" file="specific-file.js" />
+ * 
+ * Available Icons (can be used to override Alert icons):
+ * - InfoIcon, SuccessIcon, WarningIcon, ErrorIcon, TipIcon, NoteIcon
+ * - And many more UI icons...
  */
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -37,5 +73,34 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     MermaidDiagram,
     pre: Pre,
     GistEmbed,
+    // Icons available for use in MDX
+    InfoIcon,
+    SuccessIcon,
+    WarningIcon,
+    ErrorIcon,
+    TipIcon,
+    NoteIcon,
+    ChevronRight,
+    GitHub,
+    Home,
+    LinkedIn,
+    Mail,
+    Mastodon,
+    Moon,
+    Search,
+    Sun,
+    StackOverflow,
+    YouTube,
+    ExternalLink,
+    ChevronUp,
+    Calendar,
+    ChevronLeft,
+    Copy,
+    Check,
+    Clock,
+    ArrowLeft,
+    ArrowRight,
+    Menu,
+    X,
   };
 }

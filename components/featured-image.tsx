@@ -10,10 +10,10 @@ interface FeaturedImageProps {
 }
 
 const variants = {
-  small: 'aspect-[4/3] h-20 w-28',
-  medium: 'aspect-[3/2] h-48', 
-  large: 'aspect-[16/9] h-48',
-  hero: 'aspect-video h-96'
+  small: 'aspect-[4/3] max-h-48',
+  medium: 'aspect-[3/2] max-h-64', 
+  large: 'aspect-[16/9] max-h-80',
+  hero: 'aspect-video max-h-96'
 }
 
 export function FeaturedImage({ 
@@ -34,7 +34,7 @@ export function FeaturedImage({
         alt={alt}
         fill
         className="object-cover transition-transform duration-300 group-hover:scale-105"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, (max-width: 1536px) 25vw, 20vw"
         priority={priority}
       />
     </div>

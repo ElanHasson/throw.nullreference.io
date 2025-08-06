@@ -142,10 +142,70 @@
     @apply border-[hsl(var(--border))];
   }
   body {
-    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))];
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] leading-relaxed;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
+  }
+
+  /* Improved heading spacing and typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight leading-tight;
+    scroll-margin-top: 5rem;
+  }
+
+  h1 { @apply text-4xl sm:text-5xl lg:text-6xl mb-6; }
+  h2 { @apply text-3xl sm:text-4xl mb-5; }
+  h3 { @apply text-2xl sm:text-3xl mb-4; }
+  h4 { @apply text-xl sm:text-2xl mb-3; }
+  h5 { @apply text-lg sm:text-xl mb-3; }
+  h6 { @apply text-base sm:text-lg mb-2; }
+
+  /* Better paragraph spacing */
+  p {
+    @apply mb-6 leading-relaxed;
+  }
+
+  /* Improved list styling */
+  ul, ol {
+    @apply mb-6;
+  }
+
+  li {
+    @apply mb-2;
+  }
+
+  /* Better blockquote styling */
+  blockquote {
+    @apply border-l-4 border-rose-500 bg-rose-50/50 py-4 px-6 my-8 rounded-r-lg;
+    @apply dark:bg-rose-950/20 dark:border-rose-400;
+  }
+
+  blockquote p {
+    @apply mb-0;
+  }
+
+  /* Improved link styling */
+  a:not(.no-underline) {
+    @apply text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300;
+    @apply transition-colors duration-200;
+  }
+
+  /* Better code styling */
+  :not(pre) > code {
+    @apply bg-gray-100 dark:bg-gray-800 rounded px-2 py-1 text-sm font-mono;
+    @apply text-rose-600 dark:text-rose-400 font-medium;
+  }
+
+  /* Responsive container spacing */
+  .container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Better focus states */
+  :focus-visible {
+    @apply outline-none ring-2 ring-rose-500 ring-offset-2;
+    @apply dark:ring-offset-gray-900;
   }
 }
 
@@ -191,6 +251,61 @@
 
   .link-underline:hover::after {
     width: 100%;
+  }
+
+  /* Responsive spacing utilities */
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .section-padding-large {
+    @apply py-24 sm:py-28 lg:py-32;
+  }
+
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Content spacing utilities */
+  .prose-spacing h1 { @apply mt-16 first:mt-0; }
+  .prose-spacing h2 { @apply mt-12 first:mt-0; }
+  .prose-spacing h3 { @apply mt-10 first:mt-0; }
+  .prose-spacing h4 { @apply mt-8 first:mt-0; }
+
+  /* Button spacing utilities */
+  .btn-spacing {
+    @apply px-6 py-3 sm:px-8 sm:py-4;
+  }
+
+  /* Card spacing utilities */
+  .card-padding {
+    @apply p-6 sm:p-8;
+  }
+
+  .card-padding-large {
+    @apply p-8 sm:p-10 lg:p-12;
+  }
+
+  /* Ultra-wide screen optimizations */
+  @media (min-width: 1920px) {
+    .ultra-wide-grid-6 {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .ultra-wide-grid-7 {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .ultra-wide-grid-8 {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .ultra-wide-grid-8 {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+    .ultra-wide-grid-10 {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
   }
 }
 

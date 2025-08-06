@@ -6,18 +6,18 @@ export function Footer() {
 
   return (
     <footer className="mt-auto border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-12">
-        <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-4">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 py-16 lg:px-8 lg:py-20">
+        <div className="mb-12 grid grid-cols-1 gap-12 md:grid-cols-4 lg:gap-16">
           {/* Brand */}
           <div className="md:col-span-2">
             <h3 className="mb-4 bg-gradient-to-r from-rose-600 to-purple-600 bg-clip-text text-lg font-bold text-transparent">
               Throwin&apos; Exceptions
             </h3>
-            <p className="mb-4 max-w-md text-gray-600 dark:text-gray-400">
+            <p className="mb-6 max-w-md text-base leading-relaxed text-gray-600 dark:text-gray-400">
               A blog about software development, technology, and the beautiful chaos of debugging
               life.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-5">
               <a
                 href="https://github.com/ElanHasson"
                 target="_blank"
@@ -68,8 +68,8 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="mb-4 font-semibold text-gray-800 dark:text-gray-200">Quick Links</h4>
-            <ul className="space-y-2">
+            <h4 className="mb-6 text-sm font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">Quick Links</h4>
+            <ul className="space-y-3">
               <li>
                 <Link
                   href="/blog"
@@ -123,8 +123,8 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="mb-4 font-semibold text-gray-800 dark:text-gray-200">Resources</h4>
-            <ul className="space-y-2">
+            <h4 className="mb-6 text-sm font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">Resources</h4>
+            <ul className="space-y-3">
               <li>
                 <a
                   href="https://github.com/ElanHasson/throw.nullreference.io"
@@ -148,11 +148,11 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 md:flex-row dark:border-gray-800">
+        <div className="flex flex-col items-center justify-between gap-6 border-t border-gray-200 pt-10 md:flex-row dark:border-gray-800">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             © 2014-{currentYear} Elan Hasson. All Rights Reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Built with Next.js, MDX, and ❤️
             </p>

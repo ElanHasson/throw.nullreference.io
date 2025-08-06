@@ -50,7 +50,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/80">
-      <div className="container mx-auto max-w-7xl flex h-16 items-center px-4 lg:px-8">
+      <div className="container mx-auto max-w-[2000px] flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         {/* Skip to main content - Accessibility */}
         <a
           href="#main-content"
@@ -59,15 +59,15 @@ export function Header() {
           Skip to main content
         </a>
 
-        <div className="mr-4 flex flex-1">
-          <Link href="/" className="group mr-8 flex items-center space-x-2">
-            <span className="bg-gradient-to-r from-rose-600 to-purple-600 bg-clip-text text-xl font-bold text-transparent">
+        <div className="flex flex-1 items-center">
+          <Link href="/" className="group mr-6 flex items-center space-x-2 lg:mr-10">
+            <span className="bg-gradient-to-r from-rose-600 to-purple-600 bg-clip-text text-lg font-bold text-transparent lg:text-xl">
               Throwin&apos; Exceptions
             </span>
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden items-center space-x-8 text-sm font-medium md:flex">
+          <nav className="hidden items-center space-x-6 text-sm font-medium md:flex lg:space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -84,7 +84,7 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 sm:gap-4">
           <SearchButton />
           
           <ThemeToggle />
@@ -131,13 +131,13 @@ export function Header() {
           data-mobile-menu
           className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-xl dark:border-gray-800 dark:bg-gray-900/95"
         >
-          <nav className="container mx-auto px-4 py-4">
-            <div className="flex flex-col space-y-3">
+          <nav className="container mx-auto px-4 py-6">
+            <div className="flex flex-col space-y-4">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block rounded-lg px-3 py-2 text-base font-medium transition-colors hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800 dark:hover:text-rose-400 ${
+                  className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors hover:bg-gray-100 hover:text-rose-600 dark:hover:bg-gray-800 dark:hover:text-rose-400 ${
                     pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                       ? 'bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400'
                       : 'text-gray-600 dark:text-gray-300'
