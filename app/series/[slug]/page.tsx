@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getAllPosts } from '@/lib/posts'
+import { getAllPosts } from '@/lib/posts-utils'
 
 interface Props {
   params: Promise<{

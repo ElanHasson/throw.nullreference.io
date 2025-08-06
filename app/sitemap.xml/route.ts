@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getAllPosts, getAllTags, getAllSeries } from '@/lib/posts'
+import { getAllPosts, getAllTags, getAllSeries } from '@/lib/posts-utils'
 
 export const dynamic = 'force-static'
 

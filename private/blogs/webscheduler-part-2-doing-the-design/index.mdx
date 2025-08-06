@@ -1,6 +1,6 @@
 export const metadata = {
   title: "WebScheduler Part II: Designing the Web Scheduler",
-  featuredImage: "/posts/webscheduler-part-2-doing-the-design/PhysicalDeploymentDiagram.png",
+  featuredImage: "/blog/webscheduler-part-2-doing-the-design/PhysicalDeploymentDiagram.png",
   publishDate: "2022-09-13",
   lastModified: "2022-09-13",
   author: {
@@ -75,7 +75,7 @@ Below are the details about each one of the components that make up the WebSched
 
 ## Microsoft Orleans
 
-<Figure src="/posts/webscheduler-part-2-doing-the-design/orleans.png" width={100} alt="Microsoft Orleans Logo" className="float-left" />
+<Figure src="/blog/webscheduler-part-2-doing-the-design/orleans.png" width={100} alt="Microsoft Orleans Logo" className="float-left" />
 
 [Microsoft Orleans](https://github.com/dotnet/orleans) is an open-source, cross-platform framework for building robust, scalable distributed applications in .NET. When I discovered Orleans sometime around 2015 I fell in love with it. It is the type of technology that one can get really excited about, the kind that changes mental model of problems and solutions. I've built a few solutions over the years with Orleans but have recently begun making real contributions (*non-docs* 😅) to the project.
 
@@ -173,7 +173,7 @@ In the future, we'll be adding support for all other HTTP verbs and message queu
 
 For the Orleans Silo Cluster, we'll be using [OrleansDashboard](https://github.com/OrleansContrib/OrleansDashboard) to monitor our silos.
 
-<Figure src="/posts/webscheduler-part-2-doing-the-design/OrleansDashboard.png" width={440} alt="The OrleansDashboard" className="float-right" />
+<Figure src="/blog/webscheduler-part-2-doing-the-design/OrleansDashboard.png" width={440} alt="The OrleansDashboard" className="float-right" />
 
 ### OpenTelemetry and Jaeger
 
@@ -181,7 +181,7 @@ We'll be using [OpenTelemetry](https://opentelemetry.io/docs/instrumentation/net
 
 ## ASP.NET Core Blazor
 
-<Figure src="/posts/webscheduler-part-2-doing-the-design/Blazor.png" width={100} alt="ASP.NET Core Blazor Logo" className="float-right" />
+<Figure src="/blog/webscheduler-part-2-doing-the-design/Blazor.png" width={100} alt="ASP.NET Core Blazor Logo" className="float-right" />
 
 ASP.NET Core Blazor is a framework for building interactive client-side web UI using .NET instead of JavaScript. Blazor has two flavors ([soon three with Blazor Hybrid](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-hybrid)), [Blazor WebAssembly](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-webassembly) and [Blazor Server](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-server). 
 

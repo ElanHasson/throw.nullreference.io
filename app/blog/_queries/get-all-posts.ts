@@ -2,25 +2,29 @@ import { readdir } from "fs/promises";
 import path from "path";
 import { Post } from "../[slug]/_queries/get-post";
 
-export async function getAllPosts() {
-  const postsPath = path.join(process.cwd(), "private/posts");
+export async function getAllPosts(includeDrafts = false) {
+  const postsPath = path.join(process.cwd(), "private/blogs");
 
-  // Get all MDX files
-  const files = (await readdir(postsPath, { withFileTypes: true }))
-    .filter((file) => file.isFile() && file.name.endsWith(".mdx"))
-    .map((file) => file.name);
+  // Get all blog directories
+  const entries = (await readdir(postsPath, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
 
   // Retrieve metadata from MDX files
   const posts = await Promise.all(
-    files.map(async (filename) => {
-      const slug = filename.replace(/\.mdx$/, ""); // Remove .mdx extension to get slug
-      const { metadata } = await import(`@/private/posts/${filename}`);
+    entries.map(async (slug) => {
+      const { metadata } = await import(`@/private/blogs/${slug}/index.mdx`);
       return { slug, ...metadata };
     })
   );
 
-  // Sort posts from newest to oldest
-  posts.sort((a, b) => +new Date(b.publishDate) - +new Date(a.publishDate));
+  // Filter out drafts if not including them
+  const filteredPosts = includeDrafts 
+    ? posts 
+    : posts.filter(post => !post.draft);
 
-  return posts as Post[];
+  // Sort posts from newest to oldest
+  filteredPosts.sort((a, b) => +new Date(b.publishDate) - +new Date(a.publishDate));
+
+  return filteredPosts as Post[];
 }

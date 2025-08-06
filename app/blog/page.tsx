@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getAllPosts } from '@/lib/posts'
+import { getAllPosts } from '@/lib/posts-utils'
 import { format } from 'date-fns'
 import { FeaturedImage } from '@/components/featured-image'
 

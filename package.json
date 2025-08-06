@@ -2,11 +2,20 @@
   "name": "next-mdx-blog",
   "version": "0.1.0",
   "private": true,
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next-image-export-optimizer",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e:static": "playwright test --config=playwright.config.static.ts",
+    "test:e2e:dev": "playwright test --config=playwright.config.dev.ts"
+  },
+  "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -21,19 +30,31 @@
     "lucide-react": "^0.536.0",
     "mermaid": "^11.9.0",
     "next": "15.0.3",
+    "next-image-export-optimizer": "^1.19.0",
     "next-themes": "^0.4.6",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-embed-gist": "^1.0.29",
+    "rehype-pretty-code": "^0.14.1",
+    "rss": "^1.2.2",
+    "shiki": "^3.9.2",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@playwright/test": "^1.54.2",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "@types/rss": "^0.0.32",
+    "axe-playwright": "^2.1.0",
+    "eslint": "^9.0.0",
     "eslint-config-next": "15.0.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-jest-dom": "^5.5.0",
+    "eslint-plugin-testing-library": "^7.6.3",
     "playwright": "^1.54.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",

@@ -43,3 +43,5 @@ next-env.d.ts
 test-results/
 playwright-report/
 *.out
+**/optimized/**
+next-image-export-optimizer-hashes.json

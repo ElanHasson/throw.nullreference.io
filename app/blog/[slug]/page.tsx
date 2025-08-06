@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { getPost } from "./_queries/get-post";
 import Breadcrumb from "@/components/breadcrumb";
 import { FeaturedImage } from "@/components/featured-image";
+import { OptimizedImage } from "@/components/optimized-image";
 
 export default async function BlogPostPage({
   params,
@@ -64,7 +64,7 @@ export default async function BlogPostPage({
           )}
         </header>
 
-        <section className="prose prose-lg prose-gray max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-p:leading-relaxed prose-a:text-rose-600 prose-a:no-underline hover:prose-a:text-rose-700 hover:prose-a:underline prose-code:rounded prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-rose-600 prose-pre:bg-gray-900 prose-pre:text-gray-100 dark:prose-a:text-rose-400 dark:hover:prose-a:text-rose-300 dark:prose-code:bg-gray-800 dark:prose-code:text-rose-400 dark:prose-pre:bg-gray-950">
+        <section className="prose prose-lg prose-gray max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-p:leading-relaxed prose-a:text-rose-600 prose-a:no-underline hover:prose-a:text-rose-700 hover:prose-a:underline prose-code:rounded prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-rose-600 dark:prose-a:text-rose-400 dark:hover:prose-a:text-rose-300 dark:prose-code:bg-gray-800 dark:prose-code:text-rose-400">
           <Content />
         </section>
 
@@ -75,7 +75,7 @@ export default async function BlogPostPage({
               <div className="flex items-start gap-6">
                 {post.author.avatar && (
                   <div className="relative h-20 w-20 flex-shrink-0">
-                    <Image
+                    <OptimizedImage
                       src={post.author.avatar}
                       alt={post.author.name}
                       fill
@@ -129,12 +129,12 @@ export async function generateStaticParams() {
   const { readdirSync } = await import('fs');
   const { join } = await import('path');
   
-  const postsDirectory = join(process.cwd(), 'private/posts');
-  const filenames = readdirSync(postsDirectory);
+  const postsDirectory = join(process.cwd(), 'private/blogs');
+  const entries = readdirSync(postsDirectory, { withFileTypes: true });
   
-  return filenames
-    .filter(filename => filename.endsWith('.mdx'))
-    .map(filename => ({
-      slug: filename.replace('.mdx', '')
+  return entries
+    .filter(entry => entry.isDirectory())
+    .map(entry => ({
+      slug: entry.name
     }));
 }

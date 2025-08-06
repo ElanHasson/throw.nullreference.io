@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getAllPosts, getAllTags } from '@/lib/posts'
+import { getAllPosts, getAllTags } from '@/lib/posts-utils'
 import type { Metadata } from 'next/types'
 
 interface PageProps {

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getAllPosts, getAllCategories } from '@/lib/posts'
+import { getAllPosts, getAllCategories } from '@/lib/posts-utils'
 import Breadcrumb from '@/components/breadcrumb'
 
 interface Props {

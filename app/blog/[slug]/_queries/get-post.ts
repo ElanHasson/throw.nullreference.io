@@ -19,9 +19,12 @@ export type PostMetadata = {
   author: Author;
   excerpt: string;
   tags: string[];
+  categories?: string[];
   seo: SEO;
   featured?: boolean;
   series?: string;
+  description?: string;
+  draft?: boolean;
 };
 
 export type Post = PostMetadata & {
@@ -31,7 +34,7 @@ export type Post = PostMetadata & {
 
 export async function getPost(slug: string): Promise<Post | null> {
   try {
-    const post = await import(`@/private/posts/${slug}.mdx`);
+    const post = await import(`@/private/blogs/${slug}/index.mdx`);
 
     return {
       slug,

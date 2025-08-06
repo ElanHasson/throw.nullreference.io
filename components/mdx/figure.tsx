@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { OptimizedImage } from '../optimized-image'
 
 interface FigureProps {
   src: string
@@ -21,13 +21,12 @@ export function Figure({ src, alt, width, height, caption, className }: FigurePr
   return (
     <figure className={`my-8 ${className || ''}`}>
       <div className="flex justify-center">
-        <Image
+        <OptimizedImage
           src={cleanSrc}
           alt={alt}
           width={finalWidth}
           height={finalHeight}
           className="rounded-lg"
-          unoptimized
         />
       </div>
       {caption && (

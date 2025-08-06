@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getAllPosts, groupPostsByYear } from '@/lib/posts'
+import { getAllPosts, groupPostsByYear } from '@/lib/posts-utils'
 
 export const metadata = {
   title: "Archive | Throwin' Exceptions",

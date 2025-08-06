@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { OptimizedImage } from './optimized-image'
 import { cn } from '@/lib/utils'
 
 interface FeaturedImageProps {
@@ -29,7 +29,7 @@ export function FeaturedImage({
       variants[variant],
       className
     )}>
-      <Image
+      <OptimizedImage
         src={src}
         alt={alt}
         fill

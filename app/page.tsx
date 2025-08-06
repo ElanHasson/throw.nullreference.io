@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { getRecentPosts, getFeaturedPosts } from '@/lib/posts'
+import { getRecentPosts, getFeaturedPosts } from '@/lib/posts-utils'
+import { OptimizedImage } from '@/components/optimized-image'
 
 export default async function HomePage() {
   const recentPosts = await getRecentPosts()
@@ -111,9 +112,11 @@ export default async function HomePage() {
                 </div>
                 <div className="relative">
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-rose-400 to-purple-400 opacity-20 blur-3xl"></div>
-                  <img
+                  <OptimizedImage
                     src="/images/profile.jpg"
                     alt="Elan's profile"
+                    width={400}
+                    height={400}
                     className="relative rounded-2xl shadow-2xl"
                   />
                 </div>
