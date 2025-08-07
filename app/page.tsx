@@ -2,24 +2,25 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { getRecentPosts, getFeaturedPosts } from '@/lib/posts-utils'
 import { OptimizedImage } from '@/components/optimized-image'
+import { HeroBackground } from '@/components/hero-background'
+import { getCurrentBackground } from '@/lib/background-config'
+import { BackgroundDemo } from '@/components/background-demo'
 
 export default async function HomePage() {
   const recentPosts = await getRecentPosts()
   const featuredPosts = await getFeaturedPosts()
+  const backgroundConfig = getCurrentBackground()
 
   return (
     <>
       {/* Hero Section */}
       <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden py-20 sm:py-24">
-        {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-rose-100 via-pink-50 to-purple-100 dark:from-rose-950/20 dark:via-pink-950/10 dark:to-purple-950/20" />
-
-        {/* Floating orbs animation */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="animate-blob absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-br from-pink-400 to-purple-400 opacity-20 mix-blend-multiply blur-3xl filter" />
-          <div className="animate-blob animation-delay-2000 absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 opacity-20 mix-blend-multiply blur-3xl filter" />
-          <div className="animate-blob animation-delay-4000 absolute top-1/2 left-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-purple-400 to-indigo-400 opacity-20 mix-blend-multiply blur-3xl filter" />
-        </div>
+        {/* Dynamic Background System */}
+        <HeroBackground 
+          type={backgroundConfig.type}
+          interactive={backgroundConfig.interactive}
+          intensity={backgroundConfig.intensity}
+        />
 
         <div className="relative z-10 container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl text-center">
@@ -313,6 +314,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Background Demo Component */}
+      <BackgroundDemo />
     </>
   )
 }

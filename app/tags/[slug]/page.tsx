@@ -2,8 +2,6 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getAllPosts, getAllTags } from '@/lib/posts-utils'
 import Breadcrumb from '@/components/breadcrumb'
-import { SeriesPill } from '@/components/ui/series-pill'
-import { TagPill } from '@/components/ui/tag-pill'
 import { FeaturedBadge } from '@/components/ui/featured-badge'
 import { BrowseTopicsButton } from '@/components/ui/browse-topics-button'
 
