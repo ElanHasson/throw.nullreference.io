@@ -45,3 +45,4 @@ playwright-report/
 *.out
 **/optimized/**
 next-image-export-optimizer-hashes.json
+*.log
