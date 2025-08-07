@@ -50,18 +50,18 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
     let time = 0
     let windStrength = 0
     let windTarget = 0
-    let dayNightCycle = 0
+    // const dayNightCycle = 0 // Not used currently
     
     // User location (default to NYC)
     let userLatitude = 40.7128
-    let userLongitude = -74.0060
+    // let userLongitude = -74.0060 // Not used
     
     // Get user location if available
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           userLatitude = position.coords.latitude
-          userLongitude = position.coords.longitude
+          // userLongitude = position.coords.longitude
         },
         () => {
           // Keep default location on error
@@ -101,17 +101,30 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       jumpHeight: 0
     }))
     
-    // Initialize clouds
-    const clouds: Cloud[] = Array(5).fill(0).map(() => ({
-      x: Math.random() * canvas.width,
-      y: 50 + Math.random() * 150,
-      size: 50 + Math.random() * 100,
-      opacity: 0.3 + Math.random() * 0.3,
-      speed: 0.1 + Math.random() * 0.3
-    }))
+    // Initialize clouds with more variety
+    const clouds: Cloud[] = Array(8).fill(0).map((_, i) => {
+      const isNearMountains = Math.random() > 0.6 // 40% chance of being near mountains
+      const baseY = isNearMountains ? canvas.height * 0.4 + Math.random() * 100 : 50 + Math.random() * 150
+      
+      return {
+        x: (canvas.width / 8) * i + Math.random() * (canvas.width / 8),
+        y: baseY,
+        size: 50 + Math.random() * 80,
+        // Clouds near mountains are almost invisible
+        opacity: isNearMountains ? 0.02 + Math.random() * 0.03 : 0.2 + Math.random() * 0.3,
+        speed: isNearMountains ? 0.005 + Math.random() * 0.015 : 0.03 + Math.random() * 0.07,
+        type: isNearMountains ? 'stratus' : (Math.random() > 0.5 ? 'cumulus' : 'stratus'),
+        puffs: Array(Math.floor(4 + Math.random() * 3)).fill(0).map(() => ({
+          offsetX: (Math.random() - 0.5) * 60,
+          offsetY: (Math.random() - 0.5) * 30,
+          size: 0.5 + Math.random() * 0.5
+        })),
+        isNearMountains
+      }
+    }) as (Cloud & {puffs: Array<{offsetX: number, offsetY: number, size: number}>, isNearMountains: boolean, type: string})[]
 
     // Astronomical calculations
-    const getSunMoonPosition = (date: Date, latitude: number, longitude: number) => {
+    const getSunMoonPosition = (date: Date, latitude: number) => {
       const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000)
       const hour = date.getHours() + date.getMinutes() / 60
       
@@ -185,8 +198,8 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
           ctx.moveTo(x, baseY)
           
           // Left slope with crags
-          let currentX = x
-          let currentY = baseY
+          // let currentX = x
+          // let currentY = baseY
           const leftSteps = 8
           for (let j = 0; j < leftSteps; j++) {
             const progress = j / leftSteps
@@ -194,8 +207,8 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
             const targetY = baseY - height * progress * progress // Exponential curve
             const cragOffset = Math.sin(j * 2 + i) * 5 * (1 - progress)
             ctx.lineTo(targetX + cragOffset, targetY)
-            currentX = targetX
-            currentY = targetY
+            // currentX = targetX  
+            // currentY = targetY
           }
           
           // Peak
@@ -281,10 +294,25 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       twinkle: Math.random() * Math.PI * 2,
       brightness: 0.3 + Math.random() * 0.7
     }))
+    
+    // Comet state
+    let lastCometTime = 0
+    let nextCometInterval = 30000 + Math.random() * 60000 // 30-90 seconds
+    interface Comet {
+      x: number
+      y: number
+      vx: number
+      vy: number
+      size: number
+      tailLength: number
+      brightness: number
+      trail: Array<{x: number, y: number}>
+    }
+    let comet: Comet | null = null
 
     // Draw stars with twinkling effect
     const drawStars = () => {
-      stars.forEach((star, i) => {
+      stars.forEach((star) => {
         star.twinkle += 0.05
         const opacity = star.brightness * (0.5 + Math.sin(star.twinkle) * 0.5)
         
@@ -303,9 +331,102 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
         }
       })
     }
+    
+    // Initialize and update comet
+    const updateComet = () => {
+      const currentTime = Date.now()
+      
+      // Check if it's time for a new comet
+      if (!comet && currentTime - lastCometTime > nextCometInterval) {
+        // Create new comet
+        const startSide = Math.random() > 0.5 ? 'left' : 'right'
+        comet = {
+          x: startSide === 'left' ? -50 : canvas.width + 50,
+          y: Math.random() * canvas.height * 0.4 + 50,
+          vx: startSide === 'left' ? 3 + Math.random() * 2 : -(3 + Math.random() * 2),
+          vy: (Math.random() - 0.5) * 1.5,
+          size: 2 + Math.random() * 2,
+          tailLength: 40 + Math.random() * 30,
+          brightness: 0.7 + Math.random() * 0.3,
+          trail: []
+        }
+        lastCometTime = currentTime
+        nextCometInterval = 30000 + Math.random() * 60000 // Next comet in 30-90 seconds
+      }
+      
+      // Update existing comet
+      if (comet) {
+        comet.x += comet.vx
+        comet.y += comet.vy
+        
+        // Add to trail
+        comet.trail.push({ x: comet.x, y: comet.y })
+        if (comet.trail.length > comet.tailLength) {
+          comet.trail.shift()
+        }
+        
+        // Remove comet when off screen
+        if (comet.x < -100 || comet.x > canvas.width + 100 || 
+            comet.y < -100 || comet.y > canvas.height + 100) {
+          comet = null
+        }
+      }
+    }
+    
+    // Draw comet
+    const drawComet = () => {
+      if (!comet) return
+      
+      ctx.save()
+      
+      // Draw trail
+      comet.trail.forEach((point, i) => {
+        const progress = i / comet!.trail.length
+        const opacity = progress * comet!.brightness * 0.6
+        const size = comet!.size * (1 - progress * 0.8)
+        
+        // Trail glow
+        const glowGradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, size * 4)
+        glowGradient.addColorStop(0, `hsla(200, 100%, 80%, ${opacity * 0.5})`)
+        glowGradient.addColorStop(0.5, `hsla(190, 100%, 70%, ${opacity * 0.3})`)
+        glowGradient.addColorStop(1, 'transparent')
+        
+        ctx.fillStyle = glowGradient
+        ctx.beginPath()
+        ctx.arc(point.x, point.y, size * 4, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Trail core
+        ctx.fillStyle = `hsla(200, 100%, 90%, ${opacity})`
+        ctx.beginPath()
+        ctx.arc(point.x, point.y, size, 0, Math.PI * 2)
+        ctx.fill()
+      })
+      
+      // Draw comet head
+      // Bright glow
+      const headGlow = ctx.createRadialGradient(comet.x, comet.y, 0, comet.x, comet.y, comet.size * 6)
+      headGlow.addColorStop(0, `hsla(60, 100%, 95%, ${comet.brightness})`)
+      headGlow.addColorStop(0.3, `hsla(200, 100%, 85%, ${comet.brightness * 0.6})`)
+      headGlow.addColorStop(0.6, `hsla(190, 100%, 75%, ${comet.brightness * 0.3})`)
+      headGlow.addColorStop(1, 'transparent')
+      
+      ctx.fillStyle = headGlow
+      ctx.beginPath()
+      ctx.arc(comet.x, comet.y, comet.size * 6, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Core
+      ctx.fillStyle = `hsla(60, 100%, 100%, ${comet.brightness})`
+      ctx.beginPath()
+      ctx.arc(comet.x, comet.y, comet.size, 0, Math.PI * 2)
+      ctx.fill()
+      
+      ctx.restore()
+    }
 
     // Draw realistic sun with proper positioning
-    const drawSun = (sun: {altitude: number, azimuth: number}, isDay: boolean) => {
+    const drawSun = (sun: {altitude: number, azimuth: number}) => {
       if (sun.altitude < -10) return // Don't draw if well below horizon
       
       // Convert altitude/azimuth to x/y position
@@ -439,28 +560,159 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       ctx.restore()
     }
 
-    // Draw clouds
-    const drawClouds = () => {
-      clouds.forEach(cloud => {
-        cloud.x += cloud.speed
-        if (cloud.x > canvas.width + cloud.size) {
-          cloud.x = -cloud.size
-          cloud.y = 50 + Math.random() * 150
+    // Draw realistic clouds
+    const drawClouds = (isDay: boolean) => {
+      type ExtendedCloud = Cloud & {puffs?: Array<{offsetX: number, offsetY: number, size: number}>, isNearMountains: boolean, type: string}
+      (clouds as ExtendedCloud[]).forEach((cloud) => {
+        // Mountain clouds move very slowly, others move normally
+        const windEffect = cloud.isNearMountains ? windStrength * 0.02 : windStrength * 0.2
+        cloud.x += cloud.speed + windEffect
+        if (cloud.x > canvas.width + cloud.size * 2) {
+          cloud.x = -cloud.size * 2
+          cloud.y = cloud.isNearMountains ? 
+            canvas.height * 0.4 + Math.random() * 100 : 
+            50 + Math.random() * 150
         }
         
         ctx.save()
-        ctx.fillStyle = `hsla(0, 0%, ${85 + dayNightCycle * 10}%, ${cloud.opacity})`
         
-        // Draw puffy cloud shape
-        for (let i = 0; i < 5; i++) {
-          const offsetX = Math.sin(i * 1.5) * cloud.size * 0.3
-          const offsetY = Math.cos(i * 2) * cloud.size * 0.2
-          const puffSize = cloud.size * (0.4 + Math.sin(i + time * 0.001) * 0.1)
+        // Special rendering for mountain fog/mist
+        if (cloud.isNearMountains) {
+          const brightness = isDay ? 98 : 85
           
-          ctx.beginPath()
-          ctx.arc(cloud.x + offsetX, cloud.y + offsetY, puffSize, 0, Math.PI * 2)
-          ctx.fill()
+          // Very subtle, stretched fog effect
+          for (let layer = 0; layer < 3; layer++) {
+            const stretch = 4 + layer * 1.5
+            const yOffset = layer * cloud.size * 0.05
+            const layerOpacity = cloud.opacity * (0.5 - layer * 0.15)
+            
+            const fogGradient = ctx.createLinearGradient(
+              cloud.x - cloud.size * stretch, 
+              cloud.y + yOffset,
+              cloud.x + cloud.size * stretch, 
+              cloud.y + yOffset
+            )
+            fogGradient.addColorStop(0, 'transparent')
+            fogGradient.addColorStop(0.15, `hsla(200, 10%, ${brightness}%, ${layerOpacity * 0.5})`)
+            fogGradient.addColorStop(0.5, `hsla(200, 10%, ${brightness - 2}%, ${layerOpacity})`)
+            fogGradient.addColorStop(0.85, `hsla(200, 10%, ${brightness}%, ${layerOpacity * 0.5})`)
+            fogGradient.addColorStop(1, 'transparent')
+            
+            ctx.fillStyle = fogGradient
+            ctx.beginPath()
+            ctx.ellipse(
+              cloud.x, 
+              cloud.y + yOffset, 
+              cloud.size * stretch, 
+              cloud.size * 0.08, 
+              Math.sin(time * 0.0005 + layer) * 0.05, 
+              0, 
+              Math.PI * 2
+            )
+            ctx.fill()
+          }
+        } else if (cloud.type === 'cumulus') {
+          // Fluffy cumulus clouds with multiple layers for depth
+          const brightness = isDay ? 100 : 75
+          
+          // Shadow layer (bottom)
+          cloud.puffs?.forEach((puff) => {
+            const puffX = cloud.x + puff.offsetX
+            const puffY = cloud.y + puff.offsetY + 5
+            const puffSize = cloud.size * puff.size * 0.9
+            
+            const shadowGradient = ctx.createRadialGradient(puffX, puffY, 0, puffX, puffY, puffSize)
+            shadowGradient.addColorStop(0, `hsla(220, 20%, ${brightness - 30}%, ${cloud.opacity * 0.3})`)
+            shadowGradient.addColorStop(0.7, `hsla(220, 20%, ${brightness - 25}%, ${cloud.opacity * 0.2})`)
+            shadowGradient.addColorStop(1, 'transparent')
+            
+            ctx.fillStyle = shadowGradient
+            ctx.beginPath()
+            ctx.arc(puffX, puffY, puffSize, 0, Math.PI * 2)
+            ctx.fill()
+          })
+          
+          // Main cloud body
+          cloud.puffs?.forEach((puff) => {
+            const puffX = cloud.x + puff.offsetX
+            const puffY = cloud.y + puff.offsetY
+            const puffSize = cloud.size * puff.size
+            
+            // Create gradient for each puff
+            const puffGradient = ctx.createRadialGradient(
+              puffX - puffSize * 0.3, 
+              puffY - puffSize * 0.3, 
+              0,
+              puffX, 
+              puffY, 
+              puffSize
+            )
+            puffGradient.addColorStop(0, `hsla(0, 0%, ${brightness}%, ${cloud.opacity * 0.9})`)
+            puffGradient.addColorStop(0.4, `hsla(0, 0%, ${brightness - 5}%, ${cloud.opacity * 0.7})`)
+            puffGradient.addColorStop(0.8, `hsla(0, 0%, ${brightness - 10}%, ${cloud.opacity * 0.4})`)
+            puffGradient.addColorStop(1, 'transparent')
+            
+            ctx.fillStyle = puffGradient
+            ctx.beginPath()
+            ctx.arc(puffX, puffY, puffSize, 0, Math.PI * 2)
+            ctx.fill()
+          })
+          
+          // Highlights (top layer)
+          cloud.puffs?.forEach((puff) => {
+            const puffX = cloud.x + puff.offsetX
+            const puffY = cloud.y + puff.offsetY - 5
+            const puffSize = cloud.size * puff.size * 0.6
+            
+            const highlightGradient = ctx.createRadialGradient(puffX, puffY, 0, puffX, puffY, puffSize)
+            highlightGradient.addColorStop(0, `hsla(0, 0%, ${brightness + 5}%, ${cloud.opacity * 0.5})`)
+            highlightGradient.addColorStop(0.5, `hsla(0, 0%, ${brightness}%, ${cloud.opacity * 0.2})`)
+            highlightGradient.addColorStop(1, 'transparent')
+            
+            ctx.fillStyle = highlightGradient
+            ctx.beginPath()
+            ctx.arc(puffX, puffY, puffSize, 0, Math.PI * 2)
+            ctx.fill()
+          })
+          
+        } else {
+          // Wispy stratus clouds
+          const brightness = isDay ? 95 : 70
+          
+          // Draw multiple wispy layers
+          for (let layer = 0; layer < 4; layer++) {
+            const stretch = 3 + layer * 0.8
+            const yOffset = layer * cloud.size * 0.08
+            const layerOpacity = cloud.opacity * (0.3 - layer * 0.07)
+            
+            // Create gradient for wispy effect
+            const wispGradient = ctx.createLinearGradient(
+              cloud.x - cloud.size * stretch, 
+              cloud.y + yOffset,
+              cloud.x + cloud.size * stretch, 
+              cloud.y + yOffset
+            )
+            wispGradient.addColorStop(0, 'transparent')
+            wispGradient.addColorStop(0.2, `hsla(0, 0%, ${brightness}%, ${layerOpacity})`)
+            wispGradient.addColorStop(0.5, `hsla(0, 0%, ${brightness - 5}%, ${layerOpacity * 0.8})`)
+            wispGradient.addColorStop(0.8, `hsla(0, 0%, ${brightness}%, ${layerOpacity})`)
+            wispGradient.addColorStop(1, 'transparent')
+            
+            ctx.fillStyle = wispGradient
+            ctx.beginPath()
+            ctx.ellipse(
+              cloud.x, 
+              cloud.y + yOffset, 
+              cloud.size * stretch, 
+              cloud.size * 0.15, 
+              Math.sin(time * 0.001 + layer) * 0.1, 
+              0, 
+              Math.PI * 2
+            )
+            ctx.fill()
+          }
         }
+        
         ctx.restore()
       })
     }
@@ -545,7 +797,7 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
         ctx.translate(x, y)
         
         switch(creature.type) {
-          case 'butterfly':
+          case 'butterfly': {
             // Wings
             const wingSpan = 15 * creature.size * (1 + Math.sin(creature.wingPhase) * 0.3)
             ctx.fillStyle = `hsl(${creature.color}, 70%, 50%)`
@@ -566,8 +818,9 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
             ctx.fillStyle = 'hsl(30, 40%, 30%)'
             ctx.fillRect(-1, -3, 2, 6)
             break
+          }
             
-          case 'bird':
+          case 'bird': {
             // Simple bird shape
             ctx.fillStyle = `hsl(${creature.color}, 70%, 50%)`
             ctx.beginPath()
@@ -585,8 +838,9 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
             ctx.lineTo(10 * creature.size, -5 - flapAngle * 10)
             ctx.stroke()
             break
+          }
             
-          case 'dragonfly':
+          case 'dragonfly': {
             // Four wings
             ctx.fillStyle = `hsla(${creature.color}, 70%, 50%, 0.33)`
             const dfWingSize = 12 * creature.size
@@ -607,8 +861,9 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
             ctx.fillStyle = `hsl(${creature.color}, 70%, 50%)`
             ctx.fillRect(-1, -8, 2, 16)
             break
+          }
             
-          case 'fairy':
+          case 'fairy': {
             // Glowing fairy
             const glowSize = 8 * creature.size * (1 + Math.sin(creature.wingPhase * 2) * 0.2)
             const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, glowSize)
@@ -635,6 +890,7 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
               ctx.fill()
             }
             break
+          }
         }
         
         ctx.restore()
@@ -643,7 +899,7 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
 
     // Draw ground animals
     const drawAnimals = () => {
-      animals.forEach((animal, i) => {
+      animals.forEach((animal) => {
         animal.animPhase += 0.1
         animal.x += animal.vx
         
@@ -863,7 +1119,7 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       
       // Get current astronomical positions based on real time and location
       const now = new Date()
-      const astro = getSunMoonPosition(now, userLatitude, userLongitude)
+      const astro = getSunMoonPosition(now, userLatitude)
       
       // Determine if it's day, twilight, or night based on sun altitude
       const isDay = astro.sun.altitude > 0
@@ -875,10 +1131,13 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       // Draw stars if it's night
       if (!isDay) {
         drawStars()
+        // Update and draw comet at night
+        updateComet()
+        drawComet()
       }
       
       // Draw sun and moon based on their calculated positions
-      drawSun(astro.sun, isDay)
+      drawSun(astro.sun)
       drawMoon(astro.moon, isDay)
       
       // Wind effect
@@ -888,7 +1147,7 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       windStrength += (windTarget - windStrength) * 0.02
 
       // Draw scene layers (back to front)
-      drawClouds()
+      drawClouds(isDay)
       drawMountains(isDay, astro.sun.altitude)
       
       // Clear branches for recalculation

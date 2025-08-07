@@ -12,7 +12,8 @@ import {
   FractalTrees,
   CodeRain,
   MatrixRain,
-  Ecosystem
+  Ecosystem,
+  HikingTrail
 } from './backgrounds'
 import { EcosystemWorker } from './backgrounds/ecosystem-worker'
 
@@ -28,6 +29,7 @@ export type BackgroundType =
   | 'fractal-tree'
   | 'cyber-grid'
   | 'ecosystem'
+  | 'hiking-trail'
 
 interface HeroBackgroundProps {
   type?: BackgroundType
@@ -110,6 +112,7 @@ export function HeroBackground({
       {type === 'code-rain' && <CodeRain canvasRef={canvasRef} intensity={intensity} />}
       {type === 'matrix-rain' && <MatrixRain canvasRef={canvasRef} intensity={intensity} />}
       {type === 'ecosystem' && <Ecosystem canvasRef={canvasRef} intensity={intensity} />}
+      {type === 'hiking-trail' && <HikingTrail canvasRef={canvasRef} intensity={intensity} />}
     </div>
   )
 }

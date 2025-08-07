@@ -305,8 +305,8 @@ function drawSky(isDay: boolean, twilight: boolean, sunAltitude: number) {
     gradient.addColorStop(1, 'hsl(220, 60%, 10%)')
   }
   
-  ctx.fillStyle = gradient
-  ctx.fillRect(0, 0, state.width, state.height)
+  ctx!.fillStyle = gradient
+  ctx!.fillRect(0, 0, state.width, state.height)
 }
 
 function drawStars() {
@@ -316,18 +316,18 @@ function drawStars() {
     star.twinkle += 0.05
     const opacity = star.brightness * (0.5 + Math.sin(star.twinkle) * 0.5)
     
-    ctx.fillStyle = `hsla(60, 100%, 90%, ${opacity})`
-    ctx.beginPath()
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = `hsla(60, 100%, 90%, ${opacity})`
+    ctx!.beginPath()
+    ctx!.arc(star.x, star.y, star.size, 0, Math.PI * 2)
+    ctx!.fill()
     
     // Add glow for brighter stars
     if (star.brightness > 0.7) {
-      const glow = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 3)
+      const glow = ctx!.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 3)
       glow.addColorStop(0, `hsla(60, 100%, 90%, ${opacity * 0.3})`)
       glow.addColorStop(1, 'transparent')
-      ctx.fillStyle = glow
-      ctx.fillRect(star.x - star.size * 3, star.y - star.size * 3, star.size * 6, star.size * 6)
+      ctx!.fillStyle = glow
+      ctx!.fillRect(star.x - star.size * 3, star.y - star.size * 3, star.size * 6, star.size * 6)
     }
   })
 }
@@ -356,12 +356,12 @@ function drawSun(sun: {altitude: number, azimuth: number}, isDay: boolean) {
       gradient.addColorStop(0, `hsla(45, 100%, 60%, ${0.4})`)
       gradient.addColorStop(1, 'transparent')
       
-      ctx.strokeStyle = gradient
-      ctx.lineWidth = 3
-      ctx.beginPath()
-      ctx.moveTo(x + Math.cos(angle) * sunRadius, y + Math.sin(angle) * sunRadius)
-      ctx.lineTo(x + Math.cos(angle) * rayLength, y + Math.sin(angle) * rayLength)
-      ctx.stroke()
+      ctx!.strokeStyle = gradient
+      ctx!.lineWidth = 3
+      ctx!.beginPath()
+      ctx!.moveTo(x + Math.cos(angle) * sunRadius, y + Math.sin(angle) * sunRadius)
+      ctx!.lineTo(x + Math.cos(angle) * rayLength, y + Math.sin(angle) * rayLength)
+      ctx!.stroke()
     }
   }
   
@@ -378,16 +378,16 @@ function drawSun(sun: {altitude: number, azimuth: number}, isDay: boolean) {
     glowGradient.addColorStop(1, 'transparent')
   }
   
-  ctx.fillStyle = glowGradient
-  ctx.beginPath()
-  ctx.arc(x, y, sunRadius * 3, 0, Math.PI * 2)
-  ctx.fill()
+  ctx!.fillStyle = glowGradient
+  ctx!.beginPath()
+  ctx!.arc(x, y, sunRadius * 3, 0, Math.PI * 2)
+  ctx!.fill()
   
   // Sun body
-  ctx.fillStyle = sun.altitude > 0 ? 'hsl(45, 100%, 65%)' : 'hsl(20, 100%, 55%)'
-  ctx.beginPath()
-  ctx.arc(x, y, sunRadius, 0, Math.PI * 2)
-  ctx.fill()
+  ctx!.fillStyle = sun.altitude > 0 ? 'hsl(45, 100%, 65%)' : 'hsl(20, 100%, 55%)'
+  ctx!.beginPath()
+  ctx!.arc(x, y, sunRadius, 0, Math.PI * 2)
+  ctx!.fill()
 }
 
 function drawMoon(moon: {altitude: number, azimuth: number, phase: number}, isDay: boolean) {
@@ -403,45 +403,45 @@ function drawMoon(moon: {altitude: number, azimuth: number, phase: number}, isDa
   glowGradient.addColorStop(0, `hsla(220, 20%, 85%, ${glowIntensity})`)
   glowGradient.addColorStop(1, 'transparent')
   
-  ctx.fillStyle = glowGradient
-  ctx.beginPath()
-  ctx.arc(x, y, moonRadius * 2, 0, Math.PI * 2)
-  ctx.fill()
+  ctx!.fillStyle = glowGradient
+  ctx!.beginPath()
+  ctx!.arc(x, y, moonRadius * 2, 0, Math.PI * 2)
+  ctx!.fill()
   
   // Moon body
-  ctx.fillStyle = isDay ? 'hsla(220, 20%, 85%, 0.5)' : 'hsla(220, 20%, 85%, 0.9)'
-  ctx.beginPath()
-  ctx.arc(x, y, moonRadius, 0, Math.PI * 2)
-  ctx.fill()
+  ctx!.fillStyle = isDay ? 'hsla(220, 20%, 85%, 0.5)' : 'hsla(220, 20%, 85%, 0.9)'
+  ctx!.beginPath()
+  ctx!.arc(x, y, moonRadius, 0, Math.PI * 2)
+  ctx!.fill()
   
   // Moon phase shadow
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(x, y, moonRadius, 0, Math.PI * 2)
-  ctx.clip()
+  ctx!.save()
+  ctx!.beginPath()
+  ctx!.arc(x, y, moonRadius, 0, Math.PI * 2)
+  ctx!.clip()
   
   if (moon.phase < 0.5) {
     // Waxing - shadow on left
     const shadowX = x - moonRadius + (moon.phase * 2 * moonRadius)
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
-    ctx.fillRect(x - moonRadius, y - moonRadius, shadowX - (x - moonRadius), moonRadius * 2)
+    ctx!.fillStyle = 'rgba(0, 0, 0, 0.7)'
+    ctx!.fillRect(x - moonRadius, y - moonRadius, shadowX - (x - moonRadius), moonRadius * 2)
   } else {
     // Waning - shadow on right
     const shadowX = x - moonRadius + ((moon.phase - 0.5) * 2 * moonRadius)
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
-    ctx.fillRect(shadowX, y - moonRadius, x + moonRadius - shadowX, moonRadius * 2)
+    ctx!.fillStyle = 'rgba(0, 0, 0, 0.7)'
+    ctx!.fillRect(shadowX, y - moonRadius, x + moonRadius - shadowX, moonRadius * 2)
   }
   
-  ctx.restore()
+  ctx!.restore()
   
   // Moon craters
-  ctx.fillStyle = 'hsla(220, 20%, 75%, 0.5)'
-  ctx.beginPath()
-  ctx.arc(x - moonRadius * 0.3, y - moonRadius * 0.2, moonRadius * 0.15, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.arc(x + moonRadius * 0.2, y + moonRadius * 0.3, moonRadius * 0.1, 0, Math.PI * 2)
-  ctx.fill()
+  ctx!.fillStyle = 'hsla(220, 20%, 75%, 0.5)'
+  ctx!.beginPath()
+  ctx!.arc(x - moonRadius * 0.3, y - moonRadius * 0.2, moonRadius * 0.15, 0, Math.PI * 2)
+  ctx!.fill()
+  ctx!.beginPath()
+  ctx!.arc(x + moonRadius * 0.2, y + moonRadius * 0.3, moonRadius * 0.1, 0, Math.PI * 2)
+  ctx!.fill()
 }
 
 function updateWind() {
@@ -481,9 +481,9 @@ function drawWindGusts() {
   
   state.windGusts.forEach((gust: any) => {
     gust.tendrils.forEach((tendril: any, i: number) => {
-      ctx.strokeStyle = `hsla(200, 30%, 80%, ${gust.strength * 0.3})`
-      ctx.lineWidth = 1
-      ctx.beginPath()
+      ctx!.strokeStyle = `hsla(200, 30%, 80%, ${gust.strength * 0.3})`
+      ctx!.lineWidth = 1
+      ctx!.beginPath()
       
       const points = 20
       for (let j = 0; j <= points; j++) {
@@ -493,13 +493,13 @@ function drawWindGusts() {
           Math.sin(progress * Math.PI * 2 + tendril.phase + state.time * 0.05) * tendril.amplitude
         
         if (j === 0) {
-          ctx.moveTo(x, y)
+          ctx!.moveTo(x, y)
         } else {
-          ctx.lineTo(x, y)
+          ctx!.lineTo(x, y)
         }
       }
       
-      ctx.stroke()
+      ctx!.stroke()
     })
   })
 }
@@ -514,7 +514,7 @@ function drawClouds(isDay: boolean) {
       cloud.y = 30 + Math.random() * 200  // More vertical variation
     }
     
-    ctx.save()
+    ctx!.save()
     
     if (cloud.type === 'cumulus') {
       // Soft, natural cumulus clouds with gradient
@@ -523,7 +523,7 @@ function drawClouds(isDay: boolean) {
       // Draw cloud with soft edges using multiple passes
       for (let pass = 0; pass < 3; pass++) {
         const opacity = cloud.opacity * (0.2 - pass * 0.05)
-        ctx.fillStyle = `hsla(0, 0%, ${brightness}%, ${opacity})`
+        ctx!.fillStyle = `hsla(0, 0%, ${brightness}%, ${opacity})`
         
         // Create natural cloud shape with random puffs
         for (let i = 0; i < 8; i++) {
@@ -533,15 +533,15 @@ function drawClouds(isDay: boolean) {
           const offsetY = Math.sin(angle) * distance * 0.5 // Flatten vertically
           const puffSize = cloud.size * (0.6 + Math.random() * 0.2 - pass * 0.1)
           
-          ctx.beginPath()
-          ctx.arc(cloud.x + offsetX, cloud.y + offsetY, puffSize, 0, Math.PI * 2)
-          ctx.fill()
+          ctx!.beginPath()
+          ctx!.arc(cloud.x + offsetX, cloud.y + offsetY, puffSize, 0, Math.PI * 2)
+          ctx!.fill()
         }
         
         // Central mass
-        ctx.beginPath()
-        ctx.ellipse(cloud.x, cloud.y, cloud.size * (1.2 - pass * 0.1), cloud.size * (0.6 - pass * 0.05), 0, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(cloud.x, cloud.y, cloud.size * (1.2 - pass * 0.1), cloud.size * (0.6 - pass * 0.05), 0, 0, Math.PI * 2)
+        ctx!.fill()
       }
     } else {
       // Wispy stratus clouds
@@ -549,17 +549,17 @@ function drawClouds(isDay: boolean) {
       
       // Draw wispy layers
       for (let layer = 0; layer < 3; layer++) {
-        ctx.fillStyle = `hsla(0, 0%, ${brightness}%, ${cloud.opacity * 0.15})`
+        ctx!.fillStyle = `hsla(0, 0%, ${brightness}%, ${cloud.opacity * 0.15})`
         
-        ctx.beginPath()
+        ctx!.beginPath()
         const stretch = 2 + layer * 0.5
         const yOffset = layer * cloud.size * 0.1
-        ctx.ellipse(cloud.x, cloud.y + yOffset, cloud.size * stretch, cloud.size * 0.2, Math.sin(state.time * 0.001) * 0.1, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.ellipse(cloud.x, cloud.y + yOffset, cloud.size * stretch, cloud.size * 0.2, Math.sin(state.time * 0.001) * 0.1, 0, Math.PI * 2)
+        ctx!.fill()
       }
     }
     
-    ctx.restore()
+    ctx!.restore()
   })
 }
 
@@ -581,13 +581,13 @@ function drawMountains(isDay: boolean, sunAltitude: number) {
       
       // Mountain shadow (offset based on sun position)
       const shadowOffset = isDay ? (sunAltitude / 90) * 20 : 5
-      ctx.fillStyle = `hsla(220, 30%, ${10 + layer * 5}%, ${0.3 * layerDepth})`
-      ctx.beginPath()
-      ctx.moveTo(x + shadowOffset, baseY)
-      ctx.lineTo(peakX + shadowOffset, peakY)
-      ctx.lineTo(x + width + shadowOffset, baseY)
-      ctx.closePath()
-      ctx.fill()
+      ctx!.fillStyle = `hsla(220, 30%, ${10 + layer * 5}%, ${0.3 * layerDepth})`
+      ctx!.beginPath()
+      ctx!.moveTo(x + shadowOffset, baseY)
+      ctx!.lineTo(peakX + shadowOffset, peakY)
+      ctx!.lineTo(x + width + shadowOffset, baseY)
+      ctx!.closePath()
+      ctx!.fill()
       
       // Mountain gradient
       const gradient = ctx.createLinearGradient(0, peakY, 0, baseY)
@@ -597,13 +597,13 @@ function drawMountains(isDay: boolean, sunAltitude: number) {
       gradient.addColorStop(0.7, `hsla(220, 15%, ${lightness + 5}%, ${0.8 * layerDepth})`)
       gradient.addColorStop(1, `hsla(220, 10%, ${lightness}%, ${0.8 * layerDepth})`)
       
-      ctx.fillStyle = gradient
-      ctx.beginPath()
-      ctx.moveTo(x, baseY)
-      ctx.lineTo(peakX, peakY)
-      ctx.lineTo(x + width, baseY)
-      ctx.closePath()
-      ctx.fill()
+      ctx!.fillStyle = gradient
+      ctx!.beginPath()
+      ctx!.moveTo(x, baseY)
+      ctx!.lineTo(peakX, peakY)
+      ctx!.lineTo(x + width, baseY)
+      ctx!.closePath()
+      ctx!.fill()
       
       // Natural snow cap
       if (height > 150 && layer < 2) {
@@ -622,10 +622,10 @@ function drawMountains(isDay: boolean, sunAltitude: number) {
           snowGradient.addColorStop(0.5, `hsla(200, 15%, ${snowBrightness - 5}%, 0.7)`)
           snowGradient.addColorStop(1, `hsla(200, 10%, ${snowBrightness - 10}%, 0.3)`)
           
-          ctx.fillStyle = snowGradient
-          ctx.beginPath()
-          ctx.ellipse(snowX, snowY, snowWidth * layerDepth, snowWidth * 0.6 * layerDepth, Math.random() * Math.PI, 0, Math.PI * 2)
-          ctx.fill()
+          ctx!.fillStyle = snowGradient
+          ctx!.beginPath()
+          ctx!.ellipse(snowX, snowY, snowWidth * layerDepth, snowWidth * 0.6 * layerDepth, Math.random() * Math.PI, 0, Math.PI * 2)
+          ctx!.fill()
         }
         
         // Main snow cap
@@ -637,41 +637,41 @@ function drawMountains(isDay: boolean, sunAltitude: number) {
         mainSnowGradient.addColorStop(1, `hsla(200, 10%, ${brightness - 15}%, 0.4)`)
         
         // Draw irregular snow cap shape
-        ctx.fillStyle = mainSnowGradient
-        ctx.beginPath()
-        ctx.moveTo(peakX - 35 * layerDepth, snowLine)
-        ctx.quadraticCurveTo(peakX - 20 * layerDepth, peakY + height * 0.15, peakX, peakY)
-        ctx.quadraticCurveTo(peakX + 20 * layerDepth, peakY + height * 0.15, peakX + 35 * layerDepth, snowLine)
-        ctx.lineTo(peakX + 25 * layerDepth, snowLine + 10)
-        ctx.lineTo(peakX - 25 * layerDepth, snowLine + 10)
-        ctx.closePath()
-        ctx.fill()
+        ctx!.fillStyle = mainSnowGradient
+        ctx!.beginPath()
+        ctx!.moveTo(peakX - 35 * layerDepth, snowLine)
+        ctx!.quadraticCurveTo(peakX - 20 * layerDepth, peakY + height * 0.15, peakX, peakY)
+        ctx!.quadraticCurveTo(peakX + 20 * layerDepth, peakY + height * 0.15, peakX + 35 * layerDepth, snowLine)
+        ctx!.lineTo(peakX + 25 * layerDepth, snowLine + 10)
+        ctx!.lineTo(peakX - 25 * layerDepth, snowLine + 10)
+        ctx!.closePath()
+        ctx!.fill()
         
         // Subtle highlights for depth
         if (isDay && sunAltitude > 0) {
-          ctx.fillStyle = `hsla(45, 30%, 100%, ${0.2 * (sunAltitude / 90)})`
-          ctx.beginPath()
-          ctx.moveTo(peakX - 15 * layerDepth, peakY + 15)
-          ctx.quadraticCurveTo(peakX, peakY + 5, peakX + 10 * layerDepth, peakY + 25)
-          ctx.lineTo(peakX + 5 * layerDepth, peakY + 30)
-          ctx.lineTo(peakX - 10 * layerDepth, peakY + 20)
-          ctx.closePath()
-          ctx.fill()
+          ctx!.fillStyle = `hsla(45, 30%, 100%, ${0.2 * (sunAltitude / 90)})`
+          ctx!.beginPath()
+          ctx!.moveTo(peakX - 15 * layerDepth, peakY + 15)
+          ctx!.quadraticCurveTo(peakX, peakY + 5, peakX + 10 * layerDepth, peakY + 25)
+          ctx!.lineTo(peakX + 5 * layerDepth, peakY + 30)
+          ctx!.lineTo(peakX - 10 * layerDepth, peakY + 20)
+          ctx!.closePath()
+          ctx!.fill()
         }
       }
       
       // Rock texture details
-      ctx.strokeStyle = `hsla(220, 15%, ${lightness - 5}%, ${0.2 * layerDepth})`
-      ctx.lineWidth = 1
+      ctx!.strokeStyle = `hsla(220, 15%, ${lightness - 5}%, ${0.2 * layerDepth})`
+      ctx!.lineWidth = 1
       for (let j = 0; j < 5; j++) {
         const rockY = peakY + (height * 0.3) + j * 20
         const rockX1 = peakX - (state.height * 0.7 - rockY) * 0.5
         const rockX2 = peakX + (state.height * 0.7 - rockY) * 0.3
         
-        ctx.beginPath()
-        ctx.moveTo(rockX1, rockY)
-        ctx.lineTo(rockX2, rockY + Math.random() * 10)
-        ctx.stroke()
+        ctx!.beginPath()
+        ctx!.moveTo(rockX1, rockY)
+        ctx!.lineTo(rockX2, rockY + Math.random() * 10)
+        ctx!.stroke()
       }
     }
   }
@@ -723,26 +723,26 @@ function drawBranch(
 
   // Tree trunk and branches
   const thickness = Math.max(depth * 0.8, 0.5)
-  ctx.strokeStyle = `hsla(25, 40%, ${20 + depth * 3}%, 0.9)`
-  ctx.lineWidth = thickness
-  ctx.beginPath()
-  ctx.moveTo(x, y)
-  ctx.lineTo(endX, endY)
-  ctx.stroke()
+  ctx!.strokeStyle = `hsla(25, 40%, ${20 + depth * 3}%, 0.9)`
+  ctx!.lineWidth = thickness
+  ctx!.beginPath()
+  ctx!.moveTo(x, y)
+  ctx!.lineTo(endX, endY)
+  ctx!.stroke()
 
   // Leaves
   if (depth <= 3 && growthFactor > 0.7) {
     const seasonalHue = 90 + Math.sin(state.time * 0.0001) * 30
-    ctx.fillStyle = `hsla(${seasonalHue}, 60%, ${40 + depth * 5}%, 0.7)`
+    ctx!.fillStyle = `hsla(${seasonalHue}, 60%, ${40 + depth * 5}%, 0.7)`
     
     for (let i = 0; i < 3; i++) {
       const leafX = x + (endX - x) * (0.3 + i * 0.3)
       const leafY = y + (endY - y) * (0.3 + i * 0.3)
       const leafSize = 3 + Math.sin(state.time * 0.01 + i) * 1
       
-      ctx.beginPath()
-      ctx.ellipse(leafX, leafY, leafSize * 2, leafSize, windAngle + Math.PI / 4, 0, Math.PI * 2)
-      ctx.fill()
+      ctx!.beginPath()
+      ctx!.ellipse(leafX, leafY, leafSize * 2, leafSize, windAngle + Math.PI / 4, 0, Math.PI * 2)
+      ctx!.fill()
     }
   }
 
@@ -776,100 +776,100 @@ function drawCreatures() {
     const x = branch.x + Math.sin(creature.wingPhase * 0.5) * 10
     const y = branch.y + Math.cos(creature.wingPhase * 0.3) * 5
     
-    ctx.save()
-    ctx.translate(x, y)
+    ctx!.save()
+    ctx!.translate(x, y)
     
     switch(creature.type) {
       case 'butterfly':
         // Wings
         const wingSpan = 15 * creature.size * (1 + Math.sin(creature.wingPhase) * 0.3)
-        ctx.fillStyle = `hsla(${creature.hue}, 70%, 50%, 0.7)`
+        ctx!.fillStyle = `hsla(${creature.hue}, 70%, 50%, 0.7)`
         
         // Left wing
-        ctx.beginPath()
-        ctx.ellipse(-wingSpan/2, 0, wingSpan/2, wingSpan/3, -Math.PI/6 + Math.sin(creature.wingPhase) * 0.3, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(-wingSpan/2, 0, wingSpan/2, wingSpan/3, -Math.PI/6 + Math.sin(creature.wingPhase) * 0.3, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Right wing
-        ctx.beginPath()
-        ctx.ellipse(wingSpan/2, 0, wingSpan/2, wingSpan/3, Math.PI/6 - Math.sin(creature.wingPhase) * 0.3, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(wingSpan/2, 0, wingSpan/2, wingSpan/3, Math.PI/6 - Math.sin(creature.wingPhase) * 0.3, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Body
-        ctx.fillStyle = 'hsl(30, 40%, 30%)'
-        ctx.fillRect(-1, -3, 2, 6)
+        ctx!.fillStyle = 'hsl(30, 40%, 30%)'
+        ctx!.fillRect(-1, -3, 2, 6)
         break
         
       case 'bird':
-        ctx.fillStyle = `hsl(${creature.hue}, 70%, 50%)`
-        ctx.beginPath()
-        ctx.arc(0, 0, 4 * creature.size, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = `hsl(${creature.hue}, 70%, 50%)`
+        ctx!.beginPath()
+        ctx!.arc(0, 0, 4 * creature.size, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Wing flap
         const flapAngle = Math.sin(creature.wingPhase) * 0.5
-        ctx.strokeStyle = `hsl(${creature.hue}, 70%, 50%)`
-        ctx.lineWidth = 2
-        ctx.beginPath()
-        ctx.moveTo(0, 0)
-        ctx.lineTo(-10 * creature.size, -5 + flapAngle * 10)
-        ctx.moveTo(0, 0)
-        ctx.lineTo(10 * creature.size, -5 - flapAngle * 10)
-        ctx.stroke()
+        ctx!.strokeStyle = `hsl(${creature.hue}, 70%, 50%)`
+        ctx!.lineWidth = 2
+        ctx!.beginPath()
+        ctx!.moveTo(0, 0)
+        ctx!.lineTo(-10 * creature.size, -5 + flapAngle * 10)
+        ctx!.moveTo(0, 0)
+        ctx!.lineTo(10 * creature.size, -5 - flapAngle * 10)
+        ctx!.stroke()
         break
         
       case 'dragonfly':
         // Wings
-        ctx.fillStyle = `hsla(${creature.hue}, 70%, 50%, 0.33)`
+        ctx!.fillStyle = `hsla(${creature.hue}, 70%, 50%, 0.33)`
         const dfWingSize = 12 * creature.size
         
         for (let w = 0; w < 4; w++) {
           const wingAngle = (w / 4) * Math.PI + Math.sin(creature.wingPhase * 2) * 0.2
-          ctx.beginPath()
-          ctx.ellipse(
+          ctx!.beginPath()
+          ctx!.ellipse(
             Math.cos(wingAngle) * dfWingSize/2,
             Math.sin(wingAngle) * dfWingSize/2,
             dfWingSize, dfWingSize/4,
             wingAngle, 0, Math.PI * 2
           )
-          ctx.fill()
+          ctx!.fill()
         }
         
         // Body
-        ctx.fillStyle = `hsl(${creature.hue}, 70%, 50%)`
-        ctx.fillRect(-1, -8, 2, 16)
+        ctx!.fillStyle = `hsl(${creature.hue}, 70%, 50%)`
+        ctx!.fillRect(-1, -8, 2, 16)
         break
         
       case 'fairy':
         // Glowing effect
         const glowSize = 8 * creature.size * (1 + Math.sin(creature.wingPhase * 2) * 0.2)
-        const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, glowSize)
+        const glow = ctx!.createRadialGradient(0, 0, 0, 0, 0, glowSize)
         glow.addColorStop(0, `hsla(${creature.hue}, 70%, 50%, 0.6)`)
         glow.addColorStop(0.5, `hsla(${creature.hue}, 70%, 50%, 0.27)`)
         glow.addColorStop(1, `hsla(${creature.hue}, 70%, 50%, 0)`)
         
-        ctx.fillStyle = glow
-        ctx.beginPath()
-        ctx.arc(0, 0, glowSize, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = glow
+        ctx!.beginPath()
+        ctx!.arc(0, 0, glowSize, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Sparkles
         for (let s = 0; s < 3; s++) {
           const sparkleAngle = (s / 3) * Math.PI * 2 + creature.wingPhase
           const sparkleR = glowSize + 5
-          ctx.fillStyle = `hsla(60, 100%, 80%, ${Math.sin(creature.wingPhase * 3 + s) * 0.5 + 0.5})`
-          ctx.beginPath()
-          ctx.arc(
+          ctx!.fillStyle = `hsla(60, 100%, 80%, ${Math.sin(creature.wingPhase * 3 + s) * 0.5 + 0.5})`
+          ctx!.beginPath()
+          ctx!.arc(
             Math.cos(sparkleAngle) * sparkleR,
             Math.sin(sparkleAngle) * sparkleR,
             2, 0, Math.PI * 2
           )
-          ctx.fill()
+          ctx!.fill()
         }
         break
     }
     
-    ctx.restore()
+    ctx!.restore()
   })
 }
 
@@ -898,130 +898,130 @@ function drawAnimals() {
     
     const y = animal.y - Math.abs(animal.jumpHeight)
     
-    ctx.save()
-    ctx.translate(animal.x, y)
+    ctx!.save()
+    ctx!.translate(animal.x, y)
     
     // Flip if moving left
     if (animal.vx < 0) {
-      ctx.scale(-1, 1)
+      ctx!.scale(-1, 1)
     }
     
     switch(animal.type) {
       case 'rabbit':
         // Body
-        ctx.fillStyle = `hsl(${animal.hue}, 40%, 40%)`
-        ctx.beginPath()
-        ctx.ellipse(0, 0, 8 * animal.size, 6 * animal.size, 0, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = `hsl(${animal.hue}, 40%, 40%)`
+        ctx!.beginPath()
+        ctx!.ellipse(0, 0, 8 * animal.size, 6 * animal.size, 0, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Head
-        ctx.beginPath()
-        ctx.arc(-6 * animal.size, -2, 5 * animal.size, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.arc(-6 * animal.size, -2, 5 * animal.size, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Ears
-        ctx.beginPath()
-        ctx.ellipse(-6 * animal.size, -8, 2 * animal.size, 6 * animal.size, -0.2, 0, Math.PI * 2)
-        ctx.ellipse(-4 * animal.size, -8, 2 * animal.size, 6 * animal.size, 0.2, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(-6 * animal.size, -8, 2 * animal.size, 6 * animal.size, -0.2, 0, Math.PI * 2)
+        ctx!.ellipse(-4 * animal.size, -8, 2 * animal.size, 6 * animal.size, 0.2, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Tail
-        ctx.fillStyle = 'hsla(0, 0%, 90%, 0.8)'
-        ctx.beginPath()
-        ctx.arc(8 * animal.size, -2, 3 * animal.size, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = 'hsla(0, 0%, 90%, 0.8)'
+        ctx!.beginPath()
+        ctx!.arc(8 * animal.size, -2, 3 * animal.size, 0, Math.PI * 2)
+        ctx!.fill()
         break
         
       case 'fox':
         // Body
-        ctx.fillStyle = `hsl(${animal.hue}, 50%, 35%)`
-        ctx.beginPath()
-        ctx.ellipse(0, 0, 12 * animal.size, 6 * animal.size, 0, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = `hsl(${animal.hue}, 50%, 35%)`
+        ctx!.beginPath()
+        ctx!.ellipse(0, 0, 12 * animal.size, 6 * animal.size, 0, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Head (triangular)
-        ctx.beginPath()
-        ctx.moveTo(-10 * animal.size, -2)
-        ctx.lineTo(-15 * animal.size, -6)
-        ctx.lineTo(-15 * animal.size, 2)
-        ctx.closePath()
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.moveTo(-10 * animal.size, -2)
+        ctx!.lineTo(-15 * animal.size, -6)
+        ctx!.lineTo(-15 * animal.size, 2)
+        ctx!.closePath()
+        ctx!.fill()
         
         // Tail
-        ctx.beginPath()
-        ctx.ellipse(10 * animal.size, -3, 8 * animal.size, 4 * animal.size, -0.3, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(10 * animal.size, -3, 8 * animal.size, 4 * animal.size, -0.3, 0, Math.PI * 2)
+        ctx!.fill()
         
         // White tail tip
-        ctx.fillStyle = 'hsla(0, 0%, 95%, 0.9)'
-        ctx.beginPath()
-        ctx.ellipse(14 * animal.size, -4, 3 * animal.size, 2 * animal.size, -0.3, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = 'hsla(0, 0%, 95%, 0.9)'
+        ctx!.beginPath()
+        ctx!.ellipse(14 * animal.size, -4, 3 * animal.size, 2 * animal.size, -0.3, 0, Math.PI * 2)
+        ctx!.fill()
         break
         
       case 'deer':
         // Body
-        ctx.fillStyle = `hsl(${animal.hue}, 30%, 40%)`
-        ctx.beginPath()
-        ctx.ellipse(0, -5, 10 * animal.size, 8 * animal.size, 0, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = `hsl(${animal.hue}, 30%, 40%)`
+        ctx!.beginPath()
+        ctx!.ellipse(0, -5, 10 * animal.size, 8 * animal.size, 0, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Neck
-        ctx.beginPath()
-        ctx.moveTo(-8 * animal.size, -5)
-        ctx.lineTo(-12 * animal.size, -15)
-        ctx.lineTo(-6 * animal.size, -10)
-        ctx.closePath()
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.moveTo(-8 * animal.size, -5)
+        ctx!.lineTo(-12 * animal.size, -15)
+        ctx!.lineTo(-6 * animal.size, -10)
+        ctx!.closePath()
+        ctx!.fill()
         
         // Head
-        ctx.beginPath()
-        ctx.ellipse(-12 * animal.size, -15, 4 * animal.size, 3 * animal.size, -0.5, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(-12 * animal.size, -15, 4 * animal.size, 3 * animal.size, -0.5, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Antlers
-        ctx.strokeStyle = `hsl(${animal.hue}, 30%, 30%)`
-        ctx.lineWidth = 1
-        ctx.beginPath()
-        ctx.moveTo(-13 * animal.size, -18)
-        ctx.lineTo(-15 * animal.size, -22)
-        ctx.moveTo(-11 * animal.size, -18)
-        ctx.lineTo(-9 * animal.size, -22)
-        ctx.stroke()
+        ctx!.strokeStyle = `hsl(${animal.hue}, 30%, 30%)`
+        ctx!.lineWidth = 1
+        ctx!.beginPath()
+        ctx!.moveTo(-13 * animal.size, -18)
+        ctx!.lineTo(-15 * animal.size, -22)
+        ctx!.moveTo(-11 * animal.size, -18)
+        ctx!.lineTo(-9 * animal.size, -22)
+        ctx!.stroke()
         
         // Legs
-        ctx.strokeStyle = `hsl(${animal.hue}, 30%, 30%)`
-        ctx.lineWidth = 2
+        ctx!.strokeStyle = `hsl(${animal.hue}, 30%, 30%)`
+        ctx!.lineWidth = 2
         for (let leg = 0; leg < 4; leg++) {
           const legX = -5 + leg * 4
           const legPhase = Math.sin(animal.animPhase + leg * Math.PI / 2) * 2
-          ctx.beginPath()
-          ctx.moveTo(legX * animal.size, 0)
-          ctx.lineTo(legX * animal.size + legPhase, 8)
-          ctx.stroke()
+          ctx!.beginPath()
+          ctx!.moveTo(legX * animal.size, 0)
+          ctx!.lineTo(legX * animal.size + legPhase, 8)
+          ctx!.stroke()
         }
         break
         
       case 'squirrel':
         // Body
-        ctx.fillStyle = `hsl(${animal.hue}, 45%, 35%)`
-        ctx.beginPath()
-        ctx.ellipse(0, 0, 6 * animal.size, 5 * animal.size, 0.2, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = `hsl(${animal.hue}, 45%, 35%)`
+        ctx!.beginPath()
+        ctx!.ellipse(0, 0, 6 * animal.size, 5 * animal.size, 0.2, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Head
-        ctx.beginPath()
-        ctx.arc(-5 * animal.size, -3, 4 * animal.size, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.arc(-5 * animal.size, -3, 4 * animal.size, 0, Math.PI * 2)
+        ctx!.fill()
         
         // Bushy tail
-        ctx.beginPath()
-        ctx.ellipse(6 * animal.size, -8, 5 * animal.size, 10 * animal.size, 0.5, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.beginPath()
+        ctx!.ellipse(6 * animal.size, -8, 5 * animal.size, 10 * animal.size, 0.5, 0, Math.PI * 2)
+        ctx!.fill()
         break
     }
     
-    ctx.restore()
+    ctx!.restore()
   })
 }
 
@@ -1033,11 +1033,11 @@ function drawGround(isDay: boolean) {
   groundGradient.addColorStop(0, `hsla(90, 40%, ${lightness + 5}%, 0.9)`)
   groundGradient.addColorStop(1, `hsla(30, 30%, ${lightness}%, 0.9)`)
   
-  ctx.fillStyle = groundGradient
-  ctx.fillRect(0, state.height - 100, state.width, 100)
+  ctx!.fillStyle = groundGradient
+  ctx!.fillRect(0, state.height - 100, state.width, 100)
   
   // Grass with wind effect
-  ctx.strokeStyle = `hsla(90, 50%, ${lightness + 10}%, 0.7)`
+  ctx!.strokeStyle = `hsla(90, 50%, ${lightness + 10}%, 0.7)`
   for (let x = 0; x < state.width; x += 5) {
     const grassHeight = 10 + Math.sin(x * 0.1 + state.time * 0.01) * 5
     const sway = Math.sin(state.time * 0.02 + x * 0.01) * 2 + state.windStrength * 3
@@ -1051,16 +1051,16 @@ function drawGround(isDay: boolean) {
       }
     })
     
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(x, state.height)
-    ctx.quadraticCurveTo(
+    ctx!.lineWidth = 1
+    ctx!.beginPath()
+    ctx!.moveTo(x, state.height)
+    ctx!.quadraticCurveTo(
       x + sway + gustSway, 
       state.height - grassHeight / 2, 
       x + (sway + gustSway) * 2, 
       state.height - grassHeight
     )
-    ctx.stroke()
+    ctx!.stroke()
   }
 }
 

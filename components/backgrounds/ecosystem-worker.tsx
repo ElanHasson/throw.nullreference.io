@@ -13,7 +13,7 @@ export function EcosystemWorker({ intensity = 'medium' }: EcosystemWorkerProps) 
 
   useEffect(() => {
     const canvas = canvasRef.current
-    console.log('EcosystemWorker: Canvas element:', canvas)
+    // console.log('EcosystemWorker: Canvas element:', canvas)
     if (!canvas) {
       console.warn('EcosystemWorker: No canvas element found')
       return
@@ -27,28 +27,28 @@ export function EcosystemWorker({ intensity = 'medium' }: EcosystemWorkerProps) 
 
     // Prevent multiple transfers
     if (transferredRef.current) {
-      console.log('EcosystemWorker: Already transferred')
+      // console.log('EcosystemWorker: Already transferred')
       return
     }
 
-    console.log('EcosystemWorker: Starting worker initialization')
+    // console.log('EcosystemWorker: Starting worker initialization')
     try {
       // Transfer control to offscreen canvas
       const offscreen = canvas.transferControlToOffscreen()
       transferredRef.current = true
 
       // Create worker
-      console.log('EcosystemWorker: Creating web worker')
+      // console.log('EcosystemWorker: Creating web worker')
       const worker = new Worker(
         new URL('../../workers/ecosystem.worker.ts', import.meta.url),
         { type: 'module' }
       )
       workerRef.current = worker
-      console.log('EcosystemWorker: Worker created successfully')
+      // console.log('EcosystemWorker: Worker created successfully')
       
       // Listen for messages from worker
-      worker.addEventListener('message', (event) => {
-        console.log('EcosystemWorker: Message from worker:', event.data)
+      worker.addEventListener('message', () => {
+        // console.log('EcosystemWorker: Message from worker:', event.data)
       })
       
       worker.addEventListener('error', (error) => {
@@ -125,7 +125,7 @@ export function EcosystemWorker({ intensity = 'medium' }: EcosystemWorkerProps) 
     } catch (error) {
       console.error('Error initializing ecosystem worker:', error)
     }
-  }, []) // Remove intensity dependency to prevent re-transfers
+  }, [intensity])
 
   return (
     <canvas 

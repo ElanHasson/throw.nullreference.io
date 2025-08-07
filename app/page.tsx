@@ -113,7 +113,7 @@ export default async function HomePage() {
                 <div className="relative">
                   <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-rose-400 to-purple-400 opacity-20 blur-3xl"></div>
                   <OptimizedImage
-                    src="/images/profile.jpg"
+                    src="/photos/elan_20250314_141124204.jpg"
                     alt="Elan's profile"
                     width={400}
                     height={400}

@@ -87,11 +87,18 @@ export const backgroundPresets: Record<string, BackgroundPreset> = {
     name: 'Living Ecosystem',
     description: 'Complete animated ecosystem with creatures, animals, and landscape',
     performance: 'high'
+  },
+  hikingTrail: {
+    type: 'hiking-trail',
+    intensity: 'medium',
+    name: 'Hiking Trail',
+    description: 'Mountain trail with hikers, birds, and pine trees',
+    performance: 'medium'
   }
 }
 
 // Get the current background configuration
 export function getCurrentBackground(): BackgroundPreset {
   // Change this line to switch backgrounds
-  return backgroundPresets.ecosystem;
+  return backgroundPresets.hikingTrail;
 }

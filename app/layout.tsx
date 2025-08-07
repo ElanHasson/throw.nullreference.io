@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Throwin' Exceptions",
     images: [
       {
-        url: '/images/profile.jpg',
+        url: '/photos/elan_20250314_141124204.jpg',
         width: 800,
         height: 600,
       },

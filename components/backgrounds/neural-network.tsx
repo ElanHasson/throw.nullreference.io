@@ -60,7 +60,7 @@ export function NeuralNetwork({ canvasRef, intensity = 'medium' }: CanvasBackgro
     })
 
     let pulsePhase = 0
-    let time = 0
+    // let time = 0 // Not used currently
     let signalWaves: Array<{ from: number, to: number, progress: number }> = []
     let animationId: number
 
@@ -69,7 +69,7 @@ export function NeuralNetwork({ canvasRef, intensity = 'medium' }: CanvasBackgro
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pulsePhase += 0.02
-      time++
+      // time++
 
       // Occasionally trigger signal propagation
       if (Math.random() > 0.98 && signalWaves.length < 10) {

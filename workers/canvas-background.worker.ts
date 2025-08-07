@@ -71,8 +71,8 @@ function initCanvas(offscreenCanvas: OffscreenCanvas, bgType: string, bgIntensit
 function resizeCanvas(width: number, height: number) {
   if (!canvas) return
   
-  canvas.width = width
-  canvas.height = height
+  canvas!.width = width
+  canvas!.height = height
   
   // Reinitialize positions based on new dimensions
   reinitializeBackground()
@@ -207,7 +207,7 @@ function initializeEcosystem() {
   
   // Initialize trees
   state.trees = Array(treeCount).fill(0).map((_, i) => ({
-    x: (canvas.width / (treeCount + 1)) * (i + 1),
+    x: (canvas!.width / (treeCount + 1)) * (i + 1),
     baseAngle: -Math.PI / 2 + (Math.random() - 0.5) * 0.1,
     growthRate: 0.3 + Math.random() * 0.2,
     phase: Math.random() * Math.PI * 2,
@@ -227,8 +227,8 @@ function initializeEcosystem() {
   
   // Initialize animals
   state.animals = Array(animalCount).fill(0).map(() => ({
-    x: Math.random() * canvas.width,
-    y: canvas.height - 20 - Math.random() * 50,
+    x: Math.random() * canvas!.width,
+    y: canvas!.height - 20 - Math.random() * 50,
     vx: (Math.random() - 0.5) * 2,
     size: 0.7 + Math.random() * 0.5,
     type: ['rabbit', 'fox', 'deer', 'squirrel'][Math.floor(Math.random() * 4)],
@@ -239,7 +239,7 @@ function initializeEcosystem() {
   
   // Initialize clouds
   state.clouds = Array(5).fill(0).map(() => ({
-    x: Math.random() * canvas.width,
+    x: Math.random() * canvas!.width,
     y: 50 + Math.random() * 150,
     size: 50 + Math.random() * 100,
     opacity: 0.3 + Math.random() * 0.3,
@@ -253,7 +253,7 @@ function initializeFractalTrees() {
   const treeCount = intensity === 'low' ? 3 : intensity === 'high' ? 7 : 5
   
   state.trees = Array(treeCount).fill(0).map((_, i) => ({
-    x: (canvas.width / (treeCount + 1)) * (i + 1),
+    x: (canvas!.width / (treeCount + 1)) * (i + 1),
     baseAngle: -Math.PI / 2 + (Math.random() - 0.5) * 0.2,
     growthRate: 0.3 + Math.random() * 0.3,
     phase: Math.random() * Math.PI * 2,
@@ -270,8 +270,8 @@ function initializeNeuralNetwork() {
   for (let i = 0; i < nodeCount; i++) {
     const layer = Math.floor(i / (nodeCount / 5))
     state.nodes.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
+      x: Math.random() * canvas!.width,
+      y: Math.random() * canvas!.height,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       connections: [],
@@ -320,7 +320,7 @@ function initializeCodeRain() {
   if (!canvas) return
   
   const fontSize = intensity === 'low' ? 20 : intensity === 'high' ? 12 : 14
-  const columns = Math.floor(canvas.width / fontSize)
+  const columns = Math.floor(canvas!.width / fontSize)
   
   state.drops = []
   for (let i = 0; i < columns; i++) {
@@ -332,7 +332,7 @@ function initializeMatrixRain() {
   if (!canvas) return
   
   const fontSize = intensity === 'low' ? 20 : intensity === 'high' ? 12 : 16
-  const columns = Math.floor(canvas.width / fontSize)
+  const columns = Math.floor(canvas!.width / fontSize)
   
   state.drops = []
   for (let i = 0; i < columns; i++) {
@@ -348,8 +348,8 @@ function initializeParticles() {
   state.particles = []
   for (let i = 0; i < particleCount; i++) {
     state.particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
+      x: Math.random() * canvas!.width,
+      y: Math.random() * canvas!.height,
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
       size: Math.random() * 3 + 1
@@ -372,7 +372,7 @@ function animateEcosystem() {
   state.windStrength += (state.windTarget - state.windStrength) * 0.02
   
   // Clear and draw sky
-  const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+  const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas!.height)
   if (state.dayNightCycle > 0.5) {
     skyGradient.addColorStop(0, `hsl(200, 70%, ${50 + state.dayNightCycle * 30}%)`)
     skyGradient.addColorStop(1, `hsl(180, 50%, ${70 + state.dayNightCycle * 15}%)`)
@@ -381,52 +381,52 @@ function animateEcosystem() {
     skyGradient.addColorStop(1, `hsl(220, 60%, ${15 + state.dayNightCycle * 20}%)`)
   }
   
-  ctx.fillStyle = skyGradient
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = skyGradient
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   // Draw sun/moon
-  const sunX = canvas.width * 0.8
+  const sunX = canvas!.width * 0.8
   const sunY = 100 + Math.sin(state.dayNightCycle * Math.PI) * 50
   const isDay = Math.cos(state.dayNightCycle * Math.PI * 2) > 0
   
   if (isDay) {
-    ctx.fillStyle = 'hsl(45, 100%, 65%)'
-    ctx.beginPath()
-    ctx.arc(sunX, sunY, 40, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = 'hsl(45, 100%, 65%)'
+    ctx!.beginPath()
+    ctx!.arc(sunX, sunY, 40, 0, Math.PI * 2)
+    ctx!.fill()
   } else {
-    ctx.fillStyle = 'hsla(220, 20%, 85%, 0.9)'
-    ctx.beginPath()
-    ctx.arc(sunX, sunY, 35, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = 'hsla(220, 20%, 85%, 0.9)'
+    ctx!.beginPath()
+    ctx!.arc(sunX, sunY, 35, 0, Math.PI * 2)
+    ctx!.fill()
   }
   
   // Update and draw clouds
   state.clouds.forEach((cloud: any) => {
     cloud.x += cloud.speed
-    if (cloud.x > canvas.width + cloud.size) {
+    if (cloud.x > canvas!.width + cloud.size) {
       cloud.x = -cloud.size
     }
     
-    ctx.fillStyle = `hsla(0, 0%, 85%, ${cloud.opacity})`
-    ctx.beginPath()
-    ctx.arc(cloud.x, cloud.y, cloud.size * 0.5, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = `hsla(0, 0%, 85%, ${cloud.opacity})`
+    ctx!.beginPath()
+    ctx!.arc(cloud.x, cloud.y, cloud.size * 0.5, 0, Math.PI * 2)
+    ctx!.fill()
   })
   
   // Draw mountains (simplified)
   for (let i = 0; i < 5; i++) {
-    const x = (canvas.width / 5) * i
-    const width = canvas.width / 5 + 50
+    const x = (canvas!.width / 5) * i
+    const width = canvas!.width / 5 + 50
     const height = 200 + Math.sin(i * 0.5) * 100
     
-    ctx.fillStyle = `hsla(220, 25%, 35%, 0.6)`
-    ctx.beginPath()
-    ctx.moveTo(x, canvas.height * 0.7)
-    ctx.lineTo(x + width / 2, canvas.height * 0.7 - height)
-    ctx.lineTo(x + width, canvas.height * 0.7)
-    ctx.closePath()
-    ctx.fill()
+    ctx!.fillStyle = `hsla(220, 25%, 35%, 0.6)`
+    ctx!.beginPath()
+    ctx!.moveTo(x, canvas!.height * 0.7)
+    ctx!.lineTo(x + width / 2, canvas!.height * 0.7 - height)
+    ctx!.lineTo(x + width, canvas!.height * 0.7)
+    ctx!.closePath()
+    ctx!.fill()
   }
   
   // Draw trees (simplified)
@@ -435,18 +435,18 @@ function animateEcosystem() {
     const growthFactor = 0.7 + (growthCycle + 1) * 0.15
     
     // Simple tree trunk
-    ctx.strokeStyle = 'hsla(25, 40%, 20%, 0.9)'
-    ctx.lineWidth = 5
-    ctx.beginPath()
-    ctx.moveTo(tree.x, canvas.height - 80)
-    ctx.lineTo(tree.x, canvas.height - 80 - 100 * growthFactor)
-    ctx.stroke()
+    ctx!.strokeStyle = 'hsla(25, 40%, 20%, 0.9)'
+    ctx!.lineWidth = 5
+    ctx!.beginPath()
+    ctx!.moveTo(tree.x, canvas!.height - 80)
+    ctx!.lineTo(tree.x, canvas!.height - 80 - 100 * growthFactor)
+    ctx!.stroke()
     
     // Simple leaves
-    ctx.fillStyle = `hsla(90, 60%, 40%, 0.7)`
-    ctx.beginPath()
-    ctx.arc(tree.x, canvas.height - 80 - 100 * growthFactor, 30 * growthFactor, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = `hsla(90, 60%, 40%, 0.7)`
+    ctx!.beginPath()
+    ctx!.arc(tree.x, canvas!.height - 80 - 100 * growthFactor, 30 * growthFactor, 0, Math.PI * 2)
+    ctx!.fill()
   })
   
   // Update animals
@@ -454,29 +454,29 @@ function animateEcosystem() {
     animal.animPhase += 0.1
     animal.x += animal.vx
     
-    if (animal.x < 0 || animal.x > canvas.width) {
+    if (animal.x < 0 || animal.x > canvas!.width) {
       animal.vx *= -1
-      animal.x = Math.max(0, Math.min(canvas.width, animal.x))
+      animal.x = Math.max(0, Math.min(canvas!.width, animal.x))
     }
     
     // Simple animal shape
-    ctx.fillStyle = `hsl(${animal.color}, 40%, 35%)`
-    ctx.beginPath()
-    ctx.ellipse(animal.x, animal.y, 10 * animal.size, 6 * animal.size, 0, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = `hsl(${animal.color}, 40%, 35%)`
+    ctx!.beginPath()
+    ctx!.ellipse(animal.x, animal.y, 10 * animal.size, 6 * animal.size, 0, 0, Math.PI * 2)
+    ctx!.fill()
   })
   
   // Draw ground
-  ctx.fillStyle = `hsla(90, 40%, 25%, 0.9)`
-  ctx.fillRect(0, canvas.height - 100, canvas.width, 100)
+  ctx!.fillStyle = `hsla(90, 40%, 25%, 0.9)`
+  ctx!.fillRect(0, canvas!.height - 100, canvas!.width, 100)
 }
 
 // Add other animation functions in simplified form...
 function animateFractalTrees() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.03)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(255, 255, 255, 0.03)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   state.time++
   
@@ -485,7 +485,7 @@ function animateFractalTrees() {
     const growthCycle = Math.sin(state.time * tree.growthRate * 0.01 + tree.phase)
     const growthFactor = 0.3 + (growthCycle + 1) * 0.35
     
-    drawSimpleBranch(tree.x, canvas.height, tree.baseAngle, 8, canvas.height / 5 * tree.size, growthFactor)
+    drawSimpleBranch(tree.x, canvas!.height, tree.baseAngle, 8, canvas!.height / 5 * tree.size, growthFactor)
   })
 }
 
@@ -495,12 +495,12 @@ function drawSimpleBranch(x: number, y: number, angle: number, depth: number, le
   const endX = x + Math.cos(angle) * length * growthFactor
   const endY = y + Math.sin(angle) * length * growthFactor
   
-  ctx.strokeStyle = `hsla(25, 40%, ${20 + depth * 3}%, 0.9)`
-  ctx.lineWidth = Math.max(depth * 0.5, 0.5)
-  ctx.beginPath()
-  ctx.moveTo(x, y)
-  ctx.lineTo(endX, endY)
-  ctx.stroke()
+  ctx!.strokeStyle = `hsla(25, 40%, ${20 + depth * 3}%, 0.9)`
+  ctx!.lineWidth = Math.max(depth * 0.5, 0.5)
+  ctx!.beginPath()
+  ctx!.moveTo(x, y)
+  ctx!.lineTo(endX, endY)
+  ctx!.stroke()
   
   const angleVariation = Math.PI / 6
   drawSimpleBranch(endX, endY, angle - angleVariation, depth - 1, length * 0.75, growthFactor)
@@ -510,8 +510,8 @@ function drawSimpleBranch(x: number, y: number, angle: number, depth: number, le
 function animateNeuralNetwork() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(255, 255, 255, 0.02)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   state.pulsePhase = (state.pulsePhase || 0) + 0.02
   state.time++
@@ -521,8 +521,8 @@ function animateNeuralNetwork() {
     node.x += node.vx
     node.y += node.vy
     
-    if (node.x < 0 || node.x > canvas.width) node.vx *= -1
-    if (node.y < 0 || node.y > canvas.height) node.vy *= -1
+    if (node.x < 0 || node.x > canvas!.width) node.vx *= -1
+    if (node.y < 0 || node.y > canvas!.height) node.vy *= -1
     
     node.activity *= 0.98
     node.hue = (node.hue + 0.1) % 360
@@ -540,12 +540,12 @@ function animateNeuralNetwork() {
       
       if (distance < 300) {
         const pulse = Math.sin(state.pulsePhase + i * 0.5) * 0.5 + 0.5
-        ctx.strokeStyle = `hsla(${node.hue}, 70%, 50%, ${0.1 + pulse * 0.2})`
-        ctx.lineWidth = 0.5 + pulse * 0.5
-        ctx.beginPath()
-        ctx.moveTo(node.x, node.y)
-        ctx.lineTo(target.x, target.y)
-        ctx.stroke()
+        ctx!.strokeStyle = `hsla(${node.hue}, 70%, 50%, ${0.1 + pulse * 0.2})`
+        ctx!.lineWidth = 0.5 + pulse * 0.5
+        ctx!.beginPath()
+        ctx!.moveTo(node.x, node.y)
+        ctx!.lineTo(target.x, target.y)
+        ctx!.stroke()
       }
     })
   })
@@ -555,42 +555,42 @@ function animateNeuralNetwork() {
     const pulse = Math.sin(state.pulsePhase + i * 0.5) * 0.5 + 0.5
     const size = 3 + pulse * 2
     
-    ctx.fillStyle = `hsla(${node.hue}, 70%, 50%, ${0.6 + pulse * 0.4})`
-    ctx.beginPath()
-    ctx.arc(node.x, node.y, size, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = `hsla(${node.hue}, 70%, 50%, ${0.6 + pulse * 0.4})`
+    ctx!.beginPath()
+    ctx!.arc(node.x, node.y, size, 0, Math.PI * 2)
+    ctx!.fill()
   })
 }
 
 function animateCyberGrid() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(0, 0, 10, 0.1)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(0, 0, 10, 0.1)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   state.time = (state.time || 0) + 0.01
   state.scrollOffset = (state.scrollOffset || 0) + 0.5
   state.colorShift = Math.sin(state.time) * 30
   
   const gridSpacing = intensity === 'low' ? 50 : intensity === 'high' ? 25 : 35
-  const horizon = canvas.height * 0.5
-  const vanishingPoint = { x: canvas.width / 2, y: horizon }
+  const horizon = canvas!.height * 0.5
+  const vanishingPoint = { x: canvas!.width / 2, y: horizon }
   
   // Draw grid lines
   const lineOffset = state.scrollOffset % gridSpacing
-  for (let y = horizon; y < canvas.height + gridSpacing; y += gridSpacing) {
+  for (let y = horizon; y < canvas!.height + gridSpacing; y += gridSpacing) {
     const adjustedY = y + lineOffset
     if (adjustedY < horizon) continue
     
-    const progress = (adjustedY - horizon) / (canvas.height - horizon)
+    const progress = (adjustedY - horizon) / (canvas!.height - horizon)
     const hue = 180 + state.colorShift + progress * 40
     
-    ctx.strokeStyle = `hsla(${hue}, 100%, 50%, ${0.4 - progress * 0.3})`
-    ctx.lineWidth = 1 + progress * 2
-    ctx.beginPath()
-    ctx.moveTo(0, adjustedY)
-    ctx.lineTo(canvas.width, adjustedY)
-    ctx.stroke()
+    ctx!.strokeStyle = `hsla(${hue}, 100%, 50%, ${0.4 - progress * 0.3})`
+    ctx!.lineWidth = 1 + progress * 2
+    ctx!.beginPath()
+    ctx!.moveTo(0, adjustedY)
+    ctx!.lineTo(canvas!.width, adjustedY)
+    ctx!.stroke()
   }
   
   // Update data streams
@@ -606,8 +606,8 @@ function animateCyberGrid() {
 function animateGeometricGrid() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(255, 255, 255, 0.02)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   state.rotation = (state.rotation || 0) + 0.005
   state.time = (state.time || 0) + 1
@@ -615,57 +615,57 @@ function animateGeometricGrid() {
   
   const gridSize = intensity === 'low' ? 80 : intensity === 'high' ? 40 : 60
   
-  ctx.save()
-  ctx.translate(canvas.width / 2, canvas.height / 2)
-  ctx.rotate(state.rotation)
-  ctx.translate(-canvas.width / 2, -canvas.height / 2)
+  ctx!.save()
+  ctx!.translate(canvas!.width / 2, canvas!.height / 2)
+  ctx!.rotate(state.rotation)
+  ctx!.translate(-canvas.width / 2, -canvas.height / 2)
   
-  for (let x = -gridSize; x < canvas.width + gridSize * 2; x += gridSize) {
-    for (let y = -gridSize; y < canvas.height + gridSize * 2; y += gridSize) {
+  for (let x = -gridSize; x < canvas!.width + gridSize * 2; x += gridSize) {
+    for (let y = -gridSize; y < canvas!.height + gridSize * 2; y += gridSize) {
       const distanceFromCenter = Math.sqrt(
-        Math.pow(x - canvas.width / 2, 2) + 
-        Math.pow(y - canvas.height / 2, 2)
+        Math.pow(x - canvas!.width / 2, 2) + 
+        Math.pow(y - canvas!.height / 2, 2)
       )
       
       const scale = Math.sin(distanceFromCenter * 0.005 - state.rotation * 5) * 0.5 + 0.5
       const hue = (distanceFromCenter * 0.5 + state.colorShift) % 360
       
-      ctx.strokeStyle = `hsla(${hue}, 60%, 50%, ${0.1 + scale * 0.2})`
-      ctx.lineWidth = 0.5 + scale
-      ctx.beginPath()
-      ctx.rect(
+      ctx!.strokeStyle = `hsla(${hue}, 60%, 50%, ${0.1 + scale * 0.2})`
+      ctx!.lineWidth = 0.5 + scale
+      ctx!.beginPath()
+      ctx!.rect(
         x - gridSize / 2 * scale,
         y - gridSize / 2 * scale,
         gridSize * scale,
         gridSize * scale
       )
-      ctx.stroke()
+      ctx!.stroke()
     }
   }
   
-  ctx.restore()
+  ctx!.restore()
 }
 
 function animateCodeRain() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(255, 255, 255, 0.05)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   const fontSize = intensity === 'low' ? 20 : intensity === 'high' ? 12 : 14
   const codeChars = 'const function return async await class extends import export default => {} [] () ; : , . < > / = + - * & | ! ?'.split(' ')
   
-  ctx.fillStyle = 'rgba(16, 185, 129, 0.8)'
-  ctx.font = `${fontSize}px monospace`
+  ctx!.fillStyle = 'rgba(16, 185, 129, 0.8)'
+  ctx!.font = `${fontSize}px monospace`
   
   state.drops.forEach((drop: number, i: number) => {
     const char = codeChars[Math.floor(Math.random() * codeChars.length)]
     const x = i * fontSize
     const y = drop * fontSize
     
-    ctx.fillText(char, x, y)
+    ctx!.fillText(char, x, y)
     
-    if (y > canvas.height && Math.random() > 0.975) {
+    if (y > canvas!.height && Math.random() > 0.975) {
       state.drops[i] = 0
     }
     
@@ -676,20 +676,20 @@ function animateCodeRain() {
 function animateMatrixRain() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(0, 0, 0, 0.05)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   const fontSize = intensity === 'low' ? 20 : intensity === 'high' ? 12 : 16
   const matrix = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   
-  ctx.fillStyle = '#0F0'
-  ctx.font = `${fontSize}px monospace`
+  ctx!.fillStyle = '#0F0'
+  ctx!.font = `${fontSize}px monospace`
   
   state.drops.forEach((drop: number, i: number) => {
     const char = matrix[Math.floor(Math.random() * matrix.length)]
-    ctx.fillText(char, i * fontSize, drop * fontSize)
+    ctx!.fillText(char, i * fontSize, drop * fontSize)
     
-    if (drop * fontSize > canvas.height && Math.random() > 0.975) {
+    if (drop * fontSize > canvas!.height && Math.random() > 0.975) {
       state.drops[i] = 1
     }
     
@@ -700,39 +700,39 @@ function animateMatrixRain() {
 function animateWaveMotion() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(255, 255, 255, 0.02)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   state.time = (state.time || 0) + 0.01
   
   const waveCount = intensity === 'low' ? 3 : intensity === 'high' ? 8 : 5
   
   for (let w = 0; w < waveCount; w++) {
-    ctx.strokeStyle = `hsla(${200 + w * 30}, 70%, 50%, 0.3)`
-    ctx.lineWidth = 2
-    ctx.beginPath()
+    ctx!.strokeStyle = `hsla(${200 + w * 30}, 70%, 50%, 0.3)`
+    ctx!.lineWidth = 2
+    ctx!.beginPath()
     
-    for (let x = 0; x <= canvas.width; x += 10) {
-      const y = canvas.height / 2 + 
+    for (let x = 0; x <= canvas!.width; x += 10) {
+      const y = canvas!.height / 2 + 
         Math.sin(x * 0.01 + state.time + w * 0.5) * 50 +
         Math.sin(x * 0.02 - state.time * 1.5 + w) * 30
       
       if (x === 0) {
-        ctx.moveTo(x, y)
+        ctx!.moveTo(x, y)
       } else {
-        ctx.lineTo(x, y)
+        ctx!.lineTo(x, y)
       }
     }
     
-    ctx.stroke()
+    ctx!.stroke()
   }
 }
 
 function animateParticles() {
   if (!ctx || !canvas) return
   
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx!.fillStyle = 'rgba(255, 255, 255, 0.05)'
+  ctx!.fillRect(0, 0, canvas!.width, canvas!.height)
   
   // Update particles
   state.particles.forEach((particle: any) => {
@@ -750,13 +750,13 @@ function animateParticles() {
     particle.y += particle.vy
     
     // Bounce off walls
-    if (particle.x < 0 || particle.x > canvas.width) {
+    if (particle.x < 0 || particle.x > canvas!.width) {
       particle.vx *= -0.9
-      particle.x = Math.max(0, Math.min(canvas.width, particle.x))
+      particle.x = Math.max(0, Math.min(canvas!.width, particle.x))
     }
-    if (particle.y < 0 || particle.y > canvas.height) {
+    if (particle.y < 0 || particle.y > canvas!.height) {
       particle.vy *= -0.9
-      particle.y = Math.max(0, Math.min(canvas.height, particle.y))
+      particle.y = Math.max(0, Math.min(canvas!.height, particle.y))
     }
     
     // Damping
@@ -772,22 +772,22 @@ function animateParticles() {
       const distance = Math.sqrt(dx * dx + dy * dy)
       
       if (distance < 100) {
-        ctx.strokeStyle = `rgba(147, 51, 234, ${0.2 * (1 - distance / 100)})`
-        ctx.lineWidth = 0.5
-        ctx.beginPath()
-        ctx.moveTo(p1.x, p1.y)
-        ctx.lineTo(p2.x, p2.y)
-        ctx.stroke()
+        ctx!.strokeStyle = `rgba(147, 51, 234, ${0.2 * (1 - distance / 100)})`
+        ctx!.lineWidth = 0.5
+        ctx!.beginPath()
+        ctx!.moveTo(p1.x, p1.y)
+        ctx!.lineTo(p2.x, p2.y)
+        ctx!.stroke()
       }
     })
   })
   
   // Draw particles
   state.particles.forEach((particle: any) => {
-    ctx.fillStyle = 'rgba(147, 51, 234, 0.6)'
-    ctx.beginPath()
-    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-    ctx.fill()
+    ctx!.fillStyle = 'rgba(147, 51, 234, 0.6)'
+    ctx!.beginPath()
+    ctx!.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+    ctx!.fill()
   })
 }
 
