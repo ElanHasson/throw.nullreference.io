@@ -31,6 +31,8 @@ export function CyberGrid({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       })
     }
 
+    let animationId: number
+
     const animate = () => {
       // Darker fade for cyberpunk feel
       ctx.fillStyle = 'rgba(0, 0, 10, 0.1)'
@@ -142,7 +144,7 @@ export function CyberGrid({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
         }
       }
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -155,6 +157,9 @@ export function CyberGrid({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('resize', handleResize)
     }
   }, [canvasRef, intensity])

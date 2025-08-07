@@ -25,6 +25,8 @@ export function MatrixRain({ canvasRef, intensity = 'medium' }: CanvasBackground
     const matrix = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     const matrixArray = matrix.split('')
 
+    let animationId: number
+
     const animate = () => {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -46,7 +48,7 @@ export function MatrixRain({ canvasRef, intensity = 'medium' }: CanvasBackground
         drops[i]++
       }
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -59,6 +61,9 @@ export function MatrixRain({ canvasRef, intensity = 'medium' }: CanvasBackground
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('resize', handleResize)
     }
   }, [canvasRef, intensity])

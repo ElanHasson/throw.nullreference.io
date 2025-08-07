@@ -4,7 +4,6 @@ import { getRecentPosts, getFeaturedPosts } from '@/lib/posts-utils'
 import { OptimizedImage } from '@/components/optimized-image'
 import { HeroBackground } from '@/components/hero-background'
 import { getCurrentBackground } from '@/lib/background-config'
-import { BackgroundDemo } from '@/components/background-demo'
 
 export default async function HomePage() {
   const recentPosts = await getRecentPosts()
@@ -314,9 +313,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Background Demo Component */}
-      <BackgroundDemo />
     </>
   )
 }

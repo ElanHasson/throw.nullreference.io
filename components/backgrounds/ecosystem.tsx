@@ -52,6 +52,23 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
     let windTarget = 0
     let dayNightCycle = 0
     
+    // User location (default to NYC)
+    let userLatitude = 40.7128
+    let userLongitude = -74.0060
+    
+    // Get user location if available
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userLatitude = position.coords.latitude
+          userLongitude = position.coords.longitude
+        },
+        () => {
+          // Keep default location on error
+        }
+      )
+    }
+    
     // Initialize trees
     const trees = Array(treeCount).fill(0).map((_, i) => ({
       x: (canvas.width / (treeCount + 1)) * (i + 1),
@@ -93,129 +110,331 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       speed: 0.1 + Math.random() * 0.3
     }))
 
-    // Draw mountain range
-    const drawMountains = () => {
-      const mountainCount = 5
+    // Astronomical calculations
+    const getSunMoonPosition = (date: Date, latitude: number, longitude: number) => {
+      const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000)
+      const hour = date.getHours() + date.getMinutes() / 60
+      
+      // Simplified sun position calculation
+      const declination = 23.45 * Math.sin((360 * (284 + dayOfYear) / 365) * Math.PI / 180)
+      const hourAngle = 15 * (hour - 12) // 15 degrees per hour
+      const solarAltitude = Math.asin(
+        Math.sin(latitude * Math.PI / 180) * Math.sin(declination * Math.PI / 180) +
+        Math.cos(latitude * Math.PI / 180) * Math.cos(declination * Math.PI / 180) * Math.cos(hourAngle * Math.PI / 180)
+      ) * 180 / Math.PI
+      
+      const solarAzimuth = Math.atan2(
+        Math.sin(hourAngle * Math.PI / 180),
+        Math.cos(hourAngle * Math.PI / 180) * Math.sin(latitude * Math.PI / 180) -
+        Math.tan(declination * Math.PI / 180) * Math.cos(latitude * Math.PI / 180)
+      ) * 180 / Math.PI + 180
+      
+      // Moon phase calculation (simplified)
+      const knownNewMoon = new Date(2000, 0, 6, 18, 14)
+      const daysSinceNewMoon = (date.getTime() - knownNewMoon.getTime()) / 86400000
+      const moonPhase = (daysSinceNewMoon % 29.53059) / 29.53059
+      
+      // Moon position (opposite of sun at full moon)
+      const moonAltitude = -solarAltitude + 30 * Math.sin(moonPhase * Math.PI * 2)
+      const moonAzimuth = (solarAzimuth + 180) % 360
+      
+      return {
+        sun: { altitude: solarAltitude, azimuth: solarAzimuth },
+        moon: { altitude: moonAltitude, azimuth: moonAzimuth, phase: moonPhase }
+      }
+    }
+
+    // Draw mountain range with crags and varied terrain
+    const drawMountains = (isDay: boolean, sunAltitude: number) => {
       ctx.save()
       
-      for (let i = 0; i < mountainCount; i++) {
-        const x = (canvas.width / mountainCount) * i
-        const width = canvas.width / mountainCount + 50
-        const height = 200 + Math.sin(i * 0.5) * 100
-        const peakX = x + width / 2 + Math.sin(i * 1.5) * 30
+      // Multiple mountain layers for depth
+      for (let layer = 0; layer < 3; layer++) {
+        const layerDepth = 1 - layer * 0.3
+        const mountainCount = 4 + layer
         
-        // Mountain shadow
-        ctx.fillStyle = `hsla(220, 30%, ${20 + dayNightCycle * 10}%, 0.3)`
-        ctx.beginPath()
-        ctx.moveTo(x, canvas.height * 0.7)
-        ctx.lineTo(peakX + 10, canvas.height * 0.7 - height)
-        ctx.lineTo(x + width + 10, canvas.height * 0.7)
-        ctx.closePath()
-        ctx.fill()
-        
-        // Mountain body
-        const gradient = ctx.createLinearGradient(0, canvas.height * 0.7 - height, 0, canvas.height * 0.7)
-        gradient.addColorStop(0, `hsla(220, 25%, ${35 + dayNightCycle * 20}%, 0.6)`)
-        gradient.addColorStop(0.3, `hsla(220, 20%, ${30 + dayNightCycle * 15}%, 0.6)`)
-        gradient.addColorStop(1, `hsla(220, 15%, ${25 + dayNightCycle * 10}%, 0.6)`)
-        
-        ctx.fillStyle = gradient
-        ctx.beginPath()
-        ctx.moveTo(x, canvas.height * 0.7)
-        ctx.lineTo(peakX, canvas.height * 0.7 - height)
-        ctx.lineTo(x + width, canvas.height * 0.7)
-        ctx.closePath()
-        ctx.fill()
-        
-        // Snow cap
-        if (height > 250) {
-          ctx.fillStyle = `hsla(0, 0%, ${90 + dayNightCycle * 10}%, 0.8)`
+        for (let i = 0; i < mountainCount; i++) {
+          const x = (canvas.width / mountainCount) * i - 50
+          const width = canvas.width / mountainCount + 100
+          const height = (200 + Math.sin(i * 0.7 + layer) * 80) * layerDepth
+          const peakX = x + width / 2 + Math.sin(i * 1.5 + layer * 0.5) * 40
+          const baseY = canvas.height * 0.7
+          const peakY = baseY - height
+          
+          // Mountain shadow
+          const shadowOffset = isDay ? (sunAltitude / 90) * 20 : 5
+          ctx.fillStyle = `hsla(220, 30%, ${10 + layer * 5}%, ${0.3 * layerDepth})`
           ctx.beginPath()
-          ctx.moveTo(peakX - 20, canvas.height * 0.7 - height + 40)
-          ctx.lineTo(peakX, canvas.height * 0.7 - height)
-          ctx.lineTo(peakX + 20, canvas.height * 0.7 - height + 40)
+          ctx.moveTo(x + shadowOffset, baseY)
+          ctx.lineTo(peakX + shadowOffset, peakY)
+          ctx.lineTo(x + width + shadowOffset, baseY)
           ctx.closePath()
           ctx.fill()
+          
+          // Mountain gradient
+          const gradient = ctx.createLinearGradient(0, peakY, 0, baseY)
+          const lightness = isDay ? 25 + layer * 10 + sunAltitude / 3 : 15 + layer * 5
+          gradient.addColorStop(0, `hsla(220, 25%, ${lightness + 15}%, ${0.8 * layerDepth})`)
+          gradient.addColorStop(0.3, `hsla(220, 20%, ${lightness + 10}%, ${0.8 * layerDepth})`)
+          gradient.addColorStop(0.7, `hsla(220, 15%, ${lightness + 5}%, ${0.8 * layerDepth})`)
+          gradient.addColorStop(1, `hsla(220, 10%, ${lightness}%, ${0.8 * layerDepth})`)
+          
+          // Draw mountain with crags
+          ctx.fillStyle = gradient
+          ctx.beginPath()
+          ctx.moveTo(x, baseY)
+          
+          // Left slope with crags
+          let currentX = x
+          let currentY = baseY
+          const leftSteps = 8
+          for (let j = 0; j < leftSteps; j++) {
+            const progress = j / leftSteps
+            const targetX = x + (peakX - x) * progress
+            const targetY = baseY - height * progress * progress // Exponential curve
+            const cragOffset = Math.sin(j * 2 + i) * 5 * (1 - progress)
+            ctx.lineTo(targetX + cragOffset, targetY)
+            currentX = targetX
+            currentY = targetY
+          }
+          
+          // Peak
+          ctx.lineTo(peakX, peakY)
+          
+          // Right slope with crags
+          const rightSteps = 8
+          for (let j = 0; j < rightSteps; j++) {
+            const progress = 1 - j / rightSteps
+            const targetX = peakX + (x + width - peakX) * (1 - progress)
+            const targetY = baseY - height * progress * progress
+            const cragOffset = Math.sin(j * 3 + i * 2) * 5 * (1 - progress)
+            ctx.lineTo(targetX + cragOffset, targetY)
+          }
+          
+          ctx.lineTo(x + width, baseY)
+          ctx.closePath()
+          ctx.fill()
+          
+          // Rock texture details
+          ctx.strokeStyle = `hsla(220, 15%, ${lightness - 5}%, ${0.2 * layerDepth})`
+          ctx.lineWidth = 1
+          for (let j = 0; j < 5; j++) {
+            const rockY = peakY + (height * 0.3) + j * 20
+            const rockX1 = peakX - (baseY - rockY) * 0.5
+            const rockX2 = peakX + (baseY - rockY) * 0.3
+            
+            ctx.beginPath()
+            ctx.moveTo(rockX1, rockY)
+            ctx.lineTo(rockX2, rockY + Math.random() * 10)
+            ctx.stroke()
+          }
+          
+          // Natural snow cap with irregular patches
+          if (height > 150 && layer < 2) {
+            const snowLine = peakY + height * 0.35
+            
+            // Irregular snow patches
+            for (let s = 0; s < 5; s++) {
+              const snowX = peakX + (Math.random() - 0.5) * width * 0.3
+              const snowY = peakY + Math.random() * (snowLine - peakY)
+              const snowWidth = 20 + Math.random() * 30
+              
+              const snowGradient = ctx.createRadialGradient(snowX, snowY, 0, snowX, snowY, snowWidth)
+              const snowBrightness = isDay ? 95 + sunAltitude / 18 : 80
+              snowGradient.addColorStop(0, `hsla(200, 20%, ${snowBrightness}%, 0.9)`)
+              snowGradient.addColorStop(0.5, `hsla(200, 15%, ${snowBrightness - 5}%, 0.7)`)
+              snowGradient.addColorStop(1, `hsla(200, 10%, ${snowBrightness - 10}%, 0.3)`)
+              
+              ctx.fillStyle = snowGradient
+              ctx.beginPath()
+              ctx.ellipse(snowX, snowY, snowWidth * layerDepth, snowWidth * 0.6 * layerDepth, Math.random() * Math.PI, 0, Math.PI * 2)
+              ctx.fill()
+            }
+            
+            // Main snow cap
+            const mainSnowGradient = ctx.createLinearGradient(peakX, peakY, peakX, snowLine)
+            const brightness = isDay ? 92 + sunAltitude / 12 : 75
+            mainSnowGradient.addColorStop(0, `hsla(200, 25%, ${brightness}%, 0.95)`)
+            mainSnowGradient.addColorStop(0.3, `hsla(200, 20%, ${brightness - 5}%, 0.85)`)
+            mainSnowGradient.addColorStop(1, `hsla(200, 10%, ${brightness - 15}%, 0.4)`)
+            
+            ctx.fillStyle = mainSnowGradient
+            ctx.beginPath()
+            ctx.moveTo(peakX - 35 * layerDepth, snowLine)
+            ctx.quadraticCurveTo(peakX - 20 * layerDepth, peakY + height * 0.15, peakX, peakY)
+            ctx.quadraticCurveTo(peakX + 20 * layerDepth, peakY + height * 0.15, peakX + 35 * layerDepth, snowLine)
+            ctx.lineTo(peakX + 25 * layerDepth, snowLine + 10)
+            ctx.lineTo(peakX - 25 * layerDepth, snowLine + 10)
+            ctx.closePath()
+            ctx.fill()
+          }
         }
       }
       ctx.restore()
     }
 
-    // Draw sun/moon
-    const drawCelestialBody = () => {
-      const sunX = canvas.width * 0.8
-      const sunY = 100 + Math.sin(dayNightCycle * Math.PI) * 50
-      const isDay = Math.cos(dayNightCycle * Math.PI * 2) > 0
+    // Initialize stars for nighttime
+    const stars = Array(100).fill(0).map(() => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.6,
+      size: Math.random() * 2 + 0.5,
+      twinkle: Math.random() * Math.PI * 2,
+      brightness: 0.3 + Math.random() * 0.7
+    }))
+
+    // Draw stars with twinkling effect
+    const drawStars = () => {
+      stars.forEach((star, i) => {
+        star.twinkle += 0.05
+        const opacity = star.brightness * (0.5 + Math.sin(star.twinkle) * 0.5)
+        
+        ctx.fillStyle = `hsla(60, 100%, 90%, ${opacity})`
+        ctx.beginPath()
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Add glow for brighter stars
+        if (star.brightness > 0.7) {
+          const glow = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 3)
+          glow.addColorStop(0, `hsla(60, 100%, 90%, ${opacity * 0.3})`)
+          glow.addColorStop(1, 'transparent')
+          ctx.fillStyle = glow
+          ctx.fillRect(star.x - star.size * 3, star.y - star.size * 3, star.size * 6, star.size * 6)
+        }
+      })
+    }
+
+    // Draw realistic sun with proper positioning
+    const drawSun = (sun: {altitude: number, azimuth: number}, isDay: boolean) => {
+      if (sun.altitude < -10) return // Don't draw if well below horizon
+      
+      // Convert altitude/azimuth to x/y position
+      const x = canvas.width * (sun.azimuth / 360)
+      const y = canvas.height * (0.5 - sun.altitude / 90)
+      
+      const sunRadius = 30 + Math.abs(sun.altitude) / 3
       
       ctx.save()
       
-      if (isDay) {
-        // Sun
-        const sunRadius = 40
-        
-        // Sun rays
-        for (let i = 0; i < 12; i++) {
-          const angle = (i / 12) * Math.PI * 2 + time * 0.01
-          const rayLength = sunRadius + 20 + Math.sin(time * 0.05 + i) * 10
+      // Sun rays (only during day)
+      if (sun.altitude > 0) {
+        for (let i = 0; i < 16; i++) {
+          const angle = (i / 16) * Math.PI * 2 + time * 0.001
+          const rayLength = sunRadius + 30 + Math.sin(time * 0.01 + i) * 15
           
-          ctx.strokeStyle = `hsla(45, 100%, 60%, ${0.3 + Math.sin(time * 0.02 + i) * 0.2})`
+          const gradient = ctx.createLinearGradient(
+            x + Math.cos(angle) * sunRadius,
+            y + Math.sin(angle) * sunRadius,
+            x + Math.cos(angle) * rayLength,
+            y + Math.sin(angle) * rayLength
+          )
+          gradient.addColorStop(0, `hsla(45, 100%, 60%, ${0.4})`)
+          gradient.addColorStop(1, 'transparent')
+          
+          ctx.strokeStyle = gradient
           ctx.lineWidth = 3
           ctx.beginPath()
-          ctx.moveTo(
-            sunX + Math.cos(angle) * sunRadius,
-            sunY + Math.sin(angle) * sunRadius
-          )
-          ctx.lineTo(
-            sunX + Math.cos(angle) * rayLength,
-            sunY + Math.sin(angle) * rayLength
-          )
+          ctx.moveTo(x + Math.cos(angle) * sunRadius, y + Math.sin(angle) * sunRadius)
+          ctx.lineTo(x + Math.cos(angle) * rayLength, y + Math.sin(angle) * rayLength)
           ctx.stroke()
         }
-        
-        // Sun glow
-        const glowGradient = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 2)
-        glowGradient.addColorStop(0, 'hsla(45, 100%, 65%, 0.8)')
-        glowGradient.addColorStop(0.5, 'hsla(45, 100%, 60%, 0.4)')
-        glowGradient.addColorStop(1, 'hsla(45, 100%, 55%, 0)')
-        
-        ctx.fillStyle = glowGradient
-        ctx.beginPath()
-        ctx.arc(sunX, sunY, sunRadius * 2, 0, Math.PI * 2)
-        ctx.fill()
-        
-        // Sun body
-        ctx.fillStyle = 'hsl(45, 100%, 65%)'
-        ctx.beginPath()
-        ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2)
-        ctx.fill()
-      } else {
-        // Moon
-        ctx.fillStyle = 'hsla(220, 20%, 85%, 0.9)'
-        ctx.beginPath()
-        ctx.arc(sunX, sunY, 35, 0, Math.PI * 2)
-        ctx.fill()
-        
-        // Moon craters
-        ctx.fillStyle = 'hsla(220, 20%, 75%, 0.5)'
-        ctx.beginPath()
-        ctx.arc(sunX - 10, sunY - 5, 5, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.beginPath()
-        ctx.arc(sunX + 8, sunY + 8, 3, 0, Math.PI * 2)
-        ctx.fill()
-        
-        // Stars
-        for (let i = 0; i < 50; i++) {
-          const starX = (i * 73) % canvas.width
-          const starY = (i * 37) % (canvas.height * 0.5)
-          const twinkle = Math.sin(time * 0.02 + i) * 0.5 + 0.5
-          
-          ctx.fillStyle = `hsla(220, 100%, 90%, ${twinkle * 0.8})`
-          ctx.beginPath()
-          ctx.arc(starX, starY, twinkle * 2, 0, Math.PI * 2)
-          ctx.fill()
-        }
       }
+      
+      // Sun glow
+      const glowGradient = ctx.createRadialGradient(x, y, 0, x, y, sunRadius * 3)
+      if (sun.altitude > 0) {
+        // Daytime colors
+        glowGradient.addColorStop(0, 'hsla(45, 100%, 65%, 0.6)')
+        glowGradient.addColorStop(0.3, 'hsla(45, 100%, 60%, 0.3)')
+        glowGradient.addColorStop(1, 'transparent')
+      } else {
+        // Sunset/sunrise colors
+        glowGradient.addColorStop(0, 'hsla(15, 100%, 50%, 0.6)')
+        glowGradient.addColorStop(0.3, 'hsla(25, 100%, 45%, 0.3)')
+        glowGradient.addColorStop(1, 'transparent')
+      }
+      
+      ctx.fillStyle = glowGradient
+      ctx.beginPath()
+      ctx.arc(x, y, sunRadius * 3, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Sun body with realistic coloring
+      const sunGradient = ctx.createRadialGradient(x, y, 0, x, y, sunRadius)
+      if (sun.altitude > 0) {
+        sunGradient.addColorStop(0, 'hsl(45, 100%, 75%)')
+        sunGradient.addColorStop(0.5, 'hsl(45, 100%, 65%)')
+        sunGradient.addColorStop(1, 'hsl(45, 100%, 55%)')
+      } else {
+        // Sunset colors
+        sunGradient.addColorStop(0, 'hsl(20, 100%, 65%)')
+        sunGradient.addColorStop(0.5, 'hsl(20, 100%, 55%)')
+        sunGradient.addColorStop(1, 'hsl(15, 100%, 45%)')
+      }
+      
+      ctx.fillStyle = sunGradient
+      ctx.beginPath()
+      ctx.arc(x, y, sunRadius, 0, Math.PI * 2)
+      ctx.fill()
+      
+      ctx.restore()
+    }
+
+    // Draw moon with phases
+    const drawMoon = (moon: {altitude: number, azimuth: number, phase: number}, isDay: boolean) => {
+      if (moon.altitude < 0) return // Don't draw if below horizon
+      
+      const x = canvas.width * (moon.azimuth / 360)
+      const y = canvas.height * (0.5 - moon.altitude / 90)
+      const moonRadius = 25
+      
+      ctx.save()
+      
+      // Moon glow
+      const glowIntensity = isDay ? 0.2 : 0.5
+      const glowGradient = ctx.createRadialGradient(x, y, 0, x, y, moonRadius * 2)
+      glowGradient.addColorStop(0, `hsla(220, 20%, 85%, ${glowIntensity})`)
+      glowGradient.addColorStop(1, 'transparent')
+      
+      ctx.fillStyle = glowGradient
+      ctx.beginPath()
+      ctx.arc(x, y, moonRadius * 2, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Moon body
+      ctx.fillStyle = isDay ? 'hsla(220, 20%, 85%, 0.5)' : 'hsla(220, 20%, 85%, 0.9)'
+      ctx.beginPath()
+      ctx.arc(x, y, moonRadius, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Moon phase shadow
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(x, y, moonRadius, 0, Math.PI * 2)
+      ctx.clip()
+      
+      if (moon.phase < 0.5) {
+        // Waxing - shadow on left
+        const shadowX = x - moonRadius + (moon.phase * 2 * moonRadius)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
+        ctx.fillRect(x - moonRadius, y - moonRadius, shadowX - (x - moonRadius), moonRadius * 2)
+      } else {
+        // Waning - shadow on right
+        const shadowX = x - moonRadius + ((moon.phase - 0.5) * 2 * moonRadius)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
+        ctx.fillRect(shadowX, y - moonRadius, x + moonRadius - shadowX, moonRadius * 2)
+      }
+      
+      ctx.restore()
+      
+      // Moon craters for detail
+      ctx.fillStyle = 'hsla(220, 20%, 75%, 0.5)'
+      ctx.beginPath()
+      ctx.arc(x - moonRadius * 0.3, y - moonRadius * 0.2, moonRadius * 0.15, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc(x + moonRadius * 0.2, y + moonRadius * 0.3, moonRadius * 0.1, 0, Math.PI * 2)
+      ctx.fill()
       
       ctx.restore()
     }
@@ -585,17 +804,18 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
     }
 
     // Ground and grass
-    const drawGround = () => {
+    const drawGround = (isDay: boolean) => {
+      const lightness = isDay ? 25 : 15
       // Ground gradient
       const groundGradient = ctx.createLinearGradient(0, canvas.height - 100, 0, canvas.height)
-      groundGradient.addColorStop(0, `hsla(90, 40%, ${25 + dayNightCycle * 10}%, 0.9)`)
-      groundGradient.addColorStop(1, `hsla(30, 30%, ${20 + dayNightCycle * 5}%, 0.9)`)
+      groundGradient.addColorStop(0, `hsla(90, 40%, ${lightness + 5}%, 0.9)`)
+      groundGradient.addColorStop(1, `hsla(30, 30%, ${lightness}%, 0.9)`)
       
       ctx.fillStyle = groundGradient
       ctx.fillRect(0, canvas.height - 100, canvas.width, 100)
       
       // Grass blades
-      ctx.strokeStyle = `hsla(90, 50%, ${30 + dayNightCycle * 15}%, 0.7)`
+      ctx.strokeStyle = `hsla(90, 50%, ${lightness + 10}%, 0.7)`
       for (let x = 0; x < canvas.width; x += 5) {
         const grassHeight = 10 + Math.sin(x * 0.1 + time * 0.01) * 5
         const sway = Math.sin(time * 0.02 + x * 0.01) * 2 + windStrength * 3
@@ -607,28 +827,59 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
         ctx.stroke()
       }
     }
-
-    const animate = () => {
-      // Sky gradient based on day/night
-      dayNightCycle = (Math.sin(time * 0.0005) + 1) / 2 // 0 = night, 1 = day
+    
+    // Draw sky based on sun position
+    const drawSky = (isDay: boolean, twilight: boolean, sunAltitude: number) => {
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
       
-      const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-      if (dayNightCycle > 0.5) {
-        // Day sky
-        skyGradient.addColorStop(0, `hsl(200, 70%, ${50 + dayNightCycle * 30}%)`)
-        skyGradient.addColorStop(0.5, `hsl(190, 60%, ${60 + dayNightCycle * 20}%)`)
-        skyGradient.addColorStop(1, `hsl(180, 50%, ${70 + dayNightCycle * 15}%)`)
+      if (isDay) {
+        // Day sky - varies with sun altitude
+        const brightness = Math.max(0, Math.min(1, (sunAltitude + 10) / 70))
+        gradient.addColorStop(0, `hsl(200, 70%, ${20 + brightness * 40}%)`)
+        gradient.addColorStop(0.3, `hsl(190, 65%, ${30 + brightness * 40}%)`)
+        gradient.addColorStop(1, `hsl(180, 60%, ${40 + brightness * 35}%)`)
+      } else if (twilight) {
+        // Twilight colors
+        const twilightProgress = (sunAltitude + 18) / 18
+        gradient.addColorStop(0, `hsl(240, 70%, ${5 + twilightProgress * 15}%)`)
+        gradient.addColorStop(0.3, `hsl(20, 60%, ${10 + twilightProgress * 30}%)`)
+        gradient.addColorStop(0.6, `hsl(30, 50%, ${15 + twilightProgress * 25}%)`)
+        gradient.addColorStop(1, `hsl(200, 40%, ${20 + twilightProgress * 20}%)`)
       } else {
         // Night sky
-        skyGradient.addColorStop(0, `hsl(240, 80%, ${5 + dayNightCycle * 10}%)`)
-        skyGradient.addColorStop(0.5, `hsl(230, 70%, ${10 + dayNightCycle * 15}%)`)
-        skyGradient.addColorStop(1, `hsl(220, 60%, ${15 + dayNightCycle * 20}%)`)
+        gradient.addColorStop(0, 'hsl(240, 80%, 2%)')
+        gradient.addColorStop(0.5, 'hsl(240, 70%, 5%)')
+        gradient.addColorStop(1, 'hsl(220, 60%, 10%)')
       }
       
-      ctx.fillStyle = skyGradient
+      ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
 
+    let animationId: number
+
+    const animate = () => {
       time++
+      
+      // Get current astronomical positions based on real time and location
+      const now = new Date()
+      const astro = getSunMoonPosition(now, userLatitude, userLongitude)
+      
+      // Determine if it's day, twilight, or night based on sun altitude
+      const isDay = astro.sun.altitude > 0
+      const twilight = astro.sun.altitude > -18 && astro.sun.altitude <= 0
+      
+      // Draw sky with proper coloring based on sun position
+      drawSky(isDay, twilight, astro.sun.altitude)
+      
+      // Draw stars if it's night
+      if (!isDay) {
+        drawStars()
+      }
+      
+      // Draw sun and moon based on their calculated positions
+      drawSun(astro.sun, isDay)
+      drawMoon(astro.moon, isDay)
       
       // Wind effect
       if (Math.random() > 0.98) {
@@ -637,9 +888,8 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       windStrength += (windTarget - windStrength) * 0.02
 
       // Draw scene layers (back to front)
-      drawCelestialBody()
       drawClouds()
-      drawMountains()
+      drawMountains(isDay, astro.sun.altitude)
       
       // Clear branches for recalculation
       trees.forEach(tree => tree.branches = [])
@@ -662,10 +912,10 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
       })
       
       drawCreatures()
-      drawGround()
+      drawGround(isDay)
       drawAnimals()
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -686,6 +936,9 @@ export function Ecosystem({ canvasRef, intensity = 'medium' }: CanvasBackgroundP
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('resize', handleResize)
     }
   }, [canvasRef, intensity])

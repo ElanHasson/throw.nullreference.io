@@ -25,6 +25,8 @@ export function CodeRain({ canvasRef, intensity = 'medium' }: CanvasBackgroundPr
     const codeChars = 'const function return async await class extends import export default => {} [] () ; : , . < > / = + - * & | ! ?'
       .split(' ')
 
+    let animationId: number
+
     const animate = () => {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -47,7 +49,7 @@ export function CodeRain({ canvasRef, intensity = 'medium' }: CanvasBackgroundPr
         drops[i]++
       }
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -72,6 +74,9 @@ export function CodeRain({ canvasRef, intensity = 'medium' }: CanvasBackgroundPr
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('resize', handleResize)
     }
   }, [canvasRef, intensity])

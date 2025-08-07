@@ -19,7 +19,7 @@ export function SmartPillContainer({
   const [visibleTags, setVisibleTags] = useState<string[]>(tags)
   const [hiddenCount, setHiddenCount] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [containerWidth, setContainerWidth] = useState<number>(0)
+  const [containerWidth] = useState<number>(0)
 
   // Calculate pill width (approximate based on tag length and size)
   const estimatePillWidth = (tag: string): number => {

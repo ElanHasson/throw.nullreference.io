@@ -3,6 +3,7 @@ import { BackgroundType } from '@/components/hero-background'
 export interface BackgroundPreset {
   type: BackgroundType
   intensity: 'low' | 'medium' | 'high'
+  interactive?: boolean
   name: string
   description: string
   performance: 'high' | 'medium' | 'low'
@@ -26,6 +27,7 @@ export const backgroundPresets: Record<string, BackgroundPreset> = {
   particles: {
     type: 'particles',
     intensity: 'medium',
+    interactive: true,
     name: 'Interactive Particles',
     description: 'Mouse-responsive particle system',
     performance: 'medium'
@@ -91,5 +93,5 @@ export const backgroundPresets: Record<string, BackgroundPreset> = {
 // Get the current background configuration
 export function getCurrentBackground(): BackgroundPreset {
   // Change this line to switch backgrounds
-  return backgroundPresets.ecosystem
+  return backgroundPresets.ecosystem;
 }

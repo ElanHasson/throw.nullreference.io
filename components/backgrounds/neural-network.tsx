@@ -62,6 +62,7 @@ export function NeuralNetwork({ canvasRef, intensity = 'medium' }: CanvasBackgro
     let pulsePhase = 0
     let time = 0
     let signalWaves: Array<{ from: number, to: number, progress: number }> = []
+    let animationId: number
 
     const animate = () => {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
@@ -158,7 +159,7 @@ export function NeuralNetwork({ canvasRef, intensity = 'medium' }: CanvasBackgro
         ctx.fill()
       })
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -172,6 +173,9 @@ export function NeuralNetwork({ canvasRef, intensity = 'medium' }: CanvasBackgro
 
     return () => {
       window.removeEventListener('resize', handleResize)
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
     }
   }, [canvasRef, intensity])
 

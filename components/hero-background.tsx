@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import {
   AnimatedGradient,
   FloatingOrbs,
@@ -14,6 +14,7 @@ import {
   MatrixRain,
   Ecosystem
 } from './backgrounds'
+import { EcosystemWorker } from './backgrounds/ecosystem-worker'
 
 export type BackgroundType = 
   | 'animated-gradient'
@@ -31,26 +32,70 @@ export type BackgroundType =
 interface HeroBackgroundProps {
   type?: BackgroundType
   intensity?: 'low' | 'medium' | 'high'
+  interactive?: boolean
 }
 
 export function HeroBackground({ 
   type = 'animated-gradient', 
-  intensity = 'medium' 
+  intensity = 'medium'
 }: HeroBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [key, setKey] = useState(0)
+  const [mounted, setMounted] = useState(false)
+  
+  // Ensure client-side only rendering for canvas features
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  // Force re-render on resize to restart the scene
+  useEffect(() => {
+    if (!mounted) return
+    
+    const handleResize = () => {
+      setKey(prev => prev + 1)
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [mounted])
+  
+  // Force re-render when type changes to ensure clean switch
+  useEffect(() => {
+    if (mounted) {
+      setKey(prev => prev + 1)
+    }
+  }, [type, mounted])
+  
+  // Check if we can use worker for ecosystem (only on client)
+  // Disabled for now due to static export limitations
+  const useWorkerForEcosystem = false // mounted && 
+    // type === 'ecosystem' && 
+    // typeof window !== 'undefined' && 
+    // 'OffscreenCanvas' in window
 
-  // CSS-only backgrounds
+  // CSS-only backgrounds (can render on server)
   if (type === 'animated-gradient') {
-    return <AnimatedGradient intensity={intensity} />
+    return <AnimatedGradient key={key} intensity={intensity} />
   }
 
   if (type === 'floating-orbs') {
-    return <FloatingOrbs intensity={intensity} />
+    return <FloatingOrbs key={key} intensity={intensity} />
+  }
+  
+  // Don't render canvas-based backgrounds until mounted (client-side only)
+  if (!mounted) {
+    return <div className="absolute inset-0 w-full h-full" />
+  }
+  
+  // Use worker for ecosystem if supported
+  if (useWorkerForEcosystem) {
+    return <EcosystemWorker key={key} intensity={intensity} />
   }
 
   // Canvas-based backgrounds
   return (
-    <>
+    <div key={key}>
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full" 
@@ -65,6 +110,6 @@ export function HeroBackground({
       {type === 'code-rain' && <CodeRain canvasRef={canvasRef} intensity={intensity} />}
       {type === 'matrix-rain' && <MatrixRain canvasRef={canvasRef} intensity={intensity} />}
       {type === 'ecosystem' && <Ecosystem canvasRef={canvasRef} intensity={intensity} />}
-    </>
+    </div>
   )
 }

@@ -77,6 +77,8 @@ export function FractalTrees({ canvasRef, intensity = 'medium' }: CanvasBackgrou
       }
     }
 
+    let animationId: number
+
     const animate = () => {
       // Fade effect
       ctx.fillStyle = 'rgba(255, 255, 255, 0.03)'
@@ -116,7 +118,7 @@ export function FractalTrees({ canvasRef, intensity = 'medium' }: CanvasBackgrou
         )
       })
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -133,6 +135,9 @@ export function FractalTrees({ canvasRef, intensity = 'medium' }: CanvasBackgrou
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('resize', handleResize)
     }
   }, [canvasRef, intensity])

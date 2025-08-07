@@ -42,6 +42,8 @@ export function InteractiveParticles({ canvasRef, intensity = 'medium' }: Canvas
 
     window.addEventListener('mousemove', handleMouseMove)
 
+    let animationId: number
+
     const animate = () => {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -83,7 +85,7 @@ export function InteractiveParticles({ canvasRef, intensity = 'medium' }: Canvas
         })
       })
 
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -96,6 +98,9 @@ export function InteractiveParticles({ canvasRef, intensity = 'medium' }: Canvas
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('resize', handleResize)
     }

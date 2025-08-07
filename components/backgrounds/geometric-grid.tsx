@@ -19,6 +19,8 @@ export function GeometricGrid({ canvasRef, intensity = 'medium' }: CanvasBackgro
     let time = 0
     let colorShift = 0
 
+    let animationId: number
+
     const animate = () => {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.02)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -72,7 +74,7 @@ export function GeometricGrid({ canvasRef, intensity = 'medium' }: CanvasBackgro
       }
 
       ctx.restore()
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -85,6 +87,9 @@ export function GeometricGrid({ canvasRef, intensity = 'medium' }: CanvasBackgro
     window.addEventListener('resize', handleResize)
 
     return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       window.removeEventListener('resize', handleResize)
     }
   }, [canvasRef, intensity])
