@@ -1,0 +1,147 @@
+name: Deploy PR Preview to DigitalOcean App Platform
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  DO_APP_NAME: throw-nullreference-io-pr-${{ github.event.pull_request.number }}
+
+jobs:
+  deploy-preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create app spec for PR
+        run: |
+          mkdir -p .do
+          cat > .do/app-pr.yaml << EOF
+          name: ${{ env.DO_APP_NAME }}
+          region: nyc
+          static_sites:
+            - name: web
+              github:
+                repo: ${{ github.repository }}
+                branch: ${{ github.head_ref }}
+                deploy_on_push: true
+              source_dir: /
+              build_command: corepack enable && yarn install --frozen-lockfile --production=false && yarn build
+              output_dir: out
+              environment_slug: node-js
+              cache_directories:
+                - .next/cache
+              routes:
+                - path: /
+              index_document: index.html
+              catchall_document: 404.html
+              envs:
+                - key: NODE_ENV
+                  value: production
+                - key: NEXT_PUBLIC_PR_NUMBER
+                  value: "${{ github.event.pull_request.number }}"
+          EOF
+
+      - name: Deploy to DigitalOcean App Platform
+        id: app_deploy
+        uses: digitalocean/app_action/deploy@v2
+        with:
+          app_spec_location: .do/app-pr.yaml
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Get app URL
+        id: get_url
+        run: |
+          # Wait a moment for app to be fully registered
+          sleep 10
+          # Find app ID by name
+          APP_ID=$(doctl apps list --format Name,ID --no-header | grep "^${{ env.DO_APP_NAME }}" | awk '{print $2}')
+          if [ -z "$APP_ID" ]; then
+            echo "App not found: ${{ env.DO_APP_NAME }}"
+            exit 1
+          fi
+          # Get app URL using ID
+          APP_URL=$(doctl apps get "$APP_ID" --format LiveURL --no-header)
+          echo "app_url=$APP_URL" >> $GITHUB_OUTPUT
+
+      - name: Comment PR with deployment URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deploymentUrl = '${{ steps.get_url.outputs.app_url }}';
+            const appName = '${{ env.DO_APP_NAME }}';
+            const body = `### 🚀 Preview Deployment Ready!\n\nYour PR preview has been deployed to DigitalOcean App Platform:\n\n🔗 **[Preview URL](${deploymentUrl})**\n📱 **App Name:** \`${appName}\`\n\n---\n\n*This preview will be automatically removed when the PR is closed.*`;
+
+            // Find existing comment
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const botComment = comments.data.find(comment => 
+              comment.user.login === 'github-actions[bot]' && 
+              comment.body.includes('Preview Deployment Ready')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                comment_id: botComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
+
+  cleanup-preview:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Delete preview app
+        run: |
+          if doctl apps get ${{ env.DO_APP_NAME }} &>/dev/null; then
+            echo "Deleting app ${{ env.DO_APP_NAME }}..."
+            doctl apps delete ${{ env.DO_APP_NAME }} --force
+          else
+            echo "App ${{ env.DO_APP_NAME }} not found, skipping deletion"
+          fi
+
+      - name: Comment PR about cleanup
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `### 🧹 Preview Deployment Removed\n\nThe preview deployment for this PR has been removed from DigitalOcean App Platform.`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
