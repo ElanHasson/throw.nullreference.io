@@ -1,10 +1,8 @@
 {
   "mcpServers": {
     "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@playwright/mcp@latest", "--isolated"],
-      "env": {}
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "--init", "--pull=always", "mcr.microsoft.com/playwright/mcp"]
     }
   }
 }

@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr view:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh api:*)",
+      "Bash(gh pr list:*)",
+      "mcp__mcpm_playwright__browser_evaluate",
+      "mcp__mcpm_playwright__browser_close",
+      "mcp__mcpm_playwright__browser_click",
+      "mcp__mcpm_playwright__browser_resize",
+      "mcp__mcpm_playwright__browser_console_messages",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(node:*)",
+      "Bash(yarn)",
+      "Bash(yarn build:*)",
+      "Bash(npx eslint:*)",
+      "Bash(yarn test:e2e:static:*)",
+      "Bash(yarn list:*)",
+      "Bash(yarn info:*)",
+      "mcp__mcpm_playwright__browser_wait_for",
+      "Bash(yarn test:*)",
+      "Bash(jest --version)",
+      "Bash(npx jest:*)",
+      "Bash(kill:*)",
+      "Bash(yarn tsc:*)",
+      "Bash(yarn lint:*)",
+      "mcp__mcpm_playwright__browser_snapshot",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ],
+    "deny": []
+  }
+}

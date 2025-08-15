@@ -1,0 +1,65 @@
+import * as PIXI from 'pixi.js'
+import { ISystem, ISystemActions } from 'sim-ecs'
+import { Sky, TimeOfDay, PixiSprite } from '../components'
+
+export class SkySystem implements ISystem {
+  private skyColors = {
+    dawn: { top: 0xFFB6C1, bottom: 0xFFE4B5 },
+    day: { top: 0x87CEEB, bottom: 0xE0F6FF },
+    dusk: { top: 0xFF6B35, bottom: 0xFFD700 },
+    night: { top: 0x191970, bottom: 0x2F4F4F }
+  }
+
+  run(actions: ISystemActions): void {
+    const skyEntities = actions.getEntities([Sky, PixiSprite])
+    const timeEntities = actions.getComponents(TimeOfDay)
+    
+    if (timeEntities.length === 0) return
+    const timeOfDay = timeEntities[0]
+
+    for (const entity of skyEntities) {
+      const sky = entity.getComponent(Sky)!
+      const pixiSprite = entity.getComponent(PixiSprite)!
+
+      // Calculate sky colors based on time
+      const hour = timeOfDay.currentTime
+      let targetColors = this.skyColors.day
+
+      if (hour >= 5 && hour < 7) {
+        // Dawn
+        targetColors = this.skyColors.dawn
+      } else if (hour >= 17 && hour < 19) {
+        // Dusk
+        targetColors = this.skyColors.dusk
+      } else if (hour < 5 || hour >= 19) {
+        // Night
+        targetColors = this.skyColors.night
+      }
+
+      // Update sky gradient
+      if (!pixiSprite.graphics) {
+        const graphics = new PIXI.Graphics()
+        pixiSprite.graphics = graphics
+        pixiSprite.sprite = graphics
+      }
+
+      const graphics = pixiSprite.graphics as PIXI.Graphics
+      graphics.clear()
+
+      // Create gradient fill
+      const gradientFill = new PIXI.FillGradient(0, 0, 0, window.innerHeight)
+      gradientFill.addColorStop(0, targetColors.top)
+      gradientFill.addColorStop(1, targetColors.bottom)
+
+      graphics.beginFill(0xFFFFFF)
+      graphics.drawRect(0, 0, window.innerWidth, window.innerHeight)
+      graphics.endFill()
+      graphics.fill = gradientFill
+
+      // Update sky component colors
+      sky.topColor = targetColors.top
+      sky.bottomColor = targetColors.bottom
+      sky.brightness = timeOfDay.skyBrightness
+    }
+  }
+}

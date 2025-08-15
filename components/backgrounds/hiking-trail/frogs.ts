@@ -1,4 +1,4 @@
-import { Frog, Fly, WaterSplash, PondConfig } from './types'
+import { Frog, Fly, PondConfig } from './types'
 
 export class Frogs {
   private frogs: Frog[] = []

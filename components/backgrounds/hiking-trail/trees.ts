@@ -1,4 +1,4 @@
-import { TreePosition, Bird } from './types'
+import { TreePosition } from './types'
 
 export class Trees {
   private trees: TreePosition[] = []
@@ -174,7 +174,6 @@ export class Trees {
     for (let i = 0; i < points.length; i++) {
       const current = points[i]
       const next = points[(i + 1) % points.length]
-      const afterNext = points[(i + 2) % points.length]
       
       // Calculate control point
       const cpX = (current.x + next.x) / 2

@@ -440,7 +440,7 @@ export class Creatures {
       })
 
       // Update ISS
-      const { sun: sunPos, moon } = getSunMoonPosition(currentDate, 40)
+      const { sun: sunPos } = getSunMoonPosition(currentDate, 40)
       this.iss.currentAngle += (Math.PI * 2) / (this.iss.orbitalPeriod / 16)
       this.iss.altitude = 60 + Math.sin(this.iss.currentAngle) * 30
       this.iss.azimuth = (this.iss.currentAngle * 180 / Math.PI) % 360

@@ -112,7 +112,7 @@ export function HeroBackground({
       {type === 'code-rain' && <CodeRain canvasRef={canvasRef} intensity={intensity} />}
       {type === 'matrix-rain' && <MatrixRain canvasRef={canvasRef} intensity={intensity} />}
       {type === 'ecosystem' && <Ecosystem canvasRef={canvasRef} intensity={intensity} />}
-      {type === 'hiking-trail' && <HikingTrail canvasRef={canvasRef} intensity={intensity} />}
+      {type === 'hiking-trail' && <HikingTrail />}
     </div>
   )
 }

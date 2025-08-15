@@ -33,7 +33,7 @@ export class Landscape {
 
   private generateMountainVegetation() {
     // Add sporadic vegetation to lower mountain slopes only
-    this.mountains.forEach((mountain, i) => {
+    this.mountains.forEach((mountain) => {
       const vegCount = Math.floor(Math.random() * 3) // 0-2 vegetation per mountain
       for (let j = 0; j < vegCount; j++) {
         // Position vegetation on lower slopes only (bottom 30% of mountain)
@@ -275,7 +275,6 @@ export class Landscape {
       let y = baseY + (meander1 + meander2 + meander3) * 0.5
       
       // Avoid obstacles (pond and trees)
-      let avoidanceY = 0
       
       // Avoid pond
       if (this.pondConfig) {
@@ -287,9 +286,6 @@ export class Landscape {
         
         if (distToPond < pondRadius) {
           // Smoothly curve around pond
-          const avoidanceStrength = 1 - (distToPond / pondRadius)
-          const angleFromPond = Math.atan2(y - pondCenterY, x - pondCenterX)
-          avoidanceY = Math.sin(angleFromPond) * pondRadius * avoidanceStrength
           y = pondCenterY + Math.sign(y - pondCenterY) * (pondRadius + 10)
         }
       }

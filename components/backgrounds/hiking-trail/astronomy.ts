@@ -19,7 +19,6 @@ export function getSunMoonPosition(date: Date, latitude: number): { sun: SunPosi
   const g = ((357.528 + 0.9856003 * n) % 360) * Math.PI / 180
   const lambda = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * Math.PI / 180
   
-  const beta = 0
   const epsilon = (23.439 - 0.0000004 * n) * Math.PI / 180
   
   const alpha = Math.atan2(Math.cos(epsilon) * Math.sin(lambda), Math.cos(lambda))

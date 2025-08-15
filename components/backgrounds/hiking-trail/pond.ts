@@ -19,7 +19,6 @@ export class Pond {
     // Position pond to stay within grass area (grass starts at 0.7 of canvas height)
     // Account for pond size to prevent it going off screen
     const halfWidth = width / 2
-    const halfHeight = height / 2
     
     // Ensure pond stays within grass boundaries and away from horizon
     const xMin = halfWidth + 100 // Left margin increased
@@ -117,7 +116,7 @@ export class Pond {
     }
   }
 
-  update(simulateTime: boolean) {
+  update() {
     // Update lily pad flowers
     this.vegetation.forEach(veg => {
       if (veg.type === 'lilypad' && !veg.hasFlower && Math.random() > 0.999) {
@@ -131,7 +130,6 @@ export class Pond {
     })
     
     // Update fish jumping
-    const time = simulateTime ? Date.now() * 60 : Date.now()
     this.fish.forEach(fish => {
       if (!fish.active && Math.random() > 0.995) {
         fish.active = true

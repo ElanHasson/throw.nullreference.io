@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { CanvasBackgroundProps } from './types'
 import { getSunMoonPosition } from './hiking-trail/astronomy'
 import { Landscape } from './hiking-trail/landscape'
 import { Trees } from './hiking-trail/trees'
@@ -16,7 +15,11 @@ let switchHovered = false
 let mouseX = 0
 let mouseY = 0
 
-export default function HikingTrailBackground({ className = '' }: CanvasBackgroundProps) {
+interface HikingTrailBackgroundProps {
+  className?: string
+}
+
+export default function HikingTrailBackground({ className = '' }: HikingTrailBackgroundProps) {
   useEffect(() => {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
@@ -90,7 +93,6 @@ export default function HikingTrailBackground({ className = '' }: CanvasBackgrou
         if (!SIMULATE_TIME) {
           simulatedDate = new Date()
         }
-        console.log('Rocker switch toggled:', SIMULATE_TIME ? 'SIM' : 'REAL')
       }
     }
 
@@ -134,7 +136,7 @@ export default function HikingTrailBackground({ className = '' }: CanvasBackgrou
       trees.update()
       trees.draw()
 
-      pond.update(SIMULATE_TIME)
+      pond.update()
       pond.draw()
 
       frogs.update()
@@ -189,7 +191,6 @@ function drawSky(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, skyBr
     gradient.addColorStop(0.6, `hsla(190, 60%, ${60 * intensity}%, 1)`)
     gradient.addColorStop(1, `hsla(30, 50%, ${70 * intensity + 20}%, 1)`)
   } else {
-    const darkness = 1 - skyBrightness
     gradient.addColorStop(0, `hsla(230, 60%, ${5 + skyBrightness * 10}%, 1)`)
     gradient.addColorStop(0.5, `hsla(240, 50%, ${10 + skyBrightness * 15}%, 1)`)
     gradient.addColorStop(1, `hsla(250, 40%, ${15 + skyBrightness * 20}%, 1)`)

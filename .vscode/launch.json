@@ -1,3 +1,23 @@
 {
-  "defaultTheme": "hugo-theme-bootstrap"
+  "defaultTheme": "hugo-theme-bootstrap",
+  "configurations": [
+    {
+      "name": "Launch via NPM",
+      "request": "launch",
+      "runtimeArgs": [
+        "next",
+        "dev"
+      ],
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      },
+      "runtimeExecutable": "yarn",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    }
+  
+  ],
+  
 }
