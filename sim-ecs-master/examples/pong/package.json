@@ -1,0 +1,22 @@
+{
+  "name": "pong",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "sim-ecs": "file:../../src",
+    "tslib": "~2"
+  },
+  "engines": {
+    "node": ">=16.20"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "vite": "^5"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --open",
+    "install-deps": "npm i --lockfile-version 2",
+    "start": "vite --open"
+  }
+}

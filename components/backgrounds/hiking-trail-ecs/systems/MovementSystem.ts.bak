@@ -1,0 +1,35 @@
+import { ISystem, Query, Write } from 'sim-ecs'
+import { Transform, Velocity } from '../components'
+
+export class MovementSystem implements ISystem {
+  readonly query = new Query({
+    transform: Write(Transform),
+    velocity: Write(Velocity)
+  })
+
+  run(deltaTime: number): void {
+    const dt = deltaTime / 1000 // Convert to seconds
+    const movingEntities = this.query.execute()
+
+    for (const entity of movingEntities) {
+      const transform = entity.transform
+      const velocity = entity.velocity
+
+      // Update position based on velocity
+      transform.x += velocity.vx * dt
+      transform.y += velocity.vy * dt
+      
+      // Update rotation if angular velocity is set
+      if (velocity.angular !== 0) {
+        transform.rotation += velocity.angular * dt
+      }
+
+      // Apply friction if set
+      if (velocity.friction > 0 && velocity.friction < 1) {
+        velocity.vx *= Math.pow(velocity.friction, dt)
+        velocity.vy *= Math.pow(velocity.friction, dt)
+        velocity.angular *= Math.pow(velocity.friction, dt)
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+import * as PIXI from 'pixi.js'
+import { ISystem, ISystemActions } from 'sim-ecs'
+import { Transform, PixiSprite, Layer } from '../components'
+
+export class RenderSystem implements ISystem {
+  private sortedContainers: Map<Layer, PIXI.Container> = new Map()
+  
+  constructor(private stage: PIXI.Container) {
+    // Create containers for each layer
+    Object.values(Layer).forEach(layer => {
+      if (typeof layer === 'number') {
+        const container = new PIXI.Container()
+        container.sortableChildren = true
+        this.sortedContainers.set(layer, container)
+        this.stage.addChild(container)
+      }
+    })
+
+    // Sort containers by layer order
+    this.stage.sortableChildren = true
+    this.sortedContainers.forEach((container, layer) => {
+      container.zIndex = layer
+    })
+  }
+
+  run(actions: ISystemActions): void {
+    // Query entities with rendering components
+    const renderableEntities = actions.getEntities([Transform, PixiSprite])
+
+    for (const entity of renderableEntities) {
+      const transform = entity.getComponent(Transform)!
+      const pixiSprite = entity.getComponent(PixiSprite)!
+
+      // Create sprite if it doesn't exist
+      if (!pixiSprite.sprite) {
+        if (pixiSprite.texture) {
+          pixiSprite.sprite = new PIXI.Sprite(pixiSprite.texture)
+        } else if (pixiSprite.graphics) {
+          pixiSprite.sprite = pixiSprite.graphics
+        } else {
+          // Create a default sprite (colored square)
+          const graphics = new PIXI.Graphics()
+          graphics.beginFill(pixiSprite.tint || 0xFFFFFF)
+          graphics.drawRect(-16, -16, 32, 32)
+          graphics.endFill()
+          pixiSprite.sprite = graphics
+          pixiSprite.graphics = graphics
+        }
+
+        // Add to appropriate layer container
+        const container = this.sortedContainers.get(pixiSprite.layer)
+        if (container && pixiSprite.sprite) {
+          container.addChild(pixiSprite.sprite)
+        }
+      }
+
+      // Update sprite properties from transform
+      if (pixiSprite.sprite) {
+        pixiSprite.sprite.x = transform.x
+        pixiSprite.sprite.y = transform.y
+        pixiSprite.sprite.rotation = transform.rotation
+        pixiSprite.sprite.scale.set(transform.scaleX, transform.scaleY)
+        pixiSprite.sprite.visible = pixiSprite.visible
+        pixiSprite.sprite.alpha = pixiSprite.alpha
+        
+        if (pixiSprite.tint && pixiSprite.sprite instanceof PIXI.Sprite) {
+          pixiSprite.sprite.tint = pixiSprite.tint
+        }
+
+        // Update z-index within layer if needed
+        if (pixiSprite.zIndex !== undefined) {
+          pixiSprite.sprite.zIndex = pixiSprite.zIndex
+        }
+      }
+    }
+
+    // Clean up sprites for destroyed entities
+    const destroyedEntities = actions.getDestroyedEntities()
+    for (const entity of destroyedEntities) {
+      const pixiSprite = entity.getComponent(PixiSprite)
+      if (pixiSprite?.sprite) {
+        pixiSprite.sprite.destroy()
+      }
+    }
+  }
+
+  cleanup(): void {
+    this.sortedContainers.forEach(container => {
+      container.destroy({ children: true })
+    })
+    this.sortedContainers.clear()
+  }
+}

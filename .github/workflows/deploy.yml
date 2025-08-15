@@ -1,0 +1,20 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to DigitalOcean App Platform
+        run: echo "Deployment is handled automatically by DigitalOcean App Platform on push to main"
+
+      - name: Notify deployment
+        run: |
+          echo "🚀 Deployment triggered for commit ${{ github.sha }}"
+          echo "📦 Check DigitalOcean App Platform for deployment status"

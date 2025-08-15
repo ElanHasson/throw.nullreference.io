@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "alwaysStrict": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2020"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "files": [
+    "counter.ts",
+    "events.ts",
+    "system-error.ts"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "alwaysStrict": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "strict": true,
+    "stripInternal": true,
+    "target": "ESNext"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "files": [
+    "src/index.ts"
+  ]
+}

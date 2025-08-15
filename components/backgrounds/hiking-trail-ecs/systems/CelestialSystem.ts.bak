@@ -1,0 +1,131 @@
+import * as PIXI from 'pixi.js'
+import { ISystem, ISystemActions } from 'sim-ecs'
+import { Transform, PixiSprite, TimeOfDay, Sun, Moon, Star } from '../components'
+
+export class CelestialSystem implements ISystem {
+  run(actions: ISystemActions): void {
+    const timeComponents = actions.getComponents(TimeOfDay)
+    if (timeComponents.length === 0) return
+    const timeOfDay = timeComponents[0]
+
+    // Update Sun
+    const sunEntities = actions.getEntities([Sun, Transform, PixiSprite])
+    for (const entity of sunEntities) {
+      const sun = entity.getComponent(Sun)!
+      const transform = entity.getComponent(Transform)!
+      const pixiSprite = entity.getComponent(PixiSprite)!
+
+      // Position sun based on time
+      const sunAngle = (timeOfDay.currentTime - 6) / 12 * Math.PI
+      transform.x = window.innerWidth / 2 + Math.cos(sunAngle) * window.innerWidth * 0.4
+      transform.y = window.innerHeight * 0.7 - Math.sin(sunAngle) * window.innerHeight * 0.5
+
+      // Hide sun at night
+      pixiSprite.visible = timeOfDay.currentTime >= 5 && timeOfDay.currentTime <= 19
+
+      // Update sun graphics
+      if (!pixiSprite.graphics) {
+        const graphics = new PIXI.Graphics()
+        pixiSprite.graphics = graphics
+        pixiSprite.sprite = graphics
+      }
+
+      const graphics = pixiSprite.graphics as PIXI.Graphics
+      graphics.clear()
+      
+      if (pixiSprite.visible) {
+        // Draw sun with glow
+        graphics.beginFill(sun.color)
+        graphics.drawCircle(0, 0, sun.radius)
+        graphics.endFill()
+
+        // Add sun rays
+        for (let i = 0; i < 8; i++) {
+          const angle = (i / 8) * Math.PI * 2
+          graphics.beginFill(sun.color, 0.3)
+          graphics.moveTo(0, 0)
+          graphics.lineTo(
+            Math.cos(angle) * sun.radius * 2,
+            Math.sin(angle) * sun.radius * 2
+          )
+          graphics.lineTo(
+            Math.cos(angle + 0.1) * sun.radius * 2,
+            Math.sin(angle + 0.1) * sun.radius * 2
+          )
+          graphics.closePath()
+          graphics.endFill()
+        }
+      }
+    }
+
+    // Update Moon
+    const moonEntities = actions.getEntities([Moon, Transform, PixiSprite])
+    for (const entity of moonEntities) {
+      const moon = entity.getComponent(Moon)!
+      const transform = entity.getComponent(Transform)!
+      const pixiSprite = entity.getComponent(PixiSprite)!
+
+      // Position moon (opposite of sun)
+      const moonAngle = (timeOfDay.currentTime + 6) / 12 * Math.PI
+      transform.x = window.innerWidth / 2 + Math.cos(moonAngle) * window.innerWidth * 0.4
+      transform.y = window.innerHeight * 0.7 - Math.sin(moonAngle) * window.innerHeight * 0.5
+
+      // Show moon at night
+      pixiSprite.visible = timeOfDay.currentTime < 6 || timeOfDay.currentTime >= 18
+
+      // Update moon graphics
+      if (!pixiSprite.graphics) {
+        const graphics = new PIXI.Graphics()
+        pixiSprite.graphics = graphics
+        pixiSprite.sprite = graphics
+      }
+
+      const graphics = pixiSprite.graphics as PIXI.Graphics
+      graphics.clear()
+      
+      if (pixiSprite.visible) {
+        // Draw moon with phase
+        graphics.beginFill(moon.color)
+        graphics.drawCircle(0, 0, moon.radius)
+        graphics.endFill()
+
+        // Add moon phase shadow
+        if (moon.phase !== 0.5) {
+          graphics.beginFill(0x000033, 0.7)
+          const phaseOffset = (moon.phase - 0.5) * moon.radius * 2
+          graphics.drawCircle(phaseOffset, 0, moon.radius)
+          graphics.endFill()
+        }
+      }
+    }
+
+    // Update Stars
+    const starEntities = actions.getEntities([Star, Transform, PixiSprite])
+    for (const entity of starEntities) {
+      const star = entity.getComponent(Star)!
+      const pixiSprite = entity.getComponent(PixiSprite)!
+
+      // Show stars at night
+      pixiSprite.visible = timeOfDay.currentTime < 5 || timeOfDay.currentTime >= 19
+
+      if (pixiSprite.visible) {
+        // Update twinkle
+        star.twinklePhase += star.twinkleSpeed
+        pixiSprite.alpha = 0.5 + Math.sin(star.twinklePhase) * 0.5 * star.brightness
+
+        // Update star graphics
+        if (!pixiSprite.graphics) {
+          const graphics = new PIXI.Graphics()
+          pixiSprite.graphics = graphics
+          pixiSprite.sprite = graphics
+        }
+
+        const graphics = pixiSprite.graphics as PIXI.Graphics
+        graphics.clear()
+        graphics.beginFill(0xFFFFFF)
+        graphics.drawCircle(0, 0, star.size)
+        graphics.endFill()
+      }
+    }
+  }
+}

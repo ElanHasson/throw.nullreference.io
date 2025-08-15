@@ -1,0 +1,223 @@
+import * as PIXI from 'pixi.js'
+import { Emitter, upgradeConfig } from '@pixi/particle-emitter'
+import { ISystem, ISystemActions } from 'sim-ecs'
+import { Transform, ParticleEmitter, Splash, Firefly } from '../components'
+
+export class ParticleSystem implements ISystem {
+  private emitters: Map<number, Emitter> = new Map()
+  
+  constructor(private stage: PIXI.Container) {}
+
+  run(actions: ISystemActions): void {
+    const deltaTime = actions.delta
+
+    // Handle splash particles
+    const splashEntities = actions.getEntities([Splash, Transform, ParticleEmitter])
+    for (const entity of splashEntities) {
+      const splash = entity.getComponent(Splash)!
+      const transform = entity.getComponent(Transform)!
+      const emitterComponent = entity.getComponent(ParticleEmitter)!
+
+      if (!this.emitters.has(entity.id)) {
+        // Create splash emitter
+        const container = new PIXI.Container()
+        this.stage.addChild(container)
+
+        const emitterConfig = {
+          lifetime: { min: 0.3, max: 0.5 },
+          frequency: 0.001,
+          emitterLifetime: 0.1,
+          maxParticles: 20,
+          addAtBack: false,
+          pos: { x: transform.x, y: transform.y },
+          behaviors: [
+            {
+              type: 'alpha',
+              config: {
+                alpha: {
+                  list: [
+                    { time: 0, value: 0.8 },
+                    { time: 1, value: 0 }
+                  ]
+                }
+              }
+            },
+            {
+              type: 'moveSpeed',
+              config: {
+                speed: {
+                  list: [
+                    { time: 0, value: 200 },
+                    { time: 1, value: 50 }
+                  ]
+                }
+              }
+            },
+            {
+              type: 'scale',
+              config: {
+                scale: {
+                  list: [
+                    { time: 0, value: 0.5 },
+                    { time: 0.5, value: 1 },
+                    { time: 1, value: 0.3 }
+                  ]
+                }
+              }
+            },
+            {
+              type: 'rotation',
+              config: {
+                minStart: 0,
+                maxStart: 360,
+                minSpeed: 0,
+                maxSpeed: 360,
+                acceleration: 0
+              }
+            },
+            {
+              type: 'textureRandom',
+              config: {
+                textures: [PIXI.Texture.WHITE]
+              }
+            },
+            {
+              type: 'spawnShape',
+              config: {
+                type: 'circle',
+                data: {
+                  x: 0,
+                  y: 0,
+                  radius: splash.radius
+                }
+              }
+            }
+          ]
+        }
+
+        const emitter = new Emitter(container, upgradeConfig(emitterConfig, [PIXI.Texture.WHITE]))
+        this.emitters.set(entity.id, emitter)
+        emitterComponent.emitter = emitter
+      }
+
+      const emitter = this.emitters.get(entity.id)!
+      emitter.updateSpawnPos(transform.x, transform.y)
+      emitter.update(deltaTime * 0.001)
+
+      // Update ripples
+      splash.ripples = splash.ripples.filter(ripple => {
+        ripple.radius += deltaTime * 0.05
+        ripple.opacity -= deltaTime * 0.002
+        return ripple.opacity > 0
+      })
+
+      // Clean up finished splashes
+      if (splash.ripples.length === 0 && !emitter.emit) {
+        emitter.destroy()
+        this.emitters.delete(entity.id)
+        actions.destroyEntity(entity)
+      }
+    }
+
+    // Handle firefly particles
+    const fireflyEntities = actions.getEntities([Firefly, Transform, ParticleEmitter])
+    for (const entity of fireflyEntities) {
+      const firefly = entity.getComponent(Firefly)!
+      const transform = entity.getComponent(Transform)!
+      const emitterComponent = entity.getComponent(ParticleEmitter)!
+
+      if (!this.emitters.has(entity.id)) {
+        // Create firefly glow emitter
+        const container = new PIXI.Container()
+        this.stage.addChild(container)
+
+        const emitterConfig = {
+          lifetime: { min: 0.1, max: 0.2 },
+          frequency: 0.01,
+          emitterLifetime: -1,
+          maxParticles: 5,
+          addAtBack: false,
+          pos: { x: transform.x, y: transform.y },
+          behaviors: [
+            {
+              type: 'alpha',
+              config: {
+                alpha: {
+                  list: [
+                    { time: 0, value: firefly.brightness },
+                    { time: 1, value: 0 }
+                  ]
+                }
+              }
+            },
+            {
+              type: 'scale',
+              config: {
+                scale: {
+                  list: [
+                    { time: 0, value: 0.3 },
+                    { time: 1, value: 0.6 }
+                  ]
+                }
+              }
+            },
+            {
+              type: 'color',
+              config: {
+                color: {
+                  list: [
+                    { time: 0, value: 'FFFF00' },
+                    { time: 1, value: 'FFFF88' }
+                  ]
+                }
+              }
+            },
+            {
+              type: 'textureRandom',
+              config: {
+                textures: [PIXI.Texture.WHITE]
+              }
+            },
+            {
+              type: 'spawnPoint',
+              config: {
+                x: 0,
+                y: 0
+              }
+            }
+          ]
+        }
+
+        const emitter = new Emitter(container, upgradeConfig(emitterConfig, [PIXI.Texture.WHITE]))
+        emitter.emit = true
+        this.emitters.set(entity.id, emitter)
+        emitterComponent.emitter = emitter
+      }
+
+      const emitter = this.emitters.get(entity.id)!
+      emitter.updateSpawnPos(transform.x, transform.y)
+      
+      // Update firefly pulse
+      firefly.pulsePhase += deltaTime * 0.003
+      firefly.brightness = 0.5 + Math.sin(firefly.pulsePhase) * 0.5
+      
+      // Update emitter based on brightness
+      emitter.update(deltaTime * 0.001)
+    }
+
+    // Clean up destroyed entities
+    const destroyedEntities = actions.getDestroyedEntities()
+    for (const entity of destroyedEntities) {
+      if (this.emitters.has(entity.id)) {
+        const emitter = this.emitters.get(entity.id)!
+        emitter.destroy()
+        this.emitters.delete(entity.id)
+      }
+    }
+  }
+
+  cleanup(): void {
+    this.emitters.forEach(emitter => emitter.destroy())
+    this.emitters.clear()
+  }
+}
