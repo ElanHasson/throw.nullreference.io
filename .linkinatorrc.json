@@ -1,0 +1,15 @@
+{
+  "skip": [
+    "^mailto:",
+    "^tel:",
+    "localhost",
+    "127.0.0.1",
+    "example.com",
+    "linkedin.com/in",
+    "twitter.com/intent"
+  ],
+  "timeout": 10000,
+  "retryErrors": true,
+  "retryErrorsCount": 2,
+  "retryErrorsDelay": 1000
+}

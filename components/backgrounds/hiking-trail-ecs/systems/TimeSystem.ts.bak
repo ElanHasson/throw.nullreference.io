@@ -1,0 +1,78 @@
+import { ISystem, Query, Write } from 'sim-ecs'
+import { TimeOfDay } from '../components'
+
+export class TimeSystem implements ISystem {
+  private timeScale = 60 // 1 second = 1 minute in simulation
+  private paused = false
+  private rockerOverride?: boolean
+  
+  constructor() {}
+
+  readonly query = new Query({
+    timeOfDay: Write(TimeOfDay)
+  })
+
+  run(deltaTime: number): void {
+    if (this.paused && !this.rockerOverride) return
+
+    const entities = this.query.execute()
+
+    for (const entity of entities) {
+      const timeOfDay = entity.timeOfDay
+      
+      // Update time (24-hour cycle)
+      timeOfDay.currentTime += (deltaTime / 1000) * this.timeScale / 60
+      if (timeOfDay.currentTime >= 24) {
+        timeOfDay.currentTime -= 24
+      }
+
+      // Determine if day or night
+      const hour = Math.floor(timeOfDay.currentTime)
+      timeOfDay.isDay = hour >= 6 && hour < 18
+
+      // Set sunrise/sunset flags
+      timeOfDay.isSunrise = hour >= 5 && hour < 7
+      timeOfDay.isSunset = hour >= 17 && hour < 19
+
+      // Calculate sun position
+      const sunAngle = (timeOfDay.currentTime - 6) / 12 * Math.PI
+      timeOfDay.sunX = Math.cos(sunAngle)
+      timeOfDay.sunY = Math.sin(sunAngle)
+
+      // Update moon position (opposite of sun)
+      const moonAngle = sunAngle + Math.PI
+      timeOfDay.moonX = Math.cos(moonAngle)
+      timeOfDay.moonY = Math.sin(moonAngle)
+
+      // Calculate sky brightness
+      if (hour >= 6 && hour < 18) {
+        // Day time
+        if (hour < 8) {
+          // Morning
+          timeOfDay.skyBrightness = (hour - 6) / 2
+        } else if (hour > 16) {
+          // Evening
+          timeOfDay.skyBrightness = (18 - hour) / 2
+        } else {
+          // Full day
+          timeOfDay.skyBrightness = 1
+        }
+      } else {
+        // Night time
+        timeOfDay.skyBrightness = 0.1
+      }
+    }
+  }
+
+  setPaused(paused: boolean): void {
+    this.paused = paused
+  }
+
+  setTimeScale(scale: number): void {
+    this.timeScale = scale
+  }
+
+  toggleRocker(): void {
+    this.rockerOverride = !this.rockerOverride
+  }
+}

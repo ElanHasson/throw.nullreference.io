@@ -1,0 +1,99 @@
+{
+  "name": "sim-ecs",
+  "version": "0.6.5",
+  "license": "MPL 2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NSSTC/sim-ecs.git"
+  },
+  "homepage": "https://nsstc.github.io/sim-ecs/",
+  "type": "module",
+  "main": "dist/sim-ecs.cjs",
+  "module": "dist/sim-ecs.mjs",
+  "sideEffects": false,
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "bevy",
+    "bun",
+    "code-splitting",
+    "component",
+    "data",
+    "data-driven",
+    "decoupling",
+    "deno",
+    "ecs",
+    "entity",
+    "event",
+    "game",
+    "game-dev",
+    "game-engine",
+    "modularization",
+    "prefab",
+    "scheduler",
+    "scheduling",
+    "simulation",
+    "sim",
+    "sim-ecs",
+    "state",
+    "splitting",
+    "system",
+    "typescript",
+    "world"
+  ],
+  "exports": {
+    ".": {
+      "import": [
+        "./dist/sim-ecs.mjs",
+        "./dist/index.d.ts"
+      ],
+      "require": "./dist/sim-ecs.cjs"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "tslib": "^2"
+  },
+  "devDependencies": {
+    "@types/chai": "^5",
+    "@types/mocha": "^10",
+    "chai": "^5",
+    "esbuild": "~0.25",
+    "madge": "^8",
+    "mocha": "^11",
+    "nyc": "^17",
+    "tsx": "^4",
+    "typedoc": "~0.28",
+    "typescript": "^5"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "npm run loop-test-ts && npm run test",
+    "bench": "cd examples/bench && npm run bench",
+    "build": "npm run esmbuild && npm run dtsbuild && npm run doc",
+    "build-examples": "cd examples && tsc --project .",
+    "bun-example-counter": "bun examples/counter.ts",
+    "bun-example-events": "bun examples/events.ts",
+    "bun-example-system-error": "bun examples/system-error.ts",
+    "ci": "npm run prebuild && npm run cjsbuild && npm run esmbuild && npm run postbuild",
+    "doc": "typedoc src/index.ts --out docs --includeVersion --excludeInternal --excludePrivate --excludeProtected",
+    "cjsbuild": "esbuild src/index.ts --bundle --outfile=dist/sim-ecs.cjs --allow-overwrite --format=cjs --sourcemap --target=es2020 --minify",
+    "coverage": "nyc -r lcov -e .ts -x \"**/*.test.ts\" -x \"**/*.spec.ts\" -x \"src/tests\" npm run test",
+    "deno-example-counter": "deno run examples/counter.ts",
+    "deno-example-events": "deno run examples/events.ts",
+    "deno-example-system-error": "deno run examples/system-error.ts",
+    "dtsbuild": "tsc -P ./tsconfig-tsc.json --emitDeclarationOnly",
+    "esmbuild": "esbuild src/index.ts --bundle --outfile=dist/sim-ecs.mjs --allow-overwrite --format=esm --sourcemap --target=es2020 --minify",
+    "example-counter": "tsx --tsconfig tsconfig.json examples/counter.ts",
+    "example-events": "tsx --tsconfig tsconfig.json examples/events.ts",
+    "example-system-error": "tsx --tsconfig tsconfig.json examples/system-error.ts",
+    "loop-test-js": "madge -c .",
+    "loop-test-ts": "madge -c  --extensions ts --warning --orphans ./src",
+    "prepare": "npm run build",
+    "test": "mocha --experimental-specifier-resolution=node --import=tsx src/**/*.test.ts",
+    "postbuild": "npm run loop-test-js"
+  }
+}
